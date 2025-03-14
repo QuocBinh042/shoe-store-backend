@@ -1,5 +1,5 @@
 ﻿-- Thêm dữ liệu cho bảng Role
-use ShoeStore;
+use railway;
 INSERT INTO Role (name, description, createdAt, updatedAt)
 VALUES
 ('Admin', 'Quản trị viên với toàn quyền quản lý', NOW(), NOW()),
@@ -422,32 +422,32 @@ VALUES
 (45, 'product45_2.png'),
 (45, 'product45_3.png'),
 (45, 'product45_4.png'),
-(45, 'product45_5.png'),
-(46, 'product46_1.png'),
-(46, 'product46_2.png'),
-(46, 'product46_3.png'),
-(46, 'product46_4.png'),
-(46, 'product46_5.png'),
-(47, 'product47_1.png'),
-(47, 'product47_2.png'),
-(47, 'product47_3.png'),
-(47, 'product47_4.png'),
-(47, 'product47_5.png'),
-(48, 'product48_1.png'),
-(48, 'product48_2.png'),
-(48, 'product48_3.png'),
-(48, 'product48_4.png'),
-(48, 'product48_5.png'),
-(49, 'product49_1.png'),
-(49, 'product49_2.png'),
-(49, 'product49_3.png'),
-(49, 'product49_4.png'),
-(49, 'product49_5.png'),
-(50, 'product50_1.png'),
-(50, 'product50_2.png'),
-(50, 'product50_3.png'),
-(50, 'product50_4.png'),
-(50, 'product50_5.png');
+(45, 'product45_5.png');
+-- (46, 'product46_1.png'),
+-- (46, 'product46_2.png'),
+-- (46, 'product46_3.png'),
+-- (46, 'product46_4.png'),
+-- (46, 'product46_5.png'),
+-- (47, 'product47_1.png'),
+-- (47, 'product47_2.png'),
+-- (47, 'product47_3.png'),
+-- (47, 'product47_4.png'),
+-- (47, 'product47_5.png'),
+-- (48, 'product48_1.png'),
+-- (48, 'product48_2.png'),
+-- (48, 'product48_3.png'),
+-- (48, 'product48_4.png'),
+-- (48, 'product48_5.png'),
+-- (49, 'product49_1.png'),
+-- (49, 'product49_2.png'),
+-- (49, 'product49_3.png'),
+-- (49, 'product49_4.png'),
+-- (49, 'product49_5.png'),
+-- (50, 'product50_1.png'),
+-- (50, 'product50_2.png'),
+-- (50, 'product50_3.png'),
+-- (50, 'product50_4.png'),
+-- (50, 'product50_5.png');
 
 
 
@@ -455,13 +455,13 @@ VALUES
 
 
 
-INSERT INTO Voucher (code, discount, discountType, minOrderValue, freeShipping, startDate, endDate, status, createdAt, updatedAt)
+INSERT INTO Voucher (code, description, discountValue, discountType, minOrderValue, freeShipping, startDate, endDate, status,createdAt,updatedAt)
 VALUES
-('SPRINGSALE2025', 15, 'PERCENT', 100000, 0, '2025-02-01 00:00:00', '2025-03-15T23:59:59', 1, NOW(), NOW()),
-('FREESHIP100', 0, 'FIXED', 100000, 1, '2025-02-01T00:00:00', '2025-03-15T23:59:59', 1, NOW(), NOW()),
-('SUMMER15', 15, 'PERCENT', 50000, 0, '2025-01-01T00:00:00', '2025-06-30T23:59:59', 1, NOW(), NOW()),
-('FIRSTBUY20', 25, 'FIXED', 50000, 0, '2025-01-01T00:00:00', '2025-06-30T23:59:59', 1, NOW(), NOW()),
-('WINTER25OFF', 25, 'PERCENT', 200000, 0, '2024-12-01T00:00:00', '2025-03-15T23:59:59', 1, NOW(), NOW());
+('SPRINGSALE20', 'Get 20% off on your next order.', 20, 'PERCENT', 100000, 0, '2025-02-01T00:00:00', '2025-03-15T23:59:59',1, now(),now()),
+('FREESHIP100K', 'Free shipping for orders above 100,000 VND.', 0, 'FIXED', 100000, 1, '2025-02-01T00:00:00', '2025-03-10T23:59:59', 1,now(),now()),
+('SUMMERSALE15', 'Save 15% on summer collection.', 15, 'PERCENT', 50000, 0, '2025-01-01T00:00:00', '2025-06-30T23:59:59', 1,now(),now()),
+('NEWUSER50K', 'Get 50,000 VND off your first order.', 50000, 'FIXED', 50000, 0, '2025-01-01T00:00:00', '2025-01-31T23:59:59', 1,now(),now()),
+('WINTERDISCOUNT25', 'Get 25% off on all winter wear.', 25, 'PERCENT', 200000, 0, '2024-12-01T00:00:00', '2025-12-31T23:59:59', 1,now(),now());
 
 INSERT INTO Cart (createdAt, updatedAt, userID)
 VALUES 
@@ -489,34 +489,34 @@ VALUES
 
 
 
-INSERT INTO CartItem (color, size, price, quantity, cartID, productDetailID, createdAt, updatedAt)
+INSERT INTO CartItem (quantity, cartID, productDetailID, createdAt, updatedAt)
 VALUES
-('RED', 'SIZE_40', 750000, 2, 1, 1, NOW(), NOW()),
-('BLUE', 'SIZE_41', 30, 1, 2, 2, NOW(), NOW()),
-('BLACK', 'SIZE_42', 30, 3, 3600000, 3, NOW(), NOW()),
-('WHITE', 'SIZE_43', 40, 4, 1200000, NOW(), NOW()),
-('WHITE', 'SIZE_44', 20, 5, 3000000, NOW(), NOW()),
-('PINK', 'SIZE_40', 15, 6, 1500000, NOW(), NOW()),
-('GREEN', 'SIZE_41', 19, 7, 750000, NOW(), NOW()),
-('YELLOW', 'SIZE_42', 21, 8, 1500000, NOW(), NOW()),
-('BLACK', 'SIZE_40', 10, 9, 950000, NOW(), NOW()),
-('WHITE', 'SIZE_41', 14, 10, 1400000, NOW(), NOW()),
-('WHITE', 'SIZE_42', 21, 11, 2500000, NOW(), NOW()),
-('BLACK', 'SIZE_43', 18, 12, 1800000, NOW(), NOW()),
-('WHITE', 'SIZE_44', 24, 13, 2300000, NOW(), NOW()),
-('PINK', 'SIZE_45', 30, 14, 2100000, NOW(), NOW()),
-('GREEN', 'SIZE_41', 19, 15, 900000, NOW(), NOW()),
-('YELLOW', 'SIZE_42', 21, 16, 950000, NOW(), NOW()),
-('BLACK', 'SIZE_40', 10, 17, 6000000, NOW(), NOW()),
-('WHITE', 'SIZE_41', 14, 18, 2500000, NOW(), NOW()),
-('WHITE', 'SIZE_42', 21, 19, 5500000, NOW(), NOW()),
-('PINK', 'SIZE_43', 10, 20, 1200000, NOW(), NOW());
+(2, 1, 1,  NOW(), NOW()), 
+(1,1, 2, NOW(), NOW()), 
+(3, 2, 3,  NOW(), NOW()), 
+(1, 2, 4,  NOW(), NOW()), 
+(2,3, 5,  NOW(), NOW()), 
+(1, 3, 6,  NOW(), NOW()), 
+(2, 4, 7,  NOW(), NOW()), 
+(1, 4, 8,  NOW(), NOW()), 
+(3, 5, 9,  NOW(), NOW()), 
+(2, 5, 10,  NOW(), NOW()), 
+(1,  6, 11,  NOW(), NOW()), 
+(2, 6, 12,  NOW(), NOW()), 
+(1,  7, 13,  NOW(), NOW()), 
+(3,  7, 14,  NOW(), NOW()), 
+(1,  8, 15,  NOW(), NOW()), 
+(2, 8, 16,  NOW(), NOW()), 
+(1,  9, 17,  NOW(), NOW()), 
+(2,  9, 18,  NOW(), NOW()), 
+(3,  10, 19,  NOW(), NOW()), 
+(1, 10, 20,  NOW(), NOW());
 
 
 
 
 
-INSERT INTO Orders (orderDate, status, totalPrice, feeShip, code, voucherID, shippingAddress, paymentMethod, discount, userID, createdAt, updatedAt)  
+INSERT INTO Orders (orderDate, status, total, feeShip, code, voucherID, shippingAddress, typePayment, discount, userID, createdAt, updatedAt) 
 VALUES  
 (NOW(), 'Processing', 2200000, 30000, 'CODE001', NULL, '123 Maple St, City, Country', 'Credit Card', 50000, 1, NOW(), NOW()),  
 (NOW(), 'Shipped', 1800000, 25000, 'CODE002', NULL, '456 Pine Rd, City, Country', 'PayPal', 0, 2, NOW(), NOW()),  
