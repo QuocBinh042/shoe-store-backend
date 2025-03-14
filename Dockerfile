@@ -14,11 +14,11 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# Copy file .war từ stage build trước đó sang
-COPY --from=build /app/target/*.war app.war
+# Copy file .jar từ stage build trước đó sang
+COPY --from=build /app/target/Server-0.0.1-SNAPSHOT.jar app.jar
 
 # Cấu hình port cho ứng dụng
 EXPOSE 8080
 
 # Lệnh chạy ứng dụng Spring Boot
-CMD ["java", "-jar", "app.war"]
+CMD ["java", "-jar", "app.jar"]
