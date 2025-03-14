@@ -14,16 +14,13 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // Cho phép tất cả các nguồn
-        configuration.setAllowedOrigins(Arrays.asList("*"));  // Cho phép tất cả các nguồn
+        configuration.addAllowedOrigin("*"); // Cho phép tất cả các nguồn
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "x-no-retry"));
-        configuration.setAllowCredentials(true);  // Cho phép gửi cookie hoặc token
-        configuration.setMaxAge(3600L);  // Thời gian bộ nhớ cache của CORS
-
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);  // Áp dụng cho tất cả các endpoint
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }
