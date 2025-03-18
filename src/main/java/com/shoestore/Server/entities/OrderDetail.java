@@ -13,6 +13,7 @@ import org.springframework.data.domain.Auditable;
 @Table
 @Getter
 @Setter
+@ToString
 public class OrderDetail extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,8 @@ public class OrderDetail extends BaseEntity{
 
     private int quantity;
     private double price;
+    @OneToOne(mappedBy = "orderDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Review review;
 
 
 }

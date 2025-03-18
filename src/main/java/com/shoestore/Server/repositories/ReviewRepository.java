@@ -9,12 +9,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
-    @Query("SELECT r FROM Review r " +
-            "JOIN r.productDetail pd " +
-            "JOIN pd.product p " +
-            "WHERE p.productID = :productID")
-    List<Review> findReviewsByProductID(@Param("productID") int productID);
+    List<Review> findReviewsByProduct_ProductID(int productID);
+    Optional<Review> findByOrderDetail_OrderDetailID(int orderDetailID);
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.product.productID = :productId")
+    Optional<Double> getAverageRatingByProductId(@Param("productId") int productId);
+
 }

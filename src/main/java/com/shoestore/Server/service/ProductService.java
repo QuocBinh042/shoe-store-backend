@@ -17,4 +17,5 @@ public interface ProductService {
     //Search
     PaginationResponse<ProductDTO> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
                                          String keyword, Double minPrice, Double maxPrice, String sortBy, int page, int pageSize);
+    double getAverageRating(int id);
 }

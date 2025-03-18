@@ -36,8 +36,5 @@ public class ProductDetail extends BaseEntity{
     @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<OrderDetail> orderDetails;
-    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Review> reviews;
 
 }

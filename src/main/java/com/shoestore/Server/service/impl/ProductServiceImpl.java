@@ -5,6 +5,7 @@ import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.entities.Product;
 import com.shoestore.Server.mapper.ProductMapper;
 import com.shoestore.Server.repositories.ProductRepository;
+import com.shoestore.Server.repositories.ReviewRepository;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.ProductService;
 import com.shoestore.Server.specifications.ProductSpecification;
@@ -21,14 +22,15 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    @Autowired
     private final ProductMapper productMapper;
     private final PaginationService paginationService;
+    private final ReviewRepository reviewRepository;
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, PaginationService paginationService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, PaginationService paginationService, ReviewRepository reviewRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.paginationService = paginationService;
+        this.reviewRepository = reviewRepository;
     }
     @Override
     public PaginationResponse<ProductDTO> getAllProduct(int page, int pageSize) {
@@ -116,6 +118,13 @@ public class ProductServiceImpl implements ProductService {
                 pagedProducts.getSize()
         );
     }
+
+    public double getAverageRating(int id) {
+        return reviewRepository.getAverageRatingByProductId(id)
+                .map(avg -> Math.round(avg * 2) / 2.0)
+                .orElse(0.0);
+    }
+
 
 
 }

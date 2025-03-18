@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class ReviewDTO {
     private int reviewID;
     private UserDTO user;
-    private ProductDetailDTO productDetail;
-    private OrderDTO order;
+    private ProductDTO product;
+    private OrderDetailDTO orderDetail;
     private int rating;
     private String comment;
     private LocalDateTime createdAt;
