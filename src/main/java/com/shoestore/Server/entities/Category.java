@@ -21,7 +21,6 @@ public class Category extends BaseEntity{
     private int categoryID;
     private String name;
     private String description;
-
     @OneToMany(mappedBy = "category")
     @JsonBackReference("categoryReference")
     private List<Product> products;

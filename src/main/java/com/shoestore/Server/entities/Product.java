@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-
+@ToString
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +64,14 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "promotionID", nullable = true)
     @JsonIgnore
     private Promotion promotion;
-
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Review> reviews;
+    public double getAverageRating() {
+        if (reviews == null || reviews.isEmpty()) {
+            return 0;
+        }
+        return reviews.stream().mapToInt(Review::getRating).average().orElse(0);
+    }
 
 }

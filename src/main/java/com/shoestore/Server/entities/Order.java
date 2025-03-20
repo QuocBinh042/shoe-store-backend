@@ -43,8 +43,6 @@ public class Order extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Review review;
 
 
 }

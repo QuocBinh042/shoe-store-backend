@@ -26,6 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> , Jpa
     @Query("SELECT p.imageURL FROM Product p JOIN p.imageURL pi WHERE p.productID = :productID")
     List<String> findImageUrlsByProductID(@Param("productID") int productID);
 
-
+    @Query("SELECT od.productDetail.product FROM OrderDetail od WHERE od.orderDetailID = :orderDetailId")
+    Product findProductByOrderDetailId(int orderDetailId);
 
 }
