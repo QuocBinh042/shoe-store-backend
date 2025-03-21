@@ -5,6 +5,6 @@ import com.shoestore.Server.entities.Supplier;
 import java.util.List;
 
 public interface SupplierService {
-    SupplierDTO getSupplier(int id);
-    List<SupplierDTO> getAllSupplier();
+    SupplierDTO getSupplierById(int id);
+    List<SupplierDTO> getAllSuppliers();
 }

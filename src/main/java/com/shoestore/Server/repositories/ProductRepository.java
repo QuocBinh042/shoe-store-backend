@@ -31,4 +31,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> , Jpa
 
     List<Product> findTop10ByCategory_CategoryIDAndProductIDNot(int categoryId,int productId);
     List<Product> findTop10ByBrand_BrandIDAndProductIDNot(int brandId,int productId);
+
 }

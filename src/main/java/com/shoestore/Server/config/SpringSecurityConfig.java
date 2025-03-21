@@ -66,6 +66,7 @@ public class SpringSecurityConfig {
 				"/api/promotion/**",
 				"/api/payment/**",
 				"/api/search/**",
+				"/api/brands/**",
 				"/api/order-details/**",
 				"/api/review/**",
 				"/api/product-details/**",

@@ -1,6 +1,8 @@
 package com.shoestore.Server.specifications;
 
 import com.shoestore.Server.entities.Product;
+import com.shoestore.Server.entities.ProductDetail;
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
@@ -41,6 +43,25 @@ public class ProductSpecification {
                 return null;
             }
             return builder.like(builder.lower(root.get("productName")), "%" + keyword.toLowerCase() + "%");
+        };
+    }
+
+    public static Specification<Product> hasStatus(String status) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("status"), status);
+    }
+
+    public static Specification<Product> hasMinStock(Integer minStock) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Product, ProductDetail> productDetailsJoin = root.join("productDetails");
+            return criteriaBuilder.greaterThanOrEqualTo(productDetailsJoin.get("stockQuantity"), minStock);
+        };
+    }
+
+    public static Specification<Product> hasMaxStock(Integer maxStock) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Product, ProductDetail> productDetailsJoin = root.join("productDetails");
+            return criteriaBuilder.lessThanOrEqualTo(productDetailsJoin.get("stockQuantity"), maxStock);
         };
     }
 }
