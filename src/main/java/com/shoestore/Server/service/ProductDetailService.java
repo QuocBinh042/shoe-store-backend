@@ -15,4 +15,9 @@ public interface ProductDetailService {
     ProductDetailDTO save(ProductDetailDTO productDetail);
     ProductDetailDTO getProductDetailById(int id);
     ProductDetailDTO getProductDetailByProductIdAndColorAndSize(int productId, Color color, Size size);
+
+    ProductDetailDTO createProductDetail(int productId, ProductDetailDTO productDetailDTO);
+
+    ProductDetailDTO updateProductDetail(int productDetailId, ProductDetailDTO productDetailDTO);
+
 }

@@ -4,6 +4,7 @@ import com.shoestore.Server.dto.response.RestResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,5 +34,15 @@ public class GlobalExceptionHandler {
         res.setMessage(ex.getMessage());
         res.setError("Account Not Activated");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<RestResponse<Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult().getFieldError().getDefaultMessage();
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        res.setMessage(errorMessage);
+        res.setError("Validation Error");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 }

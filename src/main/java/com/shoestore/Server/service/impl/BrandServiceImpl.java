@@ -1,13 +1,4 @@
 package com.shoestore.Server.service.impl;
-
-
-/*
-    @author: Đào Thanh Phú
-    Date: 11/20/2024
-    Time: 9:41 PM
-    ProjectName: Server
-*/
-
 import com.shoestore.Server.dto.request.BrandDTO;
 import com.shoestore.Server.dto.request.CategoryDTO;
 import com.shoestore.Server.dto.request.SupplierDTO;
@@ -35,7 +26,7 @@ public class BrandServiceImpl implements BrandService {
         return brandMapper.toDto(brand);
     }
     @Override
-    public List<BrandDTO> getAllBrand() {
+    public List<BrandDTO> getAllBrands() {
         return brandRepository.findAll().stream()
                 .map(brandMapper::toDto)
                 .collect(Collectors.toList());

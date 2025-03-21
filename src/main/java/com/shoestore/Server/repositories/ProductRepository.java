@@ -29,4 +29,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> , Jpa
     @Query("SELECT od.productDetail.product FROM OrderDetail od WHERE od.orderDetailID = :orderDetailId")
     Product findProductByOrderDetailId(int orderDetailId);
 
+    @Query("SELECT p FROM Product p WHERE p.status = :status")
+    List<Product> findByStatus(@Param("status") String status);
+    
+//    @Query("SELECT p FROM Product p WHERE p.categoryID = :categoryId")
+//    List<Product> findByCategoryId(@Param("categoryId") int categoryId);
 }

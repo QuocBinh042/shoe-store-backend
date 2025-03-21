@@ -32,9 +32,9 @@ public class SearchController {
     @GetMapping("/show-filtered")
     public ResponseEntity<Map<String, Object>> getFilterOptions() {
         Map<String, Object> response = new HashMap<>();
-        response.put("categories", categoryService.getAllCategory());
-        response.put("brands", brandService.getAllBrand());
-        response.put("suppliers", supplierService.getAllSupplier());
+        response.put("categories", categoryService.getAllCategories());
+        response.put("brands", brandService.getAllBrands());
+        response.put("suppliers", supplierService.getAllSuppliers());
         return ResponseEntity.ok(response);
     }
 
