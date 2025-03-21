@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
@@ -34,9 +35,6 @@ public class User extends BaseEntity{
     private String userName;
     private String CI;
     private String status;
-    @ManyToOne
-    @JoinColumn(name = "roleID")
-    private Role role;
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnore
     private Cart cart;
@@ -49,4 +47,12 @@ public class User extends BaseEntity{
     private List<Review> reviews;
     @Column(length = 500)
     private String refreshToken;
+    @ManyToMany
+    @JoinTable(
+            name = "User_Roles",
+            joinColumns = @JoinColumn(name = "userID"),
+            inverseJoinColumns = @JoinColumn(name = "roleID")
+    )
+    @JsonIgnore
+    private Set<Role> roles;
 }

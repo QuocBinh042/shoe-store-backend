@@ -1,6 +1,8 @@
 package com.shoestore.Server.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shoestore.Server.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.ToString;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,15 +20,20 @@ import java.util.List;
 public class Role extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleID")
     private int roleID;
-    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private RoleType roleType;
+
     private String description;
-    @OneToMany(mappedBy = "role")
-    @JsonBackReference
-    @ToString.Exclude
-    private List<User> users;
-    public List<SimpleGrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(name));
-    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "Role_Permissions",
+            joinColumns = @JoinColumn(name = "roleID"),
+            inverseJoinColumns = @JoinColumn(name = "permissionID")
+    )
+    @JsonIgnore
+    private Set<Permission> permissions;
 }

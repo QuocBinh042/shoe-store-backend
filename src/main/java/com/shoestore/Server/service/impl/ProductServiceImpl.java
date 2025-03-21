@@ -3,6 +3,7 @@ package com.shoestore.Server.service.impl;
 import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.entities.Product;
+import com.shoestore.Server.entities.User;
 import com.shoestore.Server.mapper.ProductMapper;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.ReviewRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -125,6 +127,17 @@ public class ProductServiceImpl implements ProductService {
                 .orElse(0.0);
     }
 
+    @Override
+    public List<ProductDTO> getRelatedProducts(int productId, int categoryId, int brandId) {
+        List<Product> relatedProducts = productRepository.findTop10ByCategory_CategoryIDAndProductIDNot(categoryId, productId);
+
+        if (relatedProducts.size() < 10) {
+            List<Product> brandProducts = productRepository.findTop10ByBrand_BrandIDAndProductIDNot(brandId, productId);
+            relatedProducts.addAll(brandProducts);
+        }
+
+        return productMapper.toDto(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+    }
 
 
 }

@@ -70,7 +70,7 @@ public class AuthController {
                         userDB.getEmail(),
                         userDB.getPhoneNumber(),
                         userDB.getName(),
-                        userDB.getRole()
+                        userDB.getRoles()
                 );
                 loginResponse.setUser(user);
             } else {
@@ -164,7 +164,7 @@ public class AuthController {
                 userDB.getEmail(),
                 userDB.getPhoneNumber(),
                 userDB.getName(),
-                userDB.getRole()
+                userDB.getRoles()
         ));
 
         String accessToken = jwtUtil.createAccessToken(email, loginResponse);

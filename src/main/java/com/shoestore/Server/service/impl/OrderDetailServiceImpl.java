@@ -48,6 +48,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                     return new RuntimeException("Product detail not found");
                 });
 
+        int quantityToBuy = orderDetailDTO.getQuantity();
+
+        if (productDetail.getStockQuantity() < quantityToBuy) {
+            log.error("Not enough stock for productDetail ID: {}. Available: {}, Requested: {}",
+                    productDetail.getProductDetailID(), productDetail.getStockQuantity(), quantityToBuy);
+            throw new RuntimeException("Not enough stock for product");
+        }
+        productDetail.setStockQuantity(productDetail.getStockQuantity() - quantityToBuy);
+        productDetailRepository.save(productDetail);
+
         OrderDetail orderDetail = orderDetailMapper.toEntity(orderDetailDTO);
         orderDetail.setOrder(order);
         orderDetail.setProductDetail(productDetail);
@@ -57,6 +67,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         return orderDetailMapper.toDto(savedOrderDetail);
     }
+
 
     @Override
     public List<OrderDetailDTO> getProductDetailByOrderID(int orderID) {

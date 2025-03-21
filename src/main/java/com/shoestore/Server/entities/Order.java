@@ -2,6 +2,8 @@ package com.shoestore.Server.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shoestore.Server.enums.OrderStatus;
+import com.shoestore.Server.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -22,7 +24,8 @@ public class Order extends BaseEntity{
     @Column(name = "orderID")
     private int orderID;
     private LocalDate orderDate;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     private double total;
     private double feeShip;
     private String code;
@@ -38,11 +41,14 @@ public class Order extends BaseEntity{
     private Payment payment;
     @Column(name = "shippingAddress", nullable = false)
     private String shippingAddress;
-    private String typePayment;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
     private double discount;
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
-
+    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Receipt receipt;
 
 }

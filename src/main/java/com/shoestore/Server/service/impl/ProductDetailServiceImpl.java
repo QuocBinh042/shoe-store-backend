@@ -1,9 +1,9 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDetailDTO;
-import com.shoestore.Server.entities.Color;
+import com.shoestore.Server.enums.Color;
 import com.shoestore.Server.entities.ProductDetail;
-import com.shoestore.Server.entities.Size;
+import com.shoestore.Server.enums.Size;
 import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.service.ProductDetailService;

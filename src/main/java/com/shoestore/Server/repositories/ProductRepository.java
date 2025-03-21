@@ -29,4 +29,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> , Jpa
     @Query("SELECT od.productDetail.product FROM OrderDetail od WHERE od.orderDetailID = :orderDetailId")
     Product findProductByOrderDetailId(int orderDetailId);
 
+    List<Product> findTop10ByCategory_CategoryIDAndProductIDNot(int categoryId,int productId);
+    List<Product> findTop10ByBrand_BrandIDAndProductIDNot(int brandId,int productId);
 }

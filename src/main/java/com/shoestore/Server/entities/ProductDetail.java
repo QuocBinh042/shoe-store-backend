@@ -2,6 +2,8 @@ package com.shoestore.Server.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shoestore.Server.enums.Color;
+import com.shoestore.Server.enums.Size;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.*;

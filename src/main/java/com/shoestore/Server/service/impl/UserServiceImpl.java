@@ -44,12 +44,12 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists.");
         }
 
-        Role role = roleRepository.findByName("Customer")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find role 'Customer'"));
+//        Role role = roleRepository.findByName("Customer")
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find role 'Customer'"));
 
         User user = userMapper.toEntity(userDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(role);
+//        user.setRole(role);
         user.setStatus("Active");
 
         user = userRepository.save(user);

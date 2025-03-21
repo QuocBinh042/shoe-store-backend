@@ -6,6 +6,9 @@ import com.shoestore.Server.service.OrderService;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +50,7 @@ public class OrderController {
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
     }
-
+    @PreAuthorize("hasAnyAuthority('MANAGE_ORDERS')")
     @GetMapping("/get-all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAll());

@@ -4,6 +4,7 @@ import com.shoestore.Server.dto.request.AddressDTO;
 import com.shoestore.Server.service.AddressService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +17,13 @@ public class AddressController {
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }
-
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN','SUPER_ADMIN')")
     @GetMapping("/by-user-id/{id}")
     public ResponseEntity<List<AddressDTO>> getAddressByUserId(@PathVariable int id) {
         return ResponseEntity.ok(addressService.getAddressByUserId(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<AddressDTO> getAddressById(@PathVariable int id) {
         AddressDTO address = addressService.getById(id);

@@ -1,6 +1,7 @@
 package com.shoestore.Server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shoestore.Server.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -23,8 +24,7 @@ public class Payment extends BaseEntity {
     @JoinColumn(name = "orderID")
     private Order order;
     private LocalDate paymentDate;
-    private String status;
-    @OneToOne(mappedBy = "payment",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Receipt receipt;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+
 }

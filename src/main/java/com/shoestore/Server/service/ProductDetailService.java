@@ -2,10 +2,8 @@ package com.shoestore.Server.service;
 
 
 import com.shoestore.Server.dto.request.ProductDetailDTO;
-import com.shoestore.Server.entities.Color;
-import com.shoestore.Server.entities.ProductDetail;
-import com.shoestore.Server.entities.Size;
-import com.shoestore.Server.repositories.ProductRepository;
+import com.shoestore.Server.enums.Color;
+import com.shoestore.Server.enums.Size;
 
 import java.util.List;
 
