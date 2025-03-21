@@ -24,7 +24,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierDTO getSupplier(int id) {
+    public SupplierDTO getSupplierById(int id) {
         log.info("Fetching supplier with ID: {}", id);
         Supplier supplier = supplierRepository.findBySupplierID(id);
         if (supplier == null) {
@@ -35,7 +35,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<SupplierDTO> getAllSupplier() {
+    public List<SupplierDTO> getAllSuppliers() {
         log.info("Fetching all suppliers from database.");
         List<SupplierDTO> suppliers = supplierRepository.findAll().stream()
                 .map(supplierMapper::toDto)

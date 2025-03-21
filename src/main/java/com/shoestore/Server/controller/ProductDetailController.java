@@ -2,12 +2,16 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.request.ProductDetailDTO;
+import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.dto.response.ProductDetailResponse;
+import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.service.BrandService;
 import com.shoestore.Server.service.CategoryService;
 import com.shoestore.Server.service.ProductDetailService;
 import com.shoestore.Server.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,4 +63,48 @@ public class ProductDetailController {
         ProductDetailDTO productDetail = productDetailService.getProductDetailById(id);
         return productDetail != null ? ResponseEntity.ok(productDetail) : ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/{productId}")
+    public ResponseEntity<RestResponse<Object>> createProductDetail(
+            @PathVariable int productId,
+            @Valid @RequestBody ProductDetailDTO productDetailDTO) {
+
+        ProductDetailDTO createdDetail = productDetailService.createProductDetail(productId, productDetailDTO);
+        RestResponse<Object> resp = new RestResponse<>();
+
+        if (createdDetail != null) {
+            resp.setStatusCode(ApiStatusResponse.CREATED.getCode());
+            resp.setMessage(ApiStatusResponse.CREATED.getMessage());
+            resp.setData(createdDetail);
+            return ResponseEntity.status(ApiStatusResponse.CREATED.getCode()).body(resp);
+        } else {
+            resp.setStatusCode(ApiStatusResponse.NOT_FOUND.getCode());
+            resp.setMessage(ApiStatusResponse.NOT_FOUND.getMessage());
+            resp.setData(null);
+            return ResponseEntity.status(ApiStatusResponse.NOT_FOUND.getCode()).body(resp);
+        }
+    }
+    @PutMapping("/{detailId}")
+    public ResponseEntity<RestResponse<Object>> updateProductDetail(
+            @PathVariable int detailId,
+            @Valid @RequestBody ProductDetailDTO productDetailDTO) {
+
+        ProductDetailDTO updatedDetail = productDetailService.updateProductDetail(detailId, productDetailDTO);
+        RestResponse<Object> resp = new RestResponse<>();
+
+        if (updatedDetail != null) {
+            resp.setStatusCode(ApiStatusResponse.SUCCESS.getCode());
+            resp.setMessage(ApiStatusResponse.SUCCESS.getMessage());
+            resp.setData(updatedDetail);
+            return ResponseEntity.ok(resp);
+        } else {
+            resp.setStatusCode(ApiStatusResponse.NOT_FOUND.getCode());
+            resp.setMessage(ApiStatusResponse.NOT_FOUND.getMessage());
+            resp.setData(null);
+            return ResponseEntity.status(ApiStatusResponse.NOT_FOUND.getCode()).body(resp);
+        }
+    }
+
+
+
 }

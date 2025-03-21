@@ -18,13 +18,16 @@ public class GlobalResponseHandler implements ResponseBodyAdvice {
         return true;
     }
 
-
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+                                  Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
-        RestResponse<Object> restResponse = new RestResponse<>();
-        restResponse.setStatusCode(status);
+
+        if (body instanceof RestResponse) {
+            return body;
+        }
+
         if (body instanceof String) {
             return body;
         }
@@ -36,10 +39,12 @@ public class GlobalResponseHandler implements ResponseBodyAdvice {
         if (status >= 400) {
             return body;
         } else {
+            RestResponse<Object> restResponse = new RestResponse<>();
+            restResponse.setStatusCode(status);
             restResponse.setData(body);
             ApiMessage apiMessage = returnType.getMethodAnnotation(ApiMessage.class);
             restResponse.setMessage(apiMessage != null ? apiMessage.value() : "CALL API SUCCESS");
+            return restResponse;
         }
-        return restResponse;
     }
 }

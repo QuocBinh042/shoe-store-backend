@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> getAllCategory() {
+    public List<CategoryDTO> getAllCategories() {
         log.info("Fetching all categories from database.");
         List<CategoryDTO> categories = categoryRepository.findAll()
                 .stream()
