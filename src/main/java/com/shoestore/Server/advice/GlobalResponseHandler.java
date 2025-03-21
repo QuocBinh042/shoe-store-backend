@@ -29,7 +29,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice {
             return body;
         }
         String path = request.getURI().getPath();
-        if (path.startsWith("/swagger-ui")) {
+        if (path.contains("/swagger-ui") || path.contains("/v3/api-docs") || path.contains("/api-docs")) {
             return body;
         }
 

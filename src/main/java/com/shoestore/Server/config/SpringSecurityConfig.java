@@ -72,6 +72,8 @@ public class SpringSecurityConfig {
 				"/api/cart/**",
 				"/swagger-ui/**",
 				"/swagger-ui.html",
+				"/v3/api-docs/**",
+				"/api-docs/**",
 				"/",
 		};
 		http

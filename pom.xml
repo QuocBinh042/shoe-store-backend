@@ -55,10 +55,10 @@
 		</dependency>
 
 		<!--		<dependency>-->
-<!--			<groupId>com.microsoft.sqlserver</groupId>-->
-<!--			<artifactId>mssql-jdbc</artifactId>-->
-<!--			<version>11.2.3.jre17</version>-->
-<!--		</dependency>-->
+		<!--			<groupId>com.microsoft.sqlserver</groupId>-->
+		<!--			<artifactId>mssql-jdbc</artifactId>-->
+		<!--			<version>11.2.3.jre17</version>-->
+		<!--		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -136,6 +136,11 @@
 			<version>2.5.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.32.0</version>
+		</dependency>
 
 	</dependencies>
 
