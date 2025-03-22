@@ -19,8 +19,14 @@ public interface ProductService {
     PaginationResponse<ProductDTO> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
                                          String keyword, Double minPrice, Double maxPrice, String sortBy, int page, int pageSize);
 
-    PaginationResponse<ProductDTO> searchProducts(String status, List<Integer> categoryIds, Integer minStock, Integer maxStock, int page, int pageSize);
-    
+    PaginationResponse<ProductDTO> searchProducts(String status,
+                                                         List<Integer> categoryIds,
+                                                         List<Integer> brandIds,
+                                                         List<Integer> supplierIds,
+                                                         String searchText,
+                                                         String stock,
+                                                         int page,
+                                                         int pageSize);
     ProductDTO createProduct(ProductDTO productDTO);
     
     ProductDTO updateProduct(int id, ProductDTO productDTO);

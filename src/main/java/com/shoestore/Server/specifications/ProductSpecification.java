@@ -51,17 +51,24 @@ public class ProductSpecification {
                 criteriaBuilder.equal(root.get("status"), status);
     }
 
-    public static Specification<Product> hasMinStock(Integer minStock) {
-        return (root, query, criteriaBuilder) -> {
-            Join<Product, ProductDetail> productDetailsJoin = root.join("productDetails");
-            return criteriaBuilder.greaterThanOrEqualTo(productDetailsJoin.get("stockQuantity"), minStock);
-        };
+    public static Specification<Product> hasSuppliers(List<Integer> supplierIds) {
+        return (root, query, builder) ->
+                (supplierIds == null || supplierIds.isEmpty()) ? null : root.get("supplier").get("supplierID").in(supplierIds);
     }
 
-    public static Specification<Product> hasMaxStock(Integer maxStock) {
-        return (root, query, criteriaBuilder) -> {
+    public static Specification<Product> hasStockStatus(String stockStatus) {
+        return (root, query, builder) -> {
+            if (stockStatus == null || stockStatus.trim().isEmpty()) {
+                return null;
+            }
+            // Thực hiện join với productDetails để lấy giá trị stockQuantity
             Join<Product, ProductDetail> productDetailsJoin = root.join("productDetails");
-            return criteriaBuilder.lessThanOrEqualTo(productDetailsJoin.get("stockQuantity"), maxStock);
+            if ("in_stock".equalsIgnoreCase(stockStatus)) {
+                return builder.greaterThan(productDetailsJoin.get("stockQuantity"), 0);
+            } else if ("out_of_stock".equalsIgnoreCase(stockStatus)) {
+                return builder.lessThan(productDetailsJoin.get("stockQuantity"), 0);
+            }
+            return null;
         };
     }
 }
