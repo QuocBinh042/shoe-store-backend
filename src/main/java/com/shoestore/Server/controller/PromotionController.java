@@ -23,15 +23,15 @@ public class PromotionController {
         PromotionDTO promotion = promotionService.getPromotionById(id);
         return promotion != null ? ResponseEntity.ok(promotion) : ResponseEntity.notFound().build();
     }
-    @GetMapping("/discount-price/by-product-id/{id}")
-    public ResponseEntity<Double> getDiscountPriceByProduct(@PathVariable int id) {
-        ProductDTO product = productService.getProductById(id);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
-        }
-        double discountedPrice = promotionService.getDiscountedPrice(product);
-        return ResponseEntity.ok(discountedPrice);
-    }
+//    @GetMapping("/discount-price/by-product-id/{id}")
+//    public ResponseEntity<Double> getDiscountPriceByProduct(@PathVariable int id) {
+//        ProductDTO product = productService.getProductById(id);
+//        if (product == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        double discountedPrice = promotionService.getDiscountedPrice(product);
+//        return ResponseEntity.ok(discountedPrice);
+//    }
 
     @GetMapping("/by-product-id/{id}")
     public ResponseEntity<PromotionDTO> getPromotionByProduct(@PathVariable int id) {
