@@ -1,16 +1,21 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDTO;
+import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.ProductSearchResponse;
+import com.shoestore.Server.entities.Color;
 import com.shoestore.Server.entities.Product;
+import com.shoestore.Server.entities.ProductDetail;
+import com.shoestore.Server.entities.Size;
+import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.mapper.ProductMapper;
+import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.ReviewRepository;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.ProductService;
-import com.shoestore.Server.service.PromotionService;
 import com.shoestore.Server.specifications.ProductSpecification;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +24,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
@@ -51,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PaginationResponse<ProductSearchResponse> getAllProduct(int page, int pageSize) {
         List<Product> products = productRepository.findAll();
+
         PaginationResponse<Product> paginatedProducts = paginationService.paginate(products, page, pageSize);
         List<ProductSearchResponse> productDTOs = productMapper.toProductSearchResponse(paginatedProducts.getItems());
 
@@ -113,13 +120,13 @@ public class ProductServiceImpl implements ProductService {
         if (maxStock != null) {
             spec = spec.and(ProductSpecification.hasMaxStock(maxStock));
         }
-
+        
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-
+        
         Page<Product> pagedProducts = productRepository.findAll(spec, pageable);
-
+        
         List<ProductDTO> productDTOs = productMapper.toDto(pagedProducts.getContent());
-
+        
         return new PaginationResponse<>(
                 productDTOs,
                 pagedProducts.getTotalElements(),
@@ -189,6 +196,7 @@ public class ProductServiceImpl implements ProductService {
         }).orElse(null);
     }
 
+    
     @Override
     @Transactional
     public boolean deleteProduct(int id) {
@@ -214,7 +222,3 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(relatedProducts.stream().limit(10).collect(Collectors.toList()));
     }
 }
-
-
-
-
