@@ -45,13 +45,18 @@ public class ProductController {
     public ResponseEntity<PaginationResponse<ProductDTO>> searchProducts(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) List<Integer> categoryIds,
-            @RequestParam(required = false) Integer minStock,
-            @RequestParam(required = false) Integer maxStock,
+            @RequestParam(required = false) List<Integer> brandIds,
+            @RequestParam(required = false) List<Integer> supplierIds,
+            @RequestParam(required = false) String searchText,
+            @RequestParam(required = false) String stock,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
-        PaginationResponse<ProductDTO> products = productService.searchProducts(status, categoryIds, minStock, maxStock, page, pageSize);
+
+        PaginationResponse<ProductDTO> products = productService.searchProducts(
+                status, categoryIds, brandIds, supplierIds, searchText, stock, page, pageSize);
         return ResponseEntity.ok(products);
     }
+
     @PostMapping
     public ResponseEntity<RestResponse<Object>> createProduct(
             @Valid @RequestBody ProductDTO productDTO) {

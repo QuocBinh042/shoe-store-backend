@@ -122,43 +122,56 @@ public class ProductServiceImpl implements ProductService {
                 pagedProducts.getSize()
         );
     }
-
     @Override
-    public PaginationResponse<ProductDTO> searchProducts(String status, List<Integer> categoryIds, Integer minStock, 
-                                                        Integer maxStock, int page, int pageSize) {
+    public PaginationResponse<ProductDTO> searchProducts(String status,
+                                                         List<Integer> categoryIds,
+                                                         List<Integer> brandIds,
+                                                         List<Integer> supplierIds,
+                                                         String searchText,
+                                                         String stock,
+                                                         int page,
+                                                         int pageSize) {
         Specification<Product> spec = Specification.where(null);
-        
+
         if (status != null && !status.isEmpty()) {
             spec = spec.and(ProductSpecification.hasStatus(status));
         }
-        
+
         if (categoryIds != null && !categoryIds.isEmpty()) {
             spec = spec.and(ProductSpecification.hasCategories(categoryIds));
         }
-        
-        if (minStock != null) {
-            spec = spec.and(ProductSpecification.hasMinStock(minStock));
+
+        if (brandIds != null && !brandIds.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasBrands(brandIds));
         }
-        
-        if (maxStock != null) {
-            spec = spec.and(ProductSpecification.hasMaxStock(maxStock));
+
+        if (supplierIds != null && !supplierIds.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasSuppliers(supplierIds));
         }
-        
+
+        if (searchText != null && !searchText.trim().isEmpty()) {
+            spec = spec.and(ProductSpecification.hasName(searchText));
+        }
+
+        if (stock != null && !stock.trim().isEmpty()) {
+            spec = spec.and(ProductSpecification.hasStockStatus(stock));
+        }
+
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        
+
         Page<Product> pagedProducts = productRepository.findAll(spec, pageable);
-        
+
         List<ProductDTO> productDTOs = productMapper.toDto(pagedProducts.getContent());
-        
+
         return new PaginationResponse<>(
                 productDTOs,
                 pagedProducts.getTotalElements(),
                 pagedProducts.getTotalPages(),
-                pagedProducts.getNumber() + 1,
+                pagedProducts.getNumber() + 1, // chuyển từ 0-based index sang 1-based
                 pagedProducts.getSize()
         );
     }
-    
+
     @Override
     @Transactional
     public ProductDTO createProduct(ProductDTO productDTO) {
