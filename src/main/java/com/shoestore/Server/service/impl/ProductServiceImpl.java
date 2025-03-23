@@ -1,19 +1,18 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDTO;
-import com.shoestore.Server.dto.request.ProductDetailDTO;
+
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.entities.Color;
+import com.shoestore.Server.dto.response.ProductSearchResponse;
+
 import com.shoestore.Server.entities.Product;
-import com.shoestore.Server.entities.ProductDetail;
-import com.shoestore.Server.entities.Size;
-import com.shoestore.Server.mapper.ProductDetailMapper;
+
 import com.shoestore.Server.mapper.ProductMapper;
-import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.ReviewRepository;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.ProductService;
+import com.shoestore.Server.service.PromotionService;
 import com.shoestore.Server.specifications.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,15 +36,6 @@ public class ProductServiceImpl implements ProductService {
     private final PaginationService paginationService;
     private final ReviewRepository reviewRepository;
     private final PromotionService promotionService;
-
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, PaginationService paginationService, ReviewRepository reviewRepository, PromotionService promotionService) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-        this.paginationService = paginationService;
-        this.reviewRepository = reviewRepository;
-        this.promotionService = promotionService;
-    }
 
     private List<ProductSearchResponse> enhanceProductSearchResponses(List<ProductSearchResponse> products) {
         for (ProductSearchResponse p : products) {
@@ -70,11 +61,6 @@ public class ProductServiceImpl implements ProductService {
         );
     }
 
-    public List<ProductSearchResponse> getAllProductsNoPaging() {
-        List<Product> products = productRepository.findAll();
-        return enhanceProductSearchResponses(productMapper.toProductSearchResponse(products));
-    }
-
     @Override
     public PaginationResponse<ProductSearchResponse> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
                                                                          String keyword, Double minPrice, Double maxPrice, String sortBy, int page, int pageSize) {
@@ -93,16 +79,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductSearchResponse> getFilteredProductsNoPaging(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
-                                                                   String keyword, Double minPrice, Double maxPrice, String sortBy) {
-        Specification<Product> spec = buildProductSpecification(categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice);
-        List<Product> filteredProducts = productRepository.findAll(spec, getSortOrder(sortBy));
-        return enhanceProductSearchResponses(productMapper.toProductSearchResponse(filteredProducts));
-    }
-
-    @Override
-    public PaginationResponse<ProductDTO> searchProducts(String status, List<Integer> categoryIds, Integer minStock,
-                                                         Integer maxStock, int page, int pageSize) {
+    public PaginationResponse<ProductDTO> searchProducts(String status,
+                                                         List<Integer> categoryIds,
+                                                         List<Integer> brandIds,
+                                                         List<Integer> supplierIds,
+                                                         String searchText,
+                                                         String stock,
+                                                         int page,
+                                                         int pageSize) {
         Specification<Product> spec = Specification.where(null);
 
         if (status != null && !status.isEmpty()) {
@@ -113,20 +97,28 @@ public class ProductServiceImpl implements ProductService {
             spec = spec.and(ProductSpecification.hasCategories(categoryIds));
         }
 
-        if (minStock != null) {
-            spec = spec.and(ProductSpecification.hasMinStock(minStock));
+        if (brandIds != null && !brandIds.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasBrands(brandIds));
         }
 
-        if (maxStock != null) {
-            spec = spec.and(ProductSpecification.hasMaxStock(maxStock));
+        if (supplierIds != null && !supplierIds.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasSuppliers(supplierIds));
         }
-        
+
+        if (searchText != null && !searchText.trim().isEmpty()) {
+            spec = spec.and(ProductSpecification.hasName(searchText));
+        }
+
+        if (stock != null && !stock.trim().isEmpty()) {
+            spec = spec.and(ProductSpecification.hasStockStatus(stock));
+        }
+
         Pageable pageable = PageRequest.of(page - 1, pageSize);
-        
+
         Page<Product> pagedProducts = productRepository.findAll(spec, pageable);
-        
+
         List<ProductDTO> productDTOs = productMapper.toDto(pagedProducts.getContent());
-        
+
         return new PaginationResponse<>(
                 productDTOs,
                 pagedProducts.getTotalElements(),

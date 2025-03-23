@@ -41,13 +41,9 @@ public class SearchController {
 
     @GetMapping("/all-products")
     public ResponseEntity<?> getAllProducts(
-            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") int pageSize) {
 
-        if (page == null || page == 0) {
-            List<ProductSearchResponse> allProducts = productService.getAllProductsNoPaging();
-            return ResponseEntity.ok(allProducts);
-        }
         PaginationResponse<ProductSearchResponse> paginatedProducts = productService.getAllProduct(page, pageSize);
         return ResponseEntity.ok(paginatedProducts);
     }
@@ -63,14 +59,8 @@ public class SearchController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") int pageSize) {
-
-        if (page == null || page == 0) {
-            List<ProductSearchResponse> allFilteredProducts = productService.getFilteredProductsNoPaging(
-                    categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice, sortBy);
-            return ResponseEntity.ok(allFilteredProducts);
-        }
 
         PaginationResponse<ProductSearchResponse> paginatedProducts = productService.getFilteredProducts(
                 categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice, sortBy, page, pageSize);
