@@ -8,20 +8,22 @@ import lombok.Data;
 public class SignUpRequest {
     private int userID;
 
-    @NotBlank(message = "Tên không được để trống")
-    @Size(max = 50, message = "Tên không được vượt quá 100 ký tự")
+    @NotBlank(message = "Name cannot be blank")
+    @Size(max = 50, message = "Name must not exceed 100 characters")
     private String name;
 
-    @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không hợp lệ")
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Invalid email format")
     private String email;
-    @NotBlank(message = "Password không được để trống")
+
+    @NotBlank(message = "Password cannot be blank")
     private String password;
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "^\\d{10,15}$", message = "Số điện thoại phải có từ 10 đến 15 chữ số")
+
+    @NotBlank(message = "Phone number cannot be blank")
+    @Pattern(regexp = "^\\d{10,15}$", message = "Phone number must be between 10 and 15 digits")
     private String phoneNumber;
 
-    @NotBlank(message = "CI không được để trống")
+    @NotBlank(message = "CI cannot be blank")
     @JsonProperty("CI")
     private String CI;
 }

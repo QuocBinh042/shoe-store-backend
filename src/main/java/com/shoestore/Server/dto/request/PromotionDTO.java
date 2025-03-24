@@ -10,21 +10,21 @@ import java.time.LocalDateTime;
 public class PromotionDTO {
     private int promotionID;
 
-    @NotBlank(message = "Tên khuyến mãi không được để trống")
-    @Size(max = 100, message = "Tên khuyến mãi không được vượt quá 100 ký tự")
+    @NotBlank(message = "Promotion name cannot be blank")
+    @Size(max = 100, message = "Promotion name must not exceed 100 characters")
     private String name;
 
-    @Size(max = 255, message = "Mô tả không được vượt quá 255 ký tự")
+    @Size(max = 255, message = "Description must not exceed 255 characters")
     private String description;
 
-    @NotNull(message = "Giá trị giảm không được để trống")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Giá trị giảm phải lớn hơn 0")
+    @NotNull(message = "Discount value cannot be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Discount value must be greater than 0")
     private BigDecimal discountValue;
 
-    @NotNull(message = "Ngày bắt đầu không được để trống")
+    @NotNull(message = "Start date cannot be null")
     private LocalDateTime startDate;
 
-    @NotNull(message = "Ngày kết thúc không được để trống")
+    @NotNull(message = "End date cannot be null")
     private LocalDateTime endDate;
 
     private boolean status;

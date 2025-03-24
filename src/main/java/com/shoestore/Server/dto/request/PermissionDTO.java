@@ -8,10 +8,10 @@ import lombok.Data;
 public class PermissionDTO {
     private int permissionID;
 
-    @NotBlank(message = "Tên quyền không được để trống")
-    @Size(max = 100, message = "Tên quyền không được vượt quá 100 ký tự")
+    @NotBlank(message = "Permission name cannot be blank")
+    @Size(max = 100, message = "Permission name must not exceed 100 characters")
     private String name;
 
-    @Size(max = 255, message = "Mô tả không được vượt quá 255 ký tự")
+    @Size(max = 255, message = "Description must not exceed 255 characters")
     private String description;
 }

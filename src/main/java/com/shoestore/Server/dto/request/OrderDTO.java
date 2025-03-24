@@ -9,32 +9,35 @@ import java.time.LocalDate;
 public class OrderDTO {
     private int orderID;
 
-    @PastOrPresent(message = "Ngày đặt hàng không được ở tương lai")
+    @PastOrPresent(message = "Order date cannot be in the future")
     private LocalDate orderDate;
 
-    @NotBlank(message = "Trạng thái không được để trống")
+    @NotBlank(message = "Status cannot be blank")
     private String status;
-    @NotNull(message = "Tổng tiền không được để trống")
-    @PositiveOrZero(message = "Tổng tiền không được âm")
+
+    @NotNull(message = "Total amount cannot be null")
+    @PositiveOrZero(message = "Total amount cannot be negative")
     private double total;
-    @NotNull(message = "Phi ship không được để trống")
-    @PositiveOrZero(message = "Phí ship không được âm")
+
+    @NotNull(message = "Shipping fee cannot be null")
+    @PositiveOrZero(message = "Shipping fee cannot be negative")
     private double feeShip;
 
-    @NotBlank(message = "Mã đơn hàng không được để trống")
+    @NotBlank(message = "Order code cannot be blank")
     private String code;
 
     private VoucherDTO voucher;
 
-    @NotBlank(message = "Địa chỉ giao hàng không được để trống")
+    @NotBlank(message = "Shipping address cannot be blank")
     private String shippingAddress;
 
-    @NotBlank(message = "Phương thức thanh toán không được để trống")
+    @NotBlank(message = "Payment method cannot be blank")
     private String typePayment;
-    @NotNull(message = "Giam gia không được để trống")
-    @PositiveOrZero(message = "Giảm giá không được âm")
+
+    @NotNull(message = "Discount cannot be null")
+    @PositiveOrZero(message = "Discount cannot be negative")
     private double discount;
 
-    @NotNull(message = "Người đặt hàng không được để trống")
+    @NotNull(message = "User cannot be null")
     private UserDTO user;
 }

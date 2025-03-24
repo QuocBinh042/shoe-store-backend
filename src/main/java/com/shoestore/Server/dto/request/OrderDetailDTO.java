@@ -8,17 +8,17 @@ import lombok.Data;
 public class OrderDetailDTO {
     private int orderDetailID;
 
-    @NotNull(message = "Đơn hàng không được để trống")
+    @NotNull(message = "Order cannot be null")
     private OrderDTO order;
 
-    @NotNull(message = "Chi tiết sản phẩm không được để trống")
+    @NotNull(message = "Product details cannot be null")
     private ProductDetailDTO productDetail;
 
-    @NotNull(message = "Số lượng không được để trống")
-    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
+    @NotNull(message = "Quantity cannot be null")
+    @Min(value = 1, message = "Quantity must be greater than 0")
     private Integer quantity;
 
-    @NotNull(message = "Giá không được để trống")
-    @Min(value = 0, message = "Giá không được âm")
+    @NotNull(message = "Price cannot be null")
+    @Min(value = 0, message = "Price cannot be negative")
     private Double price;
 }

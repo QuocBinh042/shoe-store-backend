@@ -6,6 +6,6 @@ import lombok.Data;
 public class CartDTO {
     private int cartID;
 
-    @NotNull(message = "Thông tin người dùng không được để trống")
+    @NotNull(message = "User not be empty")
     private UserDTO user;
 }

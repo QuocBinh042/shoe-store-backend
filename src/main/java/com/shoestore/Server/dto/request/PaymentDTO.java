@@ -9,12 +9,12 @@ import java.time.LocalDate;
 public class PaymentDTO {
     private int paymentID;
 
-    @NotNull(message = "Đơn hàng không được để trống")
+    @NotNull(message = "Order cannot be null")
     private OrderDTO order;
 
-    @NotNull(message = "Ngày thanh toán không được để trống")
+    @NotNull(message = "Payment date cannot be null")
     private LocalDate paymentDate;
 
-    @NotNull(message = "Trạng thái thanh toán không được để trống")
+    @NotNull(message = "Payment status cannot be null")
     private String status;
 }

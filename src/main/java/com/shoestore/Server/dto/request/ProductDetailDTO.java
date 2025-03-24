@@ -9,13 +9,13 @@ import lombok.Data;
 public class ProductDetailDTO {
     private int productDetailID;
 
-    @NotBlank(message = "Màu sắc không được để trống")
+    @NotBlank(message = "Color cannot be blank")
     private String color;
 
-    @NotBlank(message = "Kích thước không được để trống")
+    @NotBlank(message = "Size cannot be blank")
     private String size;
 
-    @NotNull(message = "Số lượng tồn kho không được để trống")
-    @Min(value = 0, message = "Số lượng tồn kho không thể nhỏ hơn 0")
+    @NotNull(message = "Stock quantity cannot be null")
+    @Min(value = 0, message = "Stock quantity cannot be less than 0")
     private Integer stockQuantity;
 }

@@ -8,12 +8,12 @@ import lombok.Data;
 public class CartItemDTO {
     private int cartItemID;
 
-    @NotNull(message = "Cart không được để trống")
+    @NotNull(message = "Cart cannot be empty")
     private CartDTO cart;
 
-    @NotNull(message = "Chi tiết sản phẩm không được để trống")
+    @NotNull(message = "ProductDetail cannot be empty")
     private ProductDetailDTO productDetail;
 
-    @Min(value = 1, message = "Số lượng phải lớn hơn 0")
+    @Min(value = 1, message = "Quantity must be greater than 0")
     private int quantity;
 }

@@ -10,31 +10,31 @@ import java.time.LocalDateTime;
 public class VoucherDTO {
     private int voucherID;
 
-    @NotBlank(message = "Mã voucher không được để trống")
-    @Size(max = 50, message = "Mã voucher không được vượt quá 50 ký tự")
+    @NotBlank(message = "Voucher code cannot be blank")
+    @Size(max = 50, message = "Voucher code must not exceed 50 characters")
     private String code;
 
-    @Size(max = 255, message = "Mô tả không được vượt quá 255 ký tự")
+    @Size(max = 255, message = "Description must not exceed 255 characters")
     private String description;
 
-    @NotNull(message = "Giá trị giảm không được để trống")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Giá trị giảm phải lớn hơn 0")
+    @NotNull(message = "Discount value cannot be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Discount value must be greater than 0")
     private BigDecimal discountValue;
 
-    @NotBlank(message = "Loại giảm giá không được để trống")
-    @Pattern(regexp = "^(PERCENT|FIXED)$", message = "Loại giảm giá chỉ có thể là PERCENT hoặc FIXED")
+    @NotBlank(message = "Discount type cannot be blank")
+    @Pattern(regexp = "^(PERCENT|FIXED)$", message = "Discount type must be either PERCENT or FIXED")
     private String discountType;
 
-    @NotNull(message = "Giá trị đơn hàng tối thiểu không được để trống")
-    @DecimalMin(value = "0.0", message = "Giá trị đơn hàng tối thiểu không được âm")
+    @NotNull(message = "Minimum order value cannot be null")
+    @DecimalMin(value = "0.0", message = "Minimum order value cannot be negative")
     private BigDecimal minOrderValue;
 
     private boolean freeShipping;
 
-    @NotNull(message = "Ngày bắt đầu không được để trống")
+    @NotNull(message = "Start date cannot be null")
     private LocalDateTime startDate;
 
-    @NotNull(message = "Ngày kết thúc không được để trống")
+    @NotNull(message = "End date cannot be null")
     private LocalDateTime endDate;
 
     private boolean status;

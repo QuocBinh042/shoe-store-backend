@@ -16,21 +16,21 @@ import java.time.LocalDateTime;
 public class ReviewDTO {
     private int reviewID;
 
-    @NotNull(message = "Người dùng không được để trống")
+    @NotNull(message = "User cannot be null")
     private UserDTO user;
 
-    @NotNull(message = "Sản phẩm không được để trống")
+    @NotNull(message = "Product cannot be null")
     private ProductDTO product;
 
-    @NotNull(message = "Chi tiết đơn hàng không được để trống")
+    @NotNull(message = "Order detail cannot be null")
     private OrderDetailDTO orderDetail;
 
-    @NotNull(message = "Đánh giá không được để trống")
-    @Min(value = 1, message = "Đánh giá tối thiểu là 1 sao")
-    @Max(value = 5, message = "Đánh giá tối đa là 5 sao")
+    @NotNull(message = "Rating cannot be null")
+    @Min(value = 1, message = "Minimum rating is 1 star")
+    @Max(value = 5, message = "Maximum rating is 5 stars")
     private Integer rating;
 
-    @NotBlank(message = "Bình luận không được để trống")
+    @NotBlank(message = "Comment cannot be blank")
     private String comment;
 
     private LocalDateTime createdAt;
