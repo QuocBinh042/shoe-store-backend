@@ -5,11 +5,9 @@ import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.dto.response.ProductDetailResponse;
 import com.shoestore.Server.dto.response.RestResponse;
-import com.shoestore.Server.service.BrandService;
-import com.shoestore.Server.service.CategoryService;
-import com.shoestore.Server.service.ProductDetailService;
-import com.shoestore.Server.service.ProductService;
+import com.shoestore.Server.service.*;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +15,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/product-details")
 public class ProductDetailController {
     private final ProductDetailService productDetailService;
     private final ProductService productService;
     private final BrandService brandService;
     private final CategoryService categoryService;
+    private final PromotionService promotionService;
 
-    public ProductDetailController(ProductDetailService productDetailService, ProductService productService,
-                                   BrandService brandService, CategoryService categoryService) {
-        this.productDetailService = productDetailService;
-        this.productService = productService;
-        this.brandService = brandService;
-        this.categoryService = categoryService;
-    }
 
     @GetMapping("/by-product-id/{id}")
     public ResponseEntity<ProductDetailResponse> getProductDetailsByProductId(@PathVariable int id) {
@@ -47,7 +40,8 @@ public class ProductDetailController {
                 brandService.getBrandById(productDTO.getBrandID()).getName(),
                 productDTO.getDescription(),
                 productDTO.getPrice(),
-                productDTO.getImageURL()
+                productDTO.getImageURL(),
+                promotionService.getDiscountedPrice(productDTO.getProductID())
         );
 
         return ResponseEntity.ok(response);

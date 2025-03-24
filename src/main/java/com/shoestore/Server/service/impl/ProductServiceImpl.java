@@ -200,7 +200,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getRelatedProducts(int productId, int categoryId, int brandId) {
+    public List<ProductSearchResponse> getRelatedProducts(int productId, int categoryId, int brandId) {
         List<Product> relatedProducts = productRepository.findTop10ByCategory_CategoryIDAndProductIDNot(categoryId, productId);
 
         if (relatedProducts.size() < 10) {
@@ -210,7 +210,7 @@ public class ProductServiceImpl implements ProductService {
                     .toList();
             relatedProducts.addAll(brandProducts);
         }
-
-        return productMapper.toDto(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+        List<ProductSearchResponse> productSearchResponse=productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+        return enhanceProductSearchResponses(productSearchResponse);
     }
 }

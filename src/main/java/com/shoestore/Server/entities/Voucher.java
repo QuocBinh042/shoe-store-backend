@@ -1,5 +1,6 @@
 package com.shoestore.Server.entities;
 
+import com.shoestore.Server.enums.VoucherType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -22,8 +23,8 @@ public class Voucher extends BaseEntity{
     private String description;
 
     private BigDecimal discountValue;
-
-    private String discountType;
+    @Enumerated(EnumType.STRING)
+    private VoucherType discountType;
 
     private BigDecimal minOrderValue;
 

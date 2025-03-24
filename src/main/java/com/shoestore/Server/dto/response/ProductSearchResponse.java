@@ -12,9 +12,9 @@ public class ProductSearchResponse {
     private String description;
     private double price;
     private String status;
-    private int brandID;
-    private int categoryID;
-    private int supplierID;
+//    private int brandID;
+//    private int categoryID;
+//    private int supplierID;
     private List<ProductDetailDTO> productDetails;
     private double discountPrice;
     private double rating;

@@ -5,6 +5,7 @@ import com.shoestore.Server.dto.request.PaymentDTO;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class PaymentController {
     private OrderService orderService;
 
     @PostMapping("/add")
-    public ResponseEntity<PaymentDTO> addPayment(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<PaymentDTO> addPayment(@Valid @RequestBody PaymentDTO paymentDTO) {
         try {
             PaymentDTO savePaymentDTO = paymentService.addPayment(paymentDTO);
             return ResponseEntity.ok(savePaymentDTO);

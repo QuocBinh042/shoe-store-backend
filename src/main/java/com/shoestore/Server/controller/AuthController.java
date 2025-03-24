@@ -1,11 +1,9 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.LoginRequest;
+import com.shoestore.Server.dto.request.SignUpRequest;
 import com.shoestore.Server.dto.request.UserDTO;
-import com.shoestore.Server.dto.response.LoginResponse;
-import com.shoestore.Server.dto.response.RestResponse;
-import com.shoestore.Server.dto.response.UserInsideTokenResponse;
-import com.shoestore.Server.dto.response.UserLoginResponse;
+import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.exception.UserNotActiveException;
 import com.shoestore.Server.security.CustomUserDetailsService;
 import com.shoestore.Server.service.UserService;
@@ -13,6 +11,7 @@ import com.shoestore.Server.security.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -55,7 +54,7 @@ public class AuthController {
     @Value("${jwt.refreshExpiration}")
     private long refreshExpirationMs;
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getEmail());
             if (!passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
@@ -106,19 +105,19 @@ public class AuthController {
 
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> register(@RequestBody UserDTO user) {
+    public ResponseEntity<RestResponse<Object>> register(@Valid @RequestBody SignUpRequest signUpRequest) {
         try {
-            UserDTO newUser = userService.addUserByRegister(user);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Collections.singletonMap("message", "User registered successfully."));
+            UserDTO newUser = userService.addUserByRegister(signUpRequest);
+            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "User registered successfully", null, newUser));
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode())
-                    .body(Collections.singletonMap("message", e.getReason()));
+                    .body(new RestResponse<>(e.getStatusCode().value(), e.getReason(), null, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "An unexpected error occurred. Please try again."));
+                    .body(new RestResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred", e.getMessage(), null));
         }
     }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@CookieValue(value = "refresh_token", required = false) String refreshToken, HttpServletResponse response) {
         if (refreshToken != null) {
@@ -139,7 +138,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(@CookieValue(value = "refresh_token",  required = false) String refreshToken) {
+    public ResponseEntity<?> refreshToken(@CookieValue(value = "refresh_token",  required = false) String refreshToken) throws UserNotActiveException {
         System.out.println("Đã xin access token");
         if (refreshToken == null || refreshToken.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -154,7 +153,11 @@ public class AuthController {
         Claims claims = claimsOpt.get();
         String email = claims.getSubject();
         UserDTO userDB = userService.findByEmail(email);
-        if (userDB == null || !userDB.getStatus().equals("Active") || !refreshToken.equals(userDB.getRefreshToken())) {
+        if (!userDB.getStatus().equalsIgnoreCase("Active")) {
+            throw new UserNotActiveException("User is not activated.");
+        }
+
+        if (!refreshToken.equals(userDB.getRefreshToken())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new RestResponse<>(HttpStatus.UNAUTHORIZED.value(), "Invalid refresh token.", null, null));
         }

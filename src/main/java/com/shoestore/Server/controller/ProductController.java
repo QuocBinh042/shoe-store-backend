@@ -51,7 +51,7 @@ public class ProductController {
                     .body(new RestResponse<>(HttpStatus.NOT_FOUND.value(), "Product not found", null, null));
         }
 
-        List<ProductDTO> relatedProducts = productService.getRelatedProducts(id, product.getCategoryID(), product.getBrandID());
+        List<ProductSearchResponse> relatedProducts = productService.getRelatedProducts(id, product.getCategoryID(), product.getBrandID());
         return ResponseEntity.ok(relatedProducts);
     }
 

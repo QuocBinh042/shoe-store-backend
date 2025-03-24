@@ -36,5 +36,5 @@ public interface ProductService {
     boolean deleteProduct(int id);
     
     double getAverageRating(int id);
-    List<ProductDTO> getRelatedProducts(int productId, int categoryId,int brandId);
+    List<ProductSearchResponse> getRelatedProducts(int productId, int categoryId,int brandId);
 }

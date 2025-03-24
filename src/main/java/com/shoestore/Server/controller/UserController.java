@@ -2,6 +2,7 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.UserDTO;
 import com.shoestore.Server.service.UserService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id,@Valid @RequestBody UserDTO userDTO) {
         UserDTO existingUser = userService.getUserById(id);
         if (existingUser == null) return ResponseEntity.notFound().build();
 

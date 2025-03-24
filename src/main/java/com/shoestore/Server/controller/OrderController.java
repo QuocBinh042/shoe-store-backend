@@ -4,6 +4,7 @@ import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.service.MailService;
 import com.shoestore.Server.service.OrderService;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +26,7 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<OrderDTO> addOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO) {
         return ResponseEntity.ok(orderService.addOrder(orderDTO));
     }
 

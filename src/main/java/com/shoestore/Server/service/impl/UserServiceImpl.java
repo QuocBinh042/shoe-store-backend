@@ -1,8 +1,10 @@
 package com.shoestore.Server.service.impl;
 
+import com.shoestore.Server.dto.request.SignUpRequest;
 import com.shoestore.Server.dto.request.UserDTO;
 import com.shoestore.Server.entities.Role;
 import com.shoestore.Server.entities.User;
+import com.shoestore.Server.enums.RoleType;
 import com.shoestore.Server.mapper.UserMapper;
 import com.shoestore.Server.repositories.RoleRepository;
 import com.shoestore.Server.repositories.UserRepository;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 @Slf4j
 @Service
@@ -39,22 +42,23 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
     @Override
-    public UserDTO addUserByRegister(UserDTO userDTO) {
-        if (userRepository.existsByEmail(userDTO.getEmail())) {
+    public UserDTO addUserByRegister(SignUpRequest signUpRequest) {
+        System.out.println(signUpRequest);
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists.");
         }
+        Role customerRole = roleRepository.findByRoleType(RoleType.CUSTOMER)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find role 'Customer'"));
 
-//        Role role = roleRepository.findByName("Customer")
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find role 'Customer'"));
-
-        User user = userMapper.toEntity(userDTO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setRole(role);
+        User user = userMapper.toSignUpRequest(signUpRequest);
+        System.out.println(user);
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setStatus("Active");
-
+        user.setRoles(Set.of(customerRole));
         user = userRepository.save(user);
         return userMapper.toDto(user);
     }
+
 
     @Override
     public UserDTO updateUserInformationByUser(int id, UserDTO updatedUserDTO) {
@@ -63,7 +67,6 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         existingUser.setName(updatedUserDTO.getName());
-        existingUser.setUserName(updatedUserDTO.getUserName());
         existingUser.setPhoneNumber(updatedUserDTO.getPhoneNumber());
         existingUser.setEmail(updatedUserDTO.getEmail());
         existingUser.setCI(updatedUserDTO.getCI());

@@ -15,4 +15,5 @@ public class ProductDetailResponse {
     private String description;
     private double price;
     private List<String> imageURL;
+    private double discountPrice;
 }
