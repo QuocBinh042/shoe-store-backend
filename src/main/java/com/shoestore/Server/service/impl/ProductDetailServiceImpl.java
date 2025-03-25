@@ -98,21 +98,22 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
 
-    @Override
-    @Transactional
-    public ProductDetailDTO createProductDetail(int productId, ProductDetailDTO productDetailDTO) {
-        Optional<Product> productOpt = productRepository.findById(productId);
+        @Override
+        @Transactional
+        public ProductDetailDTO createProductDetail(int productId, ProductDetailDTO productDetailDTO) {
+            Optional<Product> productOpt = productRepository.findById(productId);
 
-        if (productOpt.isPresent()) {
-            ProductDetail productDetail = productDetailMapper.toEntity(productDetailDTO);
-            productDetail.setProduct(productOpt.get());
+            if (productOpt.isPresent()) {
+                ProductDetail productDetail = productDetailMapper.toEntity(productDetailDTO);
+                productDetail.setProduct(productOpt.get());
 
-            ProductDetail savedDetail = productDetailRepository.save(productDetail);
-            return productDetailMapper.toDto(savedDetail);
+                ProductDetail savedDetail = productDetailRepository.save(productDetail);
+                return productDetailMapper.toDto(savedDetail);
+            }
+
+            return null;
         }
 
-        return null;
-    }
 
     @Override
     @Transactional

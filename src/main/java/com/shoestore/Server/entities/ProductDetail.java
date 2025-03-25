@@ -26,7 +26,7 @@ public class ProductDetail extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Size size;
     @Column(name = "stockQuantity", nullable = false)
-    @DecimalMin(value = "0", inclusive = false, message = "Số lượng phải lớn hơn 0")
+    @DecimalMin(value = "0", inclusive = false, message = "Stock quantity must be greater than 0")
     private int stockQuantity;
     @ManyToOne
     @JoinColumn(name = "productID")

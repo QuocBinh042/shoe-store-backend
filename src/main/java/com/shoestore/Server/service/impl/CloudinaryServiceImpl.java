@@ -20,9 +20,11 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     private final Cloudinary cloudinary;
 
     @Override
-    public Map upload(MultipartFile file) throws IOException {
+    public Map upload(MultipartFile file, String folder) throws IOException {
         File uploadedFile = convertMultiPartToFile(file);
-        Map uploadResult = cloudinary.uploader().upload(uploadedFile, new HashMap<>());
+        Map options = new HashMap<>();
+        options.put("folder", folder);
+        Map uploadResult = cloudinary.uploader().upload(uploadedFile, options);
         uploadedFile.delete();
         return uploadResult;
     }

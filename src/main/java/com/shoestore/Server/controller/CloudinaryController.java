@@ -38,14 +38,20 @@ public class CloudinaryController {
         }
     }
 
-//    @PostMapping("/upload")
-//    public ResponseEntity<Map> uploadImage(@RequestParam("file") MultipartFile file) {
-//        try {
-//            Map uploadResult = cloudinaryService.upload(file);
-//            return ResponseEntity.ok(uploadResult);
-//        } catch (IOException e) {
-//            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
-//        }
-//    }
+    @PostMapping("/upload")
+    public ResponseEntity<Map> uploadImage(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "productId", required = false) String productId) {
+        try {
+            String folder = "project_ShoeStore/ImageProduct/"
+                    + (productId != null && !productId.isEmpty() ? productId : "default");
+            Map uploadResult = cloudinaryService.upload(file, folder);
+            return ResponseEntity.ok(uploadResult);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
+
 
 }

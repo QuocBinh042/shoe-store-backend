@@ -8,6 +8,7 @@ import com.shoestore.Server.dto.response.ProductSearchResponse;
 import com.shoestore.Server.entities.Product;
 
 import com.shoestore.Server.mapper.ProductMapper;
+import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.ReviewRepository;
 import com.shoestore.Server.service.PaginationService;
@@ -173,19 +174,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDTO createProduct(ProductDTO productDTO) {
-        return productMapper.toDto(productRepository.save(productMapper.toEntity(productDTO)));
+        Product product = productMapper.toEntity(productDTO);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDto(savedProduct);
     }
-
+    
     @Override
     @Transactional
     public ProductDTO updateProduct(int id, ProductDTO productDTO) {
-        return productRepository.findById(id).map(product -> {
+        Optional<Product> existingProduct = productRepository.findById(id);
+        
+        if (existingProduct.isPresent()) {
+            Product product = existingProduct.get();
+
             product.setProductName(productDTO.getProductName());
             product.setDescription(productDTO.getDescription());
             product.setPrice(productDTO.getPrice());
             product.setStatus(productDTO.getStatus());
-            return productMapper.toDto(productRepository.save(product));
-        }).orElse(null);
+            product.getImageURL().clear();
+            product.getImageURL().addAll(productDTO.getImageURL());
+            Product updatedProduct = productRepository.save(product);
+            return productMapper.toDto(updatedProduct);
+        }
+        
+        return null;
     }
 
     
