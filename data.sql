@@ -1,41 +1,96 @@
 ﻿-- Thêm dữ liệu cho bảng Role
-use railway;
-INSERT INTO Role (name, description, createdAt, updatedAt)
-VALUES
-('Admin', 'Quản trị viên với toàn quyền quản lý', NOW(), NOW()),
-('Customer', 'Khách hàng sử dụng dịch vụ và mua sản phẩm', NOW(), NOW());
+use ShoeStore;
+INSERT INTO role (roleType, description,createdAt, updatedAt) VALUES
+('SUPER_ADMIN', 'Toàn quyền trên hệ thống', NOW(), NOW()),
+('ADMIN', 'Quản lý sản phẩm và đơn hàng', NOW(), NOW()),
+('CUSTOMER', 'Khách hàng mua hàng', NOW(), NOW());
 
+INSERT INTO permission (name, description,createdAt, updatedAt) VALUES
+('MANAGE_USERS', 'Quản lý người dùng', NOW(), NOW()),
+('MANAGE_PRODUCTS', 'Quản lý sản phẩm', NOW(), NOW()),
+('MANAGE_ORDERS', 'Quản lý đơn hàng', NOW(), NOW()),
+('VIEW_REPORTS', 'Xem báo cáo', NOW(), NOW()),
+('CREATE_ORDER', 'Tạo đơn hàng', NOW(), NOW()),
+('VIEW_ORDER', 'Xem đơn hàng', NOW(), NOW()),
+('WRITE_REVIEW', 'Viết đánh giá', NOW(), NOW()),
+('VIEW_PRODUCTS', 'Xen sản phẩm', NOW(), NOW()),
+('VIEW_PROMOTION', 'Xem khuyến mãi', NOW(), NOW());
 
+-- SUPER_ADMIN có tất cả quyền
+INSERT INTO role_permissions (roleID, permissionID) 
+SELECT r.roleID, p.permissionID 
+FROM role r, permission p 
+WHERE r.roleType = 'SUPER_ADMIN';
 
+-- ADMIN có quyền quản lý sản phẩm, đơn hàng, báo cáo
+INSERT INTO role_permissions (roleID, permissionID)
+SELECT r.roleID, p.permissionID 
+FROM role r, permission p 
+WHERE r.roleType = 'ADMIN' 
+AND p.name IN ('MANAGE_PRODUCTS', 'MANAGE_ORDERS', 'VIEW_REPORTS');
+
+-- CUSTOMER có quyền xem sản phẩm, đặt hàng, xem đơn hàng, viết đánh giá
+INSERT INTO role_permissions (roleID, permissionID)
+SELECT r.roleID, p.permissionID 
+FROM role r, permission p 
+WHERE r.roleType = 'CUSTOMER' 
+AND p.name IN ('CREATE_ORDER', 'VIEW_ORDER', 'WRITE_REVIEW', 'VIEW_PRODUCTS', 'VIEW_PROMOTION');
 
 -- Thêm dữ liệu vào bảng Users
-INSERT INTO Users (CI, email, name, password, phoneNumber, status, userName, roleID, createdAt, updatedAt)
+INSERT INTO Users (CI, email, name, password, phoneNumber, status, createdAt, updatedAt)
 VALUES
 -- Admins
-('1234567890', 'admin1@example.com', 'Admin User 1', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0334567890', 'Active', 'admin1', 1, NOW(), NOW()),
-('0987654321', 'admin2@example.com', 'Admin User 2', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0987654321', 'Active', 'admin2', 1, NOW(), NOW()),
-('1122334455', 'admin3@example.com', 'Admin User 3', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0322334455', 'Active', 'admin3', 1, NOW(), NOW()),
+('1234567890', 'admin1@example.com', 'Admin User 1', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0334567890', 'Active' ,NOW(), NOW()),
+('0987654321', 'admin2@example.com', 'Admin User 2', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0987654321', 'Active', NOW(), NOW()),
+('1122334455', 'admin3@example.com', 'Admin User 3', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0322334455', 'Active',NOW(), NOW()),
 
 -- Customers
-('2233445566', 'customer1@example.com', 'John Doe', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0333445566', 'Active', 'johndoe1', 2, NOW(), NOW()),
-('3344556677', 'customer2@example.com', 'Jane Smith', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0944556677', 'Active', 'janesmith2', 2, NOW(), NOW()),
-('4455667788', 'customer3@example.com', 'Alice Johnson', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0355667788', 'Active', 'alicejohnson3', 2, NOW(), NOW()),
-('5566778899', 'customer4@example.com', 'Bob Brown', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0366778899', 'Active', 'bobbrown4', 2, NOW(), NOW()),
-('6677889900', 'customer5@example.com', 'Charlie Davis', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0377889900', 'Active', 'charliedavis5', 2, NOW(), NOW()),
-('7788990011', 'customer6@example.com', 'Diana Prince', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0388990011', 'Active', 'dianaprince6', 2, NOW(), NOW()),
-('8899001122', 'customer7@example.com', 'Ethan Hunt', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0399001122', 'Active', 'ethanhunt7', 2, NOW(), NOW()),
-('9900112233', 'customer8@example.com', 'Fiona Gallagher', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0300112233', 'Active', 'fionagallagher8', 2, NOW(), NOW()),
-('1011121314', 'customer9@example.com', 'George Clooney', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0311121314', 'Active', 'georgeclooney9', 2, NOW(), NOW()),
-('1112131415', 'customer10@example.com', 'Hannah Montana','$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0312131415', 'Active', 'hannahmontana10', 2, NOW(), NOW()),
-('1213141516', 'customer11@example.com', 'Isaac Newton', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0313141516', 'Active', 'isaacnewton11', 2, NOW(), NOW()),
-('1314151617', 'customer12@example.com', 'Jack Sparrow', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0314151617', 'Active', 'jacksparrow12', 2, NOW(), NOW()),
-('1415161718', 'customer13@example.com', 'Kara Danvers', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0315161718', 'Active', 'karadanvers13', 2, NOW(), NOW()),
-('1516171819', 'customer14@example.com', 'Liam Hemsworth', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0316171819', 'Active', 'liamhemsworth14', 2, NOW(), NOW()),
-('1617181920', 'customer15@example.com', 'Mia Wallace', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0317181920', 'Active', 'miawallace15', 2, NOW(), NOW()),
-('1718192021', 'customer16@example.com', 'Nina Dobrev', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0318192021', 'Active', 'ninadobrev16', 2, NOW(), NOW()),
-('1819202122', 'customer17@example.com', 'Oscar Isaac', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0319202122', 'Active', 'oscarisaac17', 2, NOW(), NOW()),
-('1920212223', 'customer18@example.com', 'Peter Parker', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0320212223', 'Active', 'peterparker18', 2, NOW(), NOW()),
-('2021222324', 'customer19@example.com', 'Quinn Fabray', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0321222324', 'Active', 'quinnfabray19', 2, NOW(), NOW());
+('2233445566', 'customer1@example.com', 'John Doe', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0333445566', 'Active', NOW(), NOW()),
+('3344556677', 'customer2@example.com', 'Jane Smith', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0944556677', 'Active',  NOW(), NOW()),
+('4455667788', 'customer3@example.com', 'Alice Johnson', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0355667788', 'Active', NOW(), NOW()),
+('5566778899', 'customer4@example.com', 'Bob Brown', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0366778899', 'Active',  NOW(), NOW()),
+('6677889900', 'customer5@example.com', 'Charlie Davis', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0377889900', 'Active',NOW(), NOW()),
+('7788990011', 'customer6@example.com', 'Diana Prince', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0388990011', 'Active',  NOW(), NOW()),
+('8899001122', 'customer7@example.com', 'Ethan Hunt', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0399001122', 'Active',  NOW(), NOW()),
+('9900112233', 'customer8@example.com', 'Fiona Gallagher', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0300112233', 'Active', NOW(), NOW()),
+('1011121314', 'customer9@example.com', 'George Clooney', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0311121314', 'Active', NOW(), NOW()),
+('1112131415', 'customer10@example.com', 'Hannah Montana','$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0312131415', 'Active',  NOW(), NOW()),
+('1213141516', 'customer11@example.com', 'Isaac Newton', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0313141516', 'Active',  NOW(), NOW()),
+('1314151617', 'customer12@example.com', 'Jack Sparrow', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0314151617', 'Active', NOW(), NOW()),
+('1415161718', 'customer13@example.com', 'Kara Danvers', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0315161718', 'Active', NOW(), NOW()),
+('1516171819', 'customer14@example.com', 'Liam Hemsworth', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0316171819', 'Active', NOW(), NOW()),
+('1617181920', 'customer15@example.com', 'Mia Wallace', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0317181920', 'Active', NOW(), NOW()),
+('1718192021', 'customer16@example.com', 'Nina Dobrev', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0318192021', 'Active',  NOW(), NOW()),
+('1819202122', 'customer17@example.com', 'Oscar Isaac', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0319202122', 'Active',  NOW(), NOW()),
+('1920212223', 'customer18@example.com', 'Peter Parker', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0320212223', 'Active', NOW(), NOW()),
+('2021222324', 'customer19@example.com', 'Quinn Fabray', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0321222324', 'Active',  NOW(), NOW());
+
+INSERT INTO User_Roles (userID, roleID) VALUES
+-- Admins
+(1, 1),
+(2, 1),
+(3, 1),
+
+-- Customers (sửa roleID = 3)
+(4, 3),
+(5, 3),
+(6, 3),
+(7, 3),
+(8, 3),
+(9, 3),
+(10, 3),
+(11, 3),
+(12, 3),
+(13, 3),
+(14, 3),
+(15, 3),
+(16, 3),
+(17, 3),
+(18, 3),
+(19, 3),
+(20, 3),
+(21, 3),
+(22, 3);
 
 
 INSERT INTO Address (city, district, street, ward, fullName, phone, type, isDefault, userID, createdAt, updatedAt)
@@ -484,7 +539,8 @@ VALUES
 (NOW(), NOW(), 17),
 (NOW(), NOW(), 18),
 (NOW(), NOW(), 19),
-(NOW(), NOW(), 20);
+(NOW(), NOW(), 20),
+(NOW(), NOW(), 21);
 
 
 
@@ -516,13 +572,18 @@ VALUES
 
 
 
-INSERT INTO Orders (orderDate, status, total, feeShip, code, voucherID, shippingAddress, typePayment, discount, userID, createdAt, updatedAt) 
+INSERT INTO Orders (orderDate, status, total, feeShip, code, voucherID, shippingAddress, paymentMethod, discount, userID, createdAt, updatedAt) 
 VALUES  
-(NOW(), 'Processing', 2200000, 30000, 'CODE001', NULL, '123 Maple St, City, Country', 'Credit Card', 50000, 1, NOW(), NOW()),  
-(NOW(), 'Shipped', 1800000, 25000, 'CODE002', NULL, '456 Pine Rd, City, Country', 'PayPal', 0, 2, NOW(), NOW()),  
-(NOW(), 'Delivered', 3500000, 40000, 'CODE003', NULL, '789 Oak Ave, City, Country', 'Bank Transfer', 100000, 3, NOW(), NOW()),  
-(NOW(), 'Processing', 2800000, 45000, 'CODE004', NULL, '654 Cedar Ln, City, Country', 'Credit Card', 0, 4, NOW(), NOW()),  
-(NOW(), 'Shipped', 1600000, 20000, 'CODE005', NULL, '987 Pine St, City, Country', 'Cash on Delivery', 40000, 5, NOW(), NOW());  
+(NOW(), 'PENDING', 4400000, 30000, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '123 Maple St, City, Country', 'CASH', 0, 4, NOW(), NOW()),  
+(NOW(), 'SHIPPED', 3200000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '456 Pine Rd, City, Country', 'CASH', 0, 5, NOW(), NOW()),  
+(NOW(), 'DELIVERED', 4050000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '789 Oak Ave, City, Country', 'CASH', 0, 6, NOW(), NOW()),  
+(NOW(), 'PENDING', 3500000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '654 Cedar Ln, City, Country', 'VNPAY', 0, 7, NOW(), NOW()),  
+(NOW(), 'DELIVERED', 2150000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '987 Pine St, City, Country', 'VNPAY', 0, 8, NOW(), NOW());
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt)
+VALUES 
+(4050000, NOW(),3 , NOW(), NOW()), 
+(2150000, NOW(),5, NOW(), NOW());
+
 
 
 INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt)
@@ -540,57 +601,19 @@ VALUES
 
 
 INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES
-(1, NOW(), 'Completed', NOW(), NOW()),    
-(2, NOW(), 'Pending', NOW(), NOW()),    
-(3, NOW(), 'Completed', NOW(), NOW()),     
-(4, NOW(), 'Pending', NOW(), NOW()),      
-(5, NOW(), 'Completed', NOW(), NOW());
+(1, NOW(), 'PENDING', NOW(), NOW()),    
+(2, NOW(), 'PENDING', NOW(), NOW()),    
+(3, NOW(), 'SUCCESS', NOW(), NOW()),     
+(4, NOW(), 'PENDING', NOW(), NOW()),      
+(5, NOW(), 'SUCCESS', NOW(), NOW());
  
-
-
-/*
-INSERT INTO Receipt (receiptDate, total, paymentID)
-VALUES
-('2024-11-01', 180.00, 1),
-('2024-11-02', 120.00, 2),
-('2024-11-03', 450.00, 3),
-('2024-11-04', 320.00, 4),
-('2024-11-05', 200.00, 5),
-('2024-11-06', 110.00, 6),
-('2024-11-07', 375.00, 7),
-('2024-11-08', 285.00, 8),
-('2024-11-09', 50.00, 9),
-('2024-11-10', 400.00, 10),
-('2024-11-11', 340.00, 11),
-('2024-11-12', 120.00, 12),
-('2024-11-13', 260.00, 13),
-('2024-11-14', 500.00, 14),
-('2024-11-15', 270.00, 15),
-('2024-11-16', 75.00, 16),
-('2024-11-17', 110.00, 17),
-('2024-11-18', 330.00, 18),
-('2024-11-19', 60.00, 19),
-('2024-11-20', 1000.00, 20),
-('2024-11-21', 140.00, 21),
-('2024-11-22', 420.00, 22),
-('2024-11-23', 800.00, 23),
-('2024-11-24', 320.00, 24),
-('2024-11-25', 260.00, 25),
-('2024-11-26', 460.00, 26),
-('2024-11-27', 390.00, 27),
-('2024-11-28', 300.00, 28),
-('2024-11-29', 250.00, 29),
-('2024-11-30', 520.00, 30);*/
-
-INSERT INTO Review (userID, productDetailID, orderID, rating, comment, createdAt, updatedAt)
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt)
 VALUES 
-(1, 1, 1, 5, 'Sản phẩm tuyệt vời, chất lượng tốt!', NOW(), NOW()),
-(2, 2, 2, 4, 'Giày rất đẹp nhưng hơi chật.', NOW(), NOW()),
-(3, 3, 3, 3, 'Rất tiếc, sản phẩm không như mong đợi.', NOW(), NOW()),
-(4, 4, 4, 5, 'Rất hài lòng với sản phẩm!', NOW(), NOW()),
-(5, 5, 5, 2, 'Màu sắc không giống như hình.', NOW(), NOW());
-
-
+(1, 3, 1, 5, 'Sản phẩm tuyệt vời, chất lượng tốt!', NOW(), NOW()),
+(2, 1, 4, 4, 'Giày rất đẹp nhưng hơi chật.', NOW(), NOW()),
+(3, 3, 6, 3, 'Rất tiếc, sản phẩm không như mong đợi.', NOW(), NOW()),
+(4, 1, 8, 5, 'Rất hài lòng với sản phẩm!', NOW(), NOW()),
+(5, 1, 10, 2, 'Màu sắc không giống như hình.', NOW(), NOW());
 
 
 
