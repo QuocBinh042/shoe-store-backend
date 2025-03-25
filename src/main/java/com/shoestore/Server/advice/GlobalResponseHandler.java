@@ -37,8 +37,14 @@ public class GlobalResponseHandler implements ResponseBodyAdvice {
         }
 
         if (status >= 400) {
-            return body;
-        } else {
+            RestResponse<Object> restResponse = new RestResponse<>();
+            restResponse.setStatusCode(status);
+            restResponse.setMessage("API ERROR");
+            restResponse.setError(body.toString());
+            restResponse.setData(null);
+            return restResponse;
+        }
+        else {
             RestResponse<Object> restResponse = new RestResponse<>();
             restResponse.setStatusCode(status);
             restResponse.setData(body);

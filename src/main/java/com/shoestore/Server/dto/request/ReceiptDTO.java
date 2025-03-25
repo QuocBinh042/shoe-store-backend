@@ -8,7 +8,7 @@ public class ReceiptDTO {
     private int receiptID;
     private double total;
     private LocalDate receiptDate;
-    private PaymentDTO payment;
+    private OrderDTO order;
 
 
 }

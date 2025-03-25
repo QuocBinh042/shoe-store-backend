@@ -1,16 +1,16 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDetailDTO;
-import com.shoestore.Server.entities.Color;
 import com.shoestore.Server.entities.Product;
 import com.shoestore.Server.entities.ProductDetail;
-import com.shoestore.Server.entities.Size;
+
+import com.shoestore.Server.enums.Color;
+import com.shoestore.Server.enums.Size;
 import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.mapper.ProductMapper;
 import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.ProductDetailService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +20,18 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ProductDetailServiceImpl implements ProductDetailService {
     private final ProductDetailRepository productDetailRepository;
     private final ProductDetailMapper productDetailMapper;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+
+    public ProductDetailServiceImpl(ProductDetailRepository productDetailRepository, ProductDetailMapper productDetailMapper, ProductRepository productRepository, ProductMapper productMapper) {
+        this.productDetailRepository = productDetailRepository;
+        this.productDetailMapper = productDetailMapper;
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
+    }
 
     @Override
     public ProductDetailDTO addProductDetail(ProductDetailDTO productDetailDTO) {

@@ -12,23 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
-  public User findByEmail(String email);
+  User findByEmail(String email);
   boolean existsByEmail(String email);
-  boolean existsUserByCIIs(String CI);
-  // Tìm kiếm theo tên, không phân biệt hoa thường
-  List<User> findByNameContainingIgnoreCase(String search);
 
-  // Tìm kiếm theo trạng thái và tên, không phân biệt hoa thường
-  List<User> findByStatusAndNameContainingIgnoreCase(String status, String search);
-
-  // Truy vấn tùy chỉnh kết hợp với Role
-  @Query("SELECT u FROM User u LEFT JOIN u.role r WHERE " +
-          "(:name IS NULL OR LOWER(u.userName) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-          "(:roleName IS NULL OR LOWER(r.name) LIKE LOWER(CONCAT('%', :roleName, '%'))) AND " +
-          "(:status IS NULL OR LOWER(u.status) = LOWER(:status))")
-  List<User> searchUsers(
-          @Param("name") String name,
-          @Param("roleName") String roleName,
-          @Param("status") String status
-  );
 }

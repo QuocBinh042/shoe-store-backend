@@ -1,10 +1,13 @@
 package com.shoestore.Server.controller;
 
+import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.request.PaymentDTO;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +24,7 @@ public class PaymentController {
     private OrderService orderService;
 
     @PostMapping("/add")
-    public ResponseEntity<PaymentDTO> addPayment(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<PaymentDTO> addPayment(@Valid @RequestBody PaymentDTO paymentDTO) {
         try {
             PaymentDTO savePaymentDTO = paymentService.addPayment(paymentDTO);
             return ResponseEntity.ok(savePaymentDTO);
@@ -46,24 +49,25 @@ public class PaymentController {
     public ResponseEntity<?> pay(HttpServletRequest request) {
         return ResponseEntity.ok(paymentService.createVnPayPayment(request));
     }
-
     @GetMapping("/vn-pay-callback")
-    public ResponseEntity<Map<String, String>> payCallbackHandler(HttpServletRequest request) {
-        request.getParameterMap().forEach((key, value) -> System.out.println(key + ": " + Arrays.toString(value)));
-
-        String status = request.getParameter("vnp_ResponseCode");
-        String txnRef = request.getParameter("vnp_TxnRef");
-
-        Map<String, String> response = new HashMap<>();
+    public ResponseEntity<Void> payCallbackHandler(@RequestParam Map<String, String> params) {
+        String status = params.get("vnp_ResponseCode");
+        String txnRef = params.get("vnp_TxnRef");
+        String amount = params.get("vnp_Amount");
+        String vnpTmnCode = params.get("vnp_TmnCode");
         if ("00".equals(status)) {
-//            OrderDTO order = orderService.getOrderByCode(txnRef);
-//            paymentService.updateStatus(order.getOrderID(), "Completed");
-            response.put("status", status);
-            response.put("code-order", txnRef);
-            response.put("message", "Payment successful");
-        } else {
-            response.put("message", "Payment failed");
+            OrderDTO order = orderService.getOrderByCode(txnRef);
+            paymentService.updateStatus(order.getOrderID(), "SUCCESS");
         }
-        return ResponseEntity.ok(response);
+
+        String redirectUrl = "http://localhost:3000/payment-result?"
+                + "vnp_ResponseCode=" + status
+                + "&vnp_TxnRef=" + txnRef
+                + "&vnp_Amount=" + amount
+                + "&vnp_TmnCode=" + vnpTmnCode;
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.LOCATION, redirectUrl)
+                .build();
     }
 }

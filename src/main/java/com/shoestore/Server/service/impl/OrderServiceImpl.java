@@ -4,6 +4,7 @@ import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.User;
 import com.shoestore.Server.entities.Voucher;
+import com.shoestore.Server.enums.OrderStatus;
 import com.shoestore.Server.mapper.OrderMapper;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.UserRepository;
@@ -47,17 +48,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO updateOrderStatus(int orderId, String status) {
         log.info("Updating status for Order ID: {} to {}", orderId, status);
+
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isEmpty()) {
             log.warn("Order with ID {} not found", orderId);
             throw new IllegalArgumentException("Không tìm thấy đơn hàng với ID: " + orderId);
         }
+
         Order order = optionalOrder.get();
-        order.setStatus(status);
+
+        try {
+            OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
+            order.setStatus(newStatus);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid order status: {}", status);
+            throw new IllegalArgumentException("Trạng thái đơn hàng không hợp lệ: " + status);
+        }
+
         orderRepository.save(order);
         log.info("Updated Order ID {} status to {}", orderId, status);
+
         return orderMapper.toDto(order);
     }
+
 
     @Override
     public OrderDTO getOrderById(int orderId) {

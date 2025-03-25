@@ -1,27 +1,31 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.ProductDTO;
+import com.shoestore.Server.dto.response.ApiStatusResponse;
+import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.response.ProductSearchResponse;
+import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.entities.Product;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.shoestore.Server.dto.response.ApiStatusResponse;
-import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.RestResponse;
+
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
+
     public ProductController(ProductService productService) {
         this.productService = productService;
-
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable int id) {
@@ -39,6 +43,18 @@ public class ProductController {
         double avgRating = productService.getAverageRating(id);
         return ResponseEntity.ok(avgRating);
     }
+    @GetMapping("/get-related/{id}")
+    public ResponseEntity<?> getRelatedProducts(@PathVariable int id) {
+        ProductDTO product = productService.getProductById(id);
+        if (product == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RestResponse<>(HttpStatus.NOT_FOUND.value(), "Product not found", null, null));
+        }
+
+        List<ProductSearchResponse> relatedProducts = productService.getRelatedProducts(id, product.getCategoryID(), product.getBrandID());
+        return ResponseEntity.ok(relatedProducts);
+    }
+
 
 
     @GetMapping("/search")
@@ -117,10 +133,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginationResponse<ProductDTO>> getAllProducts(
+    public ResponseEntity<PaginationResponse<ProductSearchResponse>> getAllProducts(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int size) {
-        PaginationResponse<ProductDTO> productPage = productService.getAllProduct(page, size);
+        PaginationResponse<ProductSearchResponse> productPage = productService.getAllProduct(page, size);
         return ResponseEntity.ok(productPage);
     }
 }

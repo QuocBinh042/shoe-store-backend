@@ -1,9 +1,9 @@
 package com.shoestore.Server.repositories;
 
 
-import com.shoestore.Server.entities.Color;
+import com.shoestore.Server.enums.Color;
 import com.shoestore.Server.entities.ProductDetail;
-import com.shoestore.Server.entities.Size;
+import com.shoestore.Server.enums.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

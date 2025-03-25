@@ -1,16 +1,11 @@
 package com.shoestore.Server.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
-public class UserDTO {
+public class SignUpRequest {
     private int userID;
 
     @NotBlank(message = "Name cannot be blank")
@@ -28,14 +23,7 @@ public class UserDTO {
     @Pattern(regexp = "^\\d{10,15}$", message = "Phone number must be between 10 and 15 digits")
     private String phoneNumber;
 
-    @NotBlank(message = "Status cannot be blank")
-    private String status;
-
     @NotBlank(message = "CI cannot be blank")
+    @JsonProperty("CI")
     private String CI;
-
-    @NotNull(message = "Roles cannot be null")
-    private Set<RoleDTO> roles;
-
-    private String refreshToken;
 }

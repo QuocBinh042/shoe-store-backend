@@ -5,5 +5,5 @@ import com.shoestore.Server.entities.Cart;
 
 public interface CartService {
     CartDTO getCartByUserId(int id);
-    CartDTO getCartById(int id);
+    CartDTO addCartByRegister(CartDTO cartDTO);
 }

@@ -1,4 +1,4 @@
-package com.shoestore.Server.entities;
+package com.shoestore.Server.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

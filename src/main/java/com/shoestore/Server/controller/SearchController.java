@@ -2,6 +2,7 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.response.ProductSearchResponse;
 import com.shoestore.Server.service.BrandService;
 import com.shoestore.Server.service.CategoryService;
 import com.shoestore.Server.service.ProductService;
@@ -39,15 +40,17 @@ public class SearchController {
     }
 
     @GetMapping("/all-products")
-    public ResponseEntity<PaginationResponse<ProductDTO>> getAllProducts(
-            @RequestParam(defaultValue = "1") int page,
+    public ResponseEntity<?> getAllProducts(
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") int pageSize) {
-        PaginationResponse<ProductDTO> productPage = productService.getAllProduct(page, pageSize);
-        return ResponseEntity.ok(productPage);
+
+        PaginationResponse<ProductSearchResponse> paginatedProducts = productService.getAllProduct(page, pageSize);
+        return ResponseEntity.ok(paginatedProducts);
     }
 
+
     @GetMapping("/filtered")
-    public ResponseEntity<PaginationResponse<ProductDTO>> getFilteredProducts(
+    public ResponseEntity<?> getFilteredProducts(
             @RequestParam(required = false) List<Integer> categoryIds,
             @RequestParam(required = false) List<Integer> brandIds,
             @RequestParam(required = false) List<String> colors,
@@ -56,10 +59,12 @@ public class SearchController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") int pageSize) {
-        PaginationResponse<ProductDTO> productPage = productService.getFilteredProducts(
+
+        PaginationResponse<ProductSearchResponse> paginatedProducts = productService.getFilteredProducts(
                 categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice, sortBy, page, pageSize);
-        return ResponseEntity.ok(productPage);
+        return ResponseEntity.ok(paginatedProducts);
     }
+
 }

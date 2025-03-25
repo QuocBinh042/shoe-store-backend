@@ -5,6 +5,7 @@ import com.shoestore.Server.dto.request.PaymentDTO;
 import com.shoestore.Server.dto.response.PaymentResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.Payment;
+import com.shoestore.Server.enums.PaymentStatus;
 import com.shoestore.Server.mapper.PaymentMapper;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.PaymentRepository;
@@ -97,14 +98,21 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment payment = paymentRepository.findPaymentByOrderId(orderId);
         if (payment != null) {
-            payment.setStatus(status);
-            payment.setPaymentDate(LocalDate.now());
-            paymentRepository.save(payment);
-            log.info("Payment status updated for Order ID: {} to {}", orderId, status);
+            try {
+                PaymentStatus newStatus = PaymentStatus.valueOf(status.toUpperCase());
+                payment.setStatus(newStatus);
+                payment.setPaymentDate(LocalDate.now());
+                paymentRepository.save(payment);
+                log.info("Payment status updated for Order ID: {} to {}", orderId, newStatus);
+            } catch (IllegalArgumentException e) {
+                log.error("Invalid payment status: {}", status);
+                throw new IllegalArgumentException("Payment status invalid" + status);
+            }
         } else {
             log.warn("No payment found for Order ID: {}", orderId);
         }
     }
+
 
     public PaymentResponse createVnPayPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;

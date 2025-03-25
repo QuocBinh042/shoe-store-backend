@@ -1,5 +1,6 @@
 package com.shoestore.Server.service;
 
+import com.shoestore.Server.dto.request.SignUpRequest;
 import com.shoestore.Server.dto.request.UserDTO;
 import com.shoestore.Server.entities.User;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public interface UserService {
     UserDTO findByEmail(String email);
 
-    UserDTO addUserByRegister(UserDTO userDTO);
+    UserDTO addUserByRegister(SignUpRequest signUpRequest);
 
     List<UserDTO> getAllUsers();
 

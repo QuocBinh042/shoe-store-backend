@@ -1,5 +1,7 @@
 package com.shoestore.Server.security;
 
+import com.shoestore.Server.dto.request.PermissionDTO;
+import com.shoestore.Server.dto.request.RoleDTO;
 import com.shoestore.Server.dto.response.LoginResponse;
 import com.shoestore.Server.dto.response.UserInsideTokenResponse;
 import com.shoestore.Server.dto.response.UserLoginResponse;
@@ -8,6 +10,8 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +22,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -54,11 +59,19 @@ public class JwtUtils {
         Instant validity = now.plus(accessExpirationMs, ChronoUnit.MILLIS);
 
         String subject = identifier.contains("@") ? user.getEmail() : user.getPhoneNumber();
+        List<String> roleNames = resLoginDTO.getUser().getRoles().stream()
+                .map(role -> "ROLE_" + role.getRoleType())
+                .collect(Collectors.toList());
+        List<String> permissions = user.getRoles().stream()
+                .flatMap(role -> role.getPermissions().stream())
+                .map(PermissionDTO::getName)
+                .collect(Collectors.toList());
 
         return Jwts.builder()
                 .setSubject(subject)
                 .claim("user", userInsideToken)
-                .claim("roles", Collections.singletonList(resLoginDTO.getUser().getRole().getName()))
+                .claim("roles",roleNames)
+                .claim("permissions", permissions)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(validity))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
@@ -160,4 +173,39 @@ public class JwtUtils {
         }
         return Optional.empty();
     }
+    public List<GrantedAuthority> getPermissionsFromToken(String token) {
+        Optional<Claims> claimsOpt = parseClaims(token);
+        if (claimsOpt.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Claims claims = claimsOpt.get();
+        List<String> permissions = claims.get("permissions", List.class);
+
+        if (permissions == null) {
+            return Collections.emptyList();
+        }
+
+        return permissions.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+    public List<GrantedAuthority> getRolesFromToken(String token) {
+        Optional<Claims> claimsOpt = parseClaims(token);
+        if (claimsOpt.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Claims claims = claimsOpt.get();
+        List<String> roles = claims.get("roles", List.class);
+
+        if (roles == null) {
+            return Collections.emptyList();
+        }
+
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
 }
