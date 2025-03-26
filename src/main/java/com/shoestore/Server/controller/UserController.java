@@ -1,6 +1,7 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.UserDTO;
+import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +46,34 @@ public class UserController {
 
         UserDTO updatedUser = userService.updateUserInformationByUser(id, userDTO);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping("/customers")
+    public ResponseEntity<List<UserDTO>> getCustomers() {
+        List<UserDTO> customers = userService.getUsersByRoleCustomer();
+        return ResponseEntity.ok(customers);
+    }
+
+    @PostMapping("/customers")
+    public ResponseEntity<UserDTO> createCustomer(@Valid @RequestBody UserDTO userDTO) {
+        UserDTO newCustomer = userService.createCustomer(userDTO);
+        return ResponseEntity.status(ApiStatusResponse.CREATED.getCode()).body(newCustomer);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String keyword) {
+        List<UserDTO> users = userService.searchUsers(keyword);
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/{id}/delivered-orders-count")
+    public ResponseEntity<Integer> getDeliveredOrdersCount(@PathVariable int id) {
+        int count = userService.countDeliveredOrdersByUserId(id);
+        return ResponseEntity.ok(count);
+    }
+    @GetMapping("/{id}/total-amount")
+    public ResponseEntity<Double> getTotalAmountByUserId(@PathVariable int id) {
+        Double totalAmount = userService.calculateTotalAmountByUserId(id);
+        return ResponseEntity.ok(totalAmount);
     }
 }
