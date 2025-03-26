@@ -48,9 +48,6 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtils jwtUtils;
-    @Value("${jwt.expiration}")
-    private long accessExpirationMs;
-
     @Value("${jwt.refreshExpiration}")
     private long refreshExpirationMs;
     @PostMapping("/login")

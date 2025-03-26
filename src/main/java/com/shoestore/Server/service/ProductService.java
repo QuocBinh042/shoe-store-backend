@@ -2,6 +2,7 @@ package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.request.ProductDetailDTO;
+import com.shoestore.Server.dto.response.FeaturedProductResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.dto.response.ProductSearchResponse;
 import com.shoestore.Server.entities.Product;
@@ -37,4 +38,6 @@ public interface ProductService {
     
     double getAverageRating(int id);
     List<ProductSearchResponse> getRelatedProducts(int productId, int categoryId,int brandId);
+    List<FeaturedProductResponse> getBestSellingProduct();
+    List<FeaturedProductResponse> getNewArrivals();
 }

@@ -24,9 +24,10 @@ public class OrderController {
         this.orderService = orderService;
         this.mailService = mailService;
     }
-
+    @PreAuthorize("hasAnyAuthority('CREATE_ORDER')")
     @PostMapping("/add")
     public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO) {
+        System.out.println(orderDTO);
         return ResponseEntity.ok(orderService.addOrder(orderDTO));
     }
 
@@ -51,7 +52,7 @@ public class OrderController {
 
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
     }
-    @PreAuthorize("hasAnyAuthority('MANAGE_ORDERS')")
+    @PreAuthorize("hasAnyAuthority('VIEW_ORDER')")
     @GetMapping("/get-all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAll());

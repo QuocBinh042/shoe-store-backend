@@ -2,6 +2,7 @@ package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDTO;
 
+import com.shoestore.Server.dto.response.FeaturedProductResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.dto.response.ProductSearchResponse;
 
@@ -25,6 +26,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -133,7 +136,8 @@ public class ProductServiceImpl implements ProductService {
                                                              String keyword, Double minPrice, Double maxPrice) {
         Specification<Product> spec = Specification.where(null);
 
-        if (categoryIds != null && !categoryIds.isEmpty()) spec = spec.and(ProductSpecification.hasCategories(categoryIds));
+        if (categoryIds != null && !categoryIds.isEmpty())
+            spec = spec.and(ProductSpecification.hasCategories(categoryIds));
         if (brandIds != null && !brandIds.isEmpty()) spec = spec.and(ProductSpecification.hasBrands(brandIds));
         if (colors != null && !colors.isEmpty()) spec = spec.and(ProductSpecification.hasColors(colors));
         if (sizes != null && !sizes.isEmpty()) spec = spec.and(ProductSpecification.hasSizes(sizes));
@@ -178,12 +182,12 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         return productMapper.toDto(savedProduct);
     }
-    
+
     @Override
     @Transactional
     public ProductDTO updateProduct(int id, ProductDTO productDTO) {
         Optional<Product> existingProduct = productRepository.findById(id);
-        
+
         if (existingProduct.isPresent()) {
             Product product = existingProduct.get();
 
@@ -196,11 +200,11 @@ public class ProductServiceImpl implements ProductService {
             Product updatedProduct = productRepository.save(product);
             return productMapper.toDto(updatedProduct);
         }
-        
+
         return null;
     }
 
-    
+
     @Override
     @Transactional
     public boolean deleteProduct(int id) {
@@ -222,7 +226,42 @@ public class ProductServiceImpl implements ProductService {
                     .toList();
             relatedProducts.addAll(brandProducts);
         }
-        List<ProductSearchResponse> productSearchResponse=productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+        List<ProductSearchResponse> productSearchResponse = productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
         return enhanceProductSearchResponses(productSearchResponse);
     }
+
+    @Override
+    public List<FeaturedProductResponse> getBestSellingProduct() {
+        List<Object[]> rawResults = productRepository.findTopSellingProducts();
+        return rawResults.stream()
+                .map(row -> new FeaturedProductResponse(
+                        (int) row[0],
+                        (String) row[1],
+                        (String) row[2],
+                        (double) row[3],
+                        (long) row[4],
+                        (long) row[5],
+                        row[6] != null ? ((Timestamp) row[6]).toLocalDateTime() : null,
+                        (String) row[7]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeaturedProductResponse> getNewArrivals() {
+        List<Object[]> rawResults = productRepository.findNewArrivals();
+        return rawResults.stream()
+                .map(row -> new FeaturedProductResponse(
+                        (int) row[0],
+                        (String) row[1],
+                        (String) row[2],
+                        (double) row[3],
+                        (long) row[4],
+                        (long) row[5],
+                        row[6] != null ? ((Timestamp) row[6]).toLocalDateTime() : null,
+                        (String) row[7]
+                ))
+                .collect(Collectors.toList());
+    }
+
 }
