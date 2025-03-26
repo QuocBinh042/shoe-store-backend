@@ -16,17 +16,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
     @Query("SELECT od FROM OrderDetail od WHERE od.productDetail.productDetailID = :productDetailID AND od.order.orderID = :orderID")
     List<OrderDetail> findByProductIDAndOrderID(@Param("productDetailID") int productID, @Param("orderID") int orderID);
 
-
-//    // Tìm OrderDetail theo productID và orderID
-//    Optional<OrderDetail> findByProductProductIDAndOrderOrderID(int productID, int orderID);
-//
-//    @Modifying
-//    @Query("DELETE FROM OrderDetail od WHERE od.product.productID = :productID AND od.order.orderID = :orderID")
-//    void deleteByProductProductIDAndOrderOrderID(@Param("productID") int productID, @Param("orderID") int orderID);
-
-
-
-
     @Query("""
     SELECT p, SUM(od.quantity) AS totalQuantity
     FROM OrderDetail od

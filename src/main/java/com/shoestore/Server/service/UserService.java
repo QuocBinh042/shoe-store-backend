@@ -2,7 +2,6 @@ package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.SignUpRequest;
 import com.shoestore.Server.dto.request.UserDTO;
-import com.shoestore.Server.entities.User;
 
 import java.util.List;
 
@@ -17,4 +16,10 @@ public interface UserService {
 
     UserDTO getUserById(int id);
     void updateRefreshToken(String email, String refreshToken);
+    List<UserDTO> getUsersByRoleCustomer();
+
+    UserDTO createCustomer(UserDTO userDTO);
+    List<UserDTO> searchUsers(String keyword);
+    int countDeliveredOrdersByUserId(int userId);
+    Double calculateTotalAmountByUserId(int userId);
 }
