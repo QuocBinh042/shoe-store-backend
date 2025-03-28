@@ -16,8 +16,9 @@ public interface UserRepository extends JpaRepository<User,Integer> {
   User findByEmail(String email);
   boolean existsByEmail(String email);
   List<User> findByRoles_RoleType(RoleType roleType);
-  @Query("SELECT u FROM User u WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+  @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleType = :roleType " +
+          "AND (LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
           "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-          "OR u.phoneNumber LIKE CONCAT('%', :keyword, '%')")
-  List<User> searchUsers(@Param("keyword") String keyword);
+          "OR u.phoneNumber LIKE CONCAT('%', :keyword, '%'))")
+  List<User> searchUsersByRole(@Param("keyword") String keyword, @Param("roleType") RoleType roleType);
 }
