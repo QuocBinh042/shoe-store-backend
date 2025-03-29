@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -60,6 +61,14 @@ public class UserController {
         return ResponseEntity.status(ApiStatusResponse.CREATED.getCode()).body(newCustomer);
     }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<UserDTO> updateUserStatus(@PathVariable int id,
+                                                    @RequestBody Map<String, String> requestBody) {
+        String newStatus = requestBody.get("status");
+        return ResponseEntity.ok(userService.updateUserStatus(id, newStatus));
+    }
+
+
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestParam String keyword) {
         List<UserDTO> users = userService.searchUsers(keyword);
@@ -76,4 +85,6 @@ public class UserController {
         Double totalAmount = userService.calculateTotalAmountByUserId(id);
         return ResponseEntity.ok(totalAmount);
     }
+
+
 }

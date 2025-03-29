@@ -28,13 +28,13 @@ public class UserDTO {
     @Pattern(regexp = "^\\d{10,15}$", message = "Phone number must be between 10 and 15 digits")
     private String phoneNumber;
 
-    @NotBlank(message = "Status cannot be blank")
+//    @NotBlank(message = "Status cannot be blank")
     private String status;
 
-    @NotBlank(message = "CI cannot be blank")
+//    @NotBlank(message = "CI cannot be blank")
     private String CI;
 
-    @NotNull(message = "Roles cannot be null")
+//    @NotNull(message = "Roles cannot be null")
     private Set<RoleDTO> roles;
 
     private String refreshToken;

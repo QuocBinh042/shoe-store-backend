@@ -10,6 +10,7 @@ import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.RoleRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -125,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> searchUsers(String keyword) {
-        List<User> users = userRepository.searchUsers(keyword);
+        List<User> users = userRepository.searchUsersByRole(keyword, RoleType.CUSTOMER);
         return users.stream().map(userMapper::toDto).collect(Collectors.toList());
     }
 
@@ -137,5 +138,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Double calculateTotalAmountByUserId(int userId) {
         return orderRepository.sumTotalAmountByUserId(userId);
+    }
+
+    @Override
+    public UserDTO updateUserStatus(int id, String status) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        user.setStatus(status);
+        userRepository.save(user);
+        return userMapper.toDto(user);
     }
 }
