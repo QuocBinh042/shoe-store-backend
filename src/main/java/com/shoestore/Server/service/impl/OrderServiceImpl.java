@@ -1,6 +1,7 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.User;
 import com.shoestore.Server.entities.Voucher;
@@ -10,32 +11,31 @@ import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.repositories.VoucherRepository;
 import com.shoestore.Server.service.OrderService;
+import com.shoestore.Server.service.PaginationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
-
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper,
-                            VoucherRepository voucherRepository, UserRepository userRepository) {
-        this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.voucherRepository = voucherRepository;
-        this.userRepository = userRepository;
-    }
-
+    private final PaginationService paginationService;
     @Override
-    public List<OrderDTO> getAll() {
+    public List<OrderDTO> getAllOrders() {
         log.info("Fetching all orders...");
         List<OrderDTO> orders = orderRepository.findAll()
                 .stream()
@@ -149,4 +149,178 @@ public class OrderServiceImpl implements OrderService {
         log.info("Total order amount for User ID {}: {}", id, total != null ? total : 0.0);
         return total != null ? total : 0.0;
     }
+
+    @Override
+    public long getTotalOrdersByDay() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.countByOrderDate(today);
+    }
+
+    @Override
+    public long getTotalOrdersByMonth() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.countByMonthAndYear(today.getMonthValue(), today.getYear());
+    }
+
+    @Override
+    public long getTotalOrdersByYear() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.countByYear(today.getYear());
+    }
+
+    @Override
+    public long getTotalOrders() {
+        return orderRepository.count();
+    }
+
+    @Override
+    public Double getTotalOrderAmount() {
+        return orderRepository.sumTotalOrderAmount();
+    }
+
+    @Override
+    public Double getTotalOrderAmountByDay() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.sumTotalOrderAmountByDay(today);
+    }
+
+    @Override
+    public Double getTotalOrderAmountByMonth() {
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int year = today.getYear();
+        return orderRepository.sumTotalOrderAmountByMonth(month, year);
+    }
+
+    @Override
+    public Double getTotalOrderAmountByYear() {
+        int year = LocalDate.now().getYear();
+        return orderRepository.sumTotalOrderAmountByYear(year);
+    }
+
+    @Override
+    public long getCompletedOrders() {
+        return orderRepository.countCompletedOrders();
+    }
+
+    @Override
+    public long getCompletedOrdersByDay() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.countCompletedOrdersByDay(today);
+    }
+
+    @Override
+    public long getCompletedOrdersByMonth() {
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int year = today.getYear();
+        return orderRepository.countCompletedOrdersByMonth(month, year);
+    }
+
+    @Override
+    public long getCompletedOrdersByYear() {
+        int year = LocalDate.now().getYear();
+        return orderRepository.countCompletedOrdersByYear(year);
+    }
+
+    @Override
+    public long getCanceledOrders() {
+        return orderRepository.countCanceledOrders();
+    }
+
+    @Override
+    public long getCanceledOrdersByDay() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.countCanceledOrdersByDay(today);
+    }
+
+    @Override
+    public long getCanceledOrdersByMonth() {
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int year = today.getYear();
+        return orderRepository.countCanceledOrdersByMonth(month, year);
+    }
+
+    @Override
+    public long getCanceledOrdersByYear() {
+        int year = LocalDate.now().getYear();
+        return orderRepository.countCanceledOrdersByYear(year);
+    }
+    @Override
+    public List<OrderDTO> searchOrders(String query) {
+        List<Order> orders = orderRepository.searchOrders(query);
+        return orders.stream()
+                .map(orderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationResponse<OrderDTO> getAllOrdersSorted(String sort, int page, int pageSize) {
+        Sort sorting;
+        if (sort == null) {
+            sorting = Sort.unsorted();
+        } else {
+            switch (sort) {
+                case "newest":
+                    sorting = Sort.by(Sort.Direction.DESC, "orderDate");
+                    break;
+                case "oldest":
+                    sorting = Sort.by(Sort.Direction.ASC, "orderDate");
+                    break;
+                case "highestTotal":
+                    sorting = Sort.by(Sort.Direction.DESC, "total");
+                    break;
+                case "lowestTotal":
+                    sorting = Sort.by(Sort.Direction.ASC, "total");
+                    break;
+                default:
+                    sorting = Sort.unsorted();
+                    break;
+            }
+        }
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        pageable = PageRequest.of(page - 1, pageSize, sorting);
+        Page<Order> orderPage = orderRepository.findAll(pageable);
+        Page<OrderDTO> orderDtoPage = orderPage.map(orderMapper::toDto);
+        return paginationService.paginate(orderDtoPage);
+    }
+
+    @Override
+    public PaginationResponse<OrderDTO> getAllOrdersPaged(int page, int pageSize) {
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        Page<Order> orderPage = orderRepository.findAll(pageable);
+        Page<OrderDTO> orderDtoPage = orderPage.map(orderMapper::toDto);
+        return paginationService.paginate(orderDtoPage);
+    }
+
+    @Override
+    public PaginationResponse<OrderDTO> getOrdersByDay(int page, int pageSize) {
+        LocalDate today = LocalDate.now();
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        Page<Order> orderPage = orderRepository.findByOrderDate(today, pageable);
+        Page<OrderDTO> dtoPage = orderPage.map(orderMapper::toDto);
+        return paginationService.paginate(dtoPage);
+    }
+
+    @Override
+    public PaginationResponse<OrderDTO> getOrdersByMonth(int page, int pageSize) {
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+        int year = today.getYear();
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        Page<Order> orderPage = orderRepository.findByMonthAndYear(month, year, pageable);
+        Page<OrderDTO> dtoPage = orderPage.map(orderMapper::toDto);
+        return paginationService.paginate(dtoPage);
+    }
+
+    @Override
+    public PaginationResponse<OrderDTO> getOrdersByYear(int page, int pageSize) {
+        int year = LocalDate.now().getYear();
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        Page<Order> orderPage = orderRepository.findByYear(year, pageable);
+        Page<OrderDTO> dtoPage = orderPage.map(orderMapper::toDto);
+        return paginationService.paginate(dtoPage);
+    }
+
 }

@@ -9,6 +9,7 @@ import com.shoestore.Server.repositories.OrderDetailRepository;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.service.OrderDetailService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +18,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrderDetailServiceImpl implements OrderDetailService {
-
     private final OrderDetailRepository orderDetailRepository;
     private final OrderDetailMapper orderDetailMapper;
     private final OrderRepository orderRepository;
     private final ProductDetailRepository productDetailRepository;
-
-    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, OrderDetailMapper orderDetailMapper,
-                                  OrderRepository orderRepository, ProductDetailRepository productDetailRepository) {
-        this.orderDetailRepository = orderDetailRepository;
-        this.orderDetailMapper = orderDetailMapper;
-        this.orderRepository = orderRepository;
-        this.productDetailRepository = productDetailRepository;
-    }
 
     @Override
     public OrderDetailDTO save(OrderDetailDTO orderDetailDTO) {
