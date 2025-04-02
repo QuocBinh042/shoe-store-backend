@@ -83,8 +83,6 @@ public class Promotion extends BaseEntity{
 
     private boolean status;
 
-    private Boolean featured;
-
     private Boolean stackable;
 
     private Integer usageLimit;
@@ -92,8 +90,6 @@ public class Promotion extends BaseEntity{
     private String image;
 
     private Integer usageCount;
-
-    private BigDecimal revenue;
 
 }
 
