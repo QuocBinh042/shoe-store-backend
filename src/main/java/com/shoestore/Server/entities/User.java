@@ -1,13 +1,10 @@
 package com.shoestore.Server.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.shoestore.Server.enums.CustomerGroup;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 import java.util.Set;
@@ -16,7 +13,6 @@ import java.util.Set;
 @Table(name = "Users")
 @Getter
 @Setter
-@ToString
 public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +41,7 @@ public class User extends BaseEntity{
     private List<Review> reviews;
     @Column(length = 500)
     private String refreshToken;
+
     @ManyToMany
     @JoinTable(
             name = "User_Roles",
@@ -53,4 +50,8 @@ public class User extends BaseEntity{
     )
     @JsonIgnore
     private Set<Role> roles;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "customerGroup")
+    private CustomerGroup customerGroup;
 }
