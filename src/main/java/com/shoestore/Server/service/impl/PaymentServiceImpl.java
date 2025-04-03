@@ -3,6 +3,7 @@ package com.shoestore.Server.service.impl;
 import com.shoestore.Server.config.VnPayConfig;
 import com.shoestore.Server.dto.request.PaymentDTO;
 import com.shoestore.Server.dto.response.PaymentResponse;
+import com.shoestore.Server.dto.response.PaymentUrlResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.Payment;
 import com.shoestore.Server.enums.PaymentStatus;
@@ -13,7 +14,6 @@ import com.shoestore.Server.service.PaymentService;
 import com.shoestore.Server.utils.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -68,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentDTO getPaymentByOrderId(int id) {
+    public PaymentResponse getPaymentByOrderId(int id) {
         log.info("Fetching payment for Order ID: {}", id);
 
         Payment payment = paymentRepository.findPaymentByOrderId(id);
@@ -78,7 +78,7 @@ public class PaymentServiceImpl implements PaymentService {
             log.warn("No payment found for Order ID: {}", id);
         }
 
-        return payment != null ? paymentMapper.toDto(payment) : null;
+        return payment != null ? paymentMapper.toPaymentResponse(payment) : null;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
 
-    public PaymentResponse createVnPayPayment(HttpServletRequest request) {
+    public PaymentUrlResponse createVnPayPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String orderCode=request.getParameter("code");
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig(orderCode);
@@ -127,7 +127,7 @@ public class PaymentServiceImpl implements PaymentService {
         String vnpSecureHash = VNPayUtil.hmacSHA512(vnPayConfig.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
         String paymentUrl = vnPayConfig.getVnp_PayUrl() + "?" + queryUrl;
-        return PaymentResponse.builder()
+        return PaymentUrlResponse.builder()
                 .paymentUrl(paymentUrl).build();
     }
 }

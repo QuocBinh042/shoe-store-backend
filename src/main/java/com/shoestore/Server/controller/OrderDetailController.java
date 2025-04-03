@@ -1,6 +1,7 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
+import com.shoestore.Server.dto.response.OrderDetailsResponse;
 import com.shoestore.Server.service.OrderDetailService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class OrderDetailController {
     }
 
     @GetMapping("/by-order-id/{order-id}")
-    public ResponseEntity<List<OrderDetailDTO>> getOrderDetailByOrder(@PathVariable("order-id") int id) {
+    public ResponseEntity<List<OrderDetailsResponse>> getOrderDetailByOrder(@PathVariable("order-id") int id) {
         return ResponseEntity.ok(orderDetailService.getProductDetailByOrderID(id));
     }
 

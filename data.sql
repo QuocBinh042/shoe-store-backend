@@ -178,7 +178,7 @@ INSERT INTO Promotion (name, description, discountValue, startDate, endDate, sta
 
 INSERT INTO Product (description, price, productName, status, brandID, categoryID, promotionID, supplierID, createdAt, updatedAt)
 VALUES
-('High-performance running shoes.', 1000000, 'Nike Air Max 270', 'Available', 1, 1, 1, 1, NOW(), NOW()),
+('High-performance running shoes.', 1000000, 'Nike Jordan', 'Available', 1, 1, 1, 1, NOW(), NOW()),
 ('Lightweight basketball sneakers.', 1200000, 'Adidas Harden Vol. 5', 'Available', 2, 2, 2, 2, NOW(), NOW()),
 ('Stylish hiking boots.', 1500000, 'Timberland Premium', 'Available', 3, 3, 4, 3, NOW(), NOW()),
 ('Everyday wear sneakers.', 800000, 'Converse Chuck Taylor', 'Available', 4, 4, 5, 4, NOW(), NOW()),
@@ -427,7 +427,7 @@ VALUES
 (44, 'product44_4.png'),
 (44, 'product44_5.png'),
 (45, 'product45_1.png'),
-(45, 'product45_2.png')
+(45, 'product45_2.png');
 
 -- (46, 'product46_1.png'),
 -- (46, 'product46_2.png'),

@@ -1,15 +1,19 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.OrderResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.User;
 import com.shoestore.Server.entities.Voucher;
 import com.shoestore.Server.enums.OrderStatus;
+import com.shoestore.Server.mapper.OrderDetailMapper;
 import com.shoestore.Server.mapper.OrderMapper;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.repositories.VoucherRepository;
 import com.shoestore.Server.service.OrderService;
+import com.shoestore.Server.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +23,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
-
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper,
-                            VoucherRepository voucherRepository, UserRepository userRepository) {
-        this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.voucherRepository = voucherRepository;
-        this.userRepository = userRepository;
-    }
+    private final OrderDetailMapper orderDetailMapper;
+   private final PaymentService paymentService;
 
     @Override
     public List<OrderDTO> getAll() {
@@ -103,24 +102,34 @@ public class OrderServiceImpl implements OrderService {
                     log.error("User not found with ID: {}", orderDTO.getUser().getUserID());
                     return new IllegalArgumentException("User not found");
                 });
-
+        order.setPaymentMethod(orderDTO.getPaymentMethod());
         order.setUser(user);
         Order savedOrder = orderRepository.save(order);
         log.info("Order added successfully with ID: {}", savedOrder.getOrderID());
-
         return orderMapper.toDto(savedOrder);
     }
 
     @Override
-    public List<OrderDTO> getOrderByByUser(int userId) {
+    public List<OrderResponse> getOrderByByUser(int userId) {
         log.info("Fetching orders for User ID: {}", userId);
-        List<OrderDTO> orders = orderRepository.findByUser_UserID(userId)
+
+        List<OrderResponse> orders = orderRepository.findByUser_UserID(userId)
                 .stream()
-                .map(orderMapper::toDto)
+                .map(order -> {
+                    int orderId = order.getOrderID();
+
+                    return new OrderResponse(
+                            orderMapper.toDto(order),
+                            orderDetailMapper.toListDto(order.getOrderDetails()),
+                            paymentService.getPaymentByOrderId(orderId)
+                    );
+                })
                 .collect(Collectors.toList());
+
         log.info("Found {} orders for User ID: {}", orders.size(), userId);
         return orders;
     }
+
 
     @Override
     public OrderDTO getOrderByCode(String code) {

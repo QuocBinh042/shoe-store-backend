@@ -1,6 +1,7 @@
 package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.OrderResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.entities.Product;
@@ -18,7 +19,7 @@ public interface OrderService {
 
     OrderDTO addOrder(OrderDTO order);
 
-    List<OrderDTO> getOrderByByUser(int userId);
+    List<OrderResponse> getOrderByByUser(int userId);
 
     OrderDTO getOrderByCode(String orderCode);
 

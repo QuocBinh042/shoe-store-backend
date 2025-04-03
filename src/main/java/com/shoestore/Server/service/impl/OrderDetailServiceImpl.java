@@ -1,14 +1,19 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
+import com.shoestore.Server.dto.response.OrderDetailsResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.entities.ProductDetail;
 import com.shoestore.Server.mapper.OrderDetailMapper;
+import com.shoestore.Server.mapper.OrderMapper;
+import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.repositories.OrderDetailRepository;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.service.OrderDetailService;
+import com.shoestore.Server.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,21 +22,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrderDetailServiceImpl implements OrderDetailService {
 
     private final OrderDetailRepository orderDetailRepository;
     private final OrderDetailMapper orderDetailMapper;
     private final OrderRepository orderRepository;
     private final ProductDetailRepository productDetailRepository;
-
-    public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository, OrderDetailMapper orderDetailMapper,
-                                  OrderRepository orderRepository, ProductDetailRepository productDetailRepository) {
-        this.orderDetailRepository = orderDetailRepository;
-        this.orderDetailMapper = orderDetailMapper;
-        this.orderRepository = orderRepository;
-        this.productDetailRepository = productDetailRepository;
-    }
-
+    private final ProductDetailMapper productDetailMapper;
+    private final ProductService productService;
+    private final OrderMapper orderMapper;
     @Override
     public OrderDetailDTO save(OrderDetailDTO orderDetailDTO) {
         log.info("Saving order detail for Order ID: {}", orderDetailDTO.getOrder().getOrderID());
@@ -70,15 +70,27 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 
     @Override
-    public List<OrderDetailDTO> getProductDetailByOrderID(int orderID) {
+    public List<OrderDetailsResponse> getProductDetailByOrderID(int orderID) {
         log.info("Fetching order details for Order ID: {}", orderID);
 
-        List<OrderDetailDTO> orderDetails = orderDetailRepository.findByOrder_OrderID(orderID)
+        List<OrderDetailsResponse> responses = orderDetailRepository.findByOrder_OrderID(orderID)
                 .stream()
-                .map(orderDetailMapper::toDto)
+                .map(orderDetail -> {
+                    var productDetailDTO = productDetailMapper.toDto(orderDetail.getProductDetail());
+//                    var product = productService.getProductByProductDetailsId(productDetailDTO.getProductDetailID());
+                    log.info("Product image: {}", productDetailDTO.getProductDetailID());
+                    return new OrderDetailsResponse(
+                            productDetailDTO,
+                            orderDetail.getQuantity(),
+                            orderDetail.getPrice(),
+                            "OK"
+                    );
+                })
                 .collect(Collectors.toList());
 
-        log.info("Found {} order details for Order ID: {}", orderDetails.size(), orderID);
-        return orderDetails;
+        log.info("Found {} order details for Order ID: {}", responses.size(), orderID);
+        return responses;
     }
+
+
 }

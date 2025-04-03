@@ -53,9 +53,8 @@ public class CartItemServiceImpl implements CartItemService {
             ProductDetail productDetail = cartItem.getProductDetail();
             CartItemResponse cartItemResponse = new CartItemResponse();
             cartItemResponse.setCartItemDTO(cartItemMapper.toCartItemDTO(cartItem));
-            cartItemResponse.setProductName(productDetail.getProduct().getProductName());
             cartItemResponse.setProductDetailDTO(productDetailMapper.toDto(productDetail));
-            cartItemResponse.setProductPrice(promotionService.getDiscountedPrice(productDetail.getProduct().getProductID()));
+           cartItemResponse.setProductDTO(productMapper.toDto(productDetail.getProduct()));
             return cartItemResponse;
         }));
     }

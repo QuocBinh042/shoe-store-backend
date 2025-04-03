@@ -1,10 +1,13 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.OrderResponse;
+import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.MailService;
 import com.shoestore.Server.service.OrderService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,30 +18,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/order")
 public class OrderController {
     private final OrderService orderService;
-    private final MailService mailService;
-
-    public OrderController(OrderService orderService, MailService mailService) {
-        this.orderService = orderService;
-        this.mailService = mailService;
-    }
+    private final EmailService emailService;
     @PreAuthorize("hasAnyAuthority('CREATE_ORDER')")
     @PostMapping("/add")
-    public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO){
         System.out.println(orderDTO);
-        return ResponseEntity.ok(orderService.addOrder(orderDTO));
-    }
-
-    @PostMapping("/mail-confirm")
-    public ResponseEntity<String> sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String text) {
-        try {
-            mailService.sendOrderConfirmation(to, subject, text);
-            return ResponseEntity.ok("Email sent successfully!");
-        } catch (MessagingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send email: " + e.getMessage());
-        }
+        OrderDTO saveOrder=orderService.addOrder(orderDTO);
+//        emailService.sendOrderSuccessEmail(saveOrder.getUser().getEmail(), saveOrder.getUser().getName(), saveOrder.getCode());
+        return ResponseEntity.ok(saveOrder);
     }
 
     @GetMapping("/{id}")
@@ -59,7 +50,7 @@ public class OrderController {
     }
 
     @GetMapping("/by-user-id/{userId}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByUserId(@PathVariable int userId) {
+    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable int userId) {
         return ResponseEntity.ok(orderService.getOrderByByUser(userId));
     }
 
