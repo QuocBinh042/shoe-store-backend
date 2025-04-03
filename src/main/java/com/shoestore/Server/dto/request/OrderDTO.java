@@ -27,8 +27,6 @@ public class OrderDTO {
     @NotBlank(message = "Order code cannot be blank")
     private String code;
 
-    private VoucherDTO voucher;
-
     @NotBlank(message = "Shipping address cannot be blank")
     private String shippingAddress;
 
@@ -39,6 +37,6 @@ public class OrderDTO {
     @PositiveOrZero(message = "Discount cannot be negative")
     private double discount;
 
-    @NotNull(message = "User cannot be null")
+    private VoucherDTO voucher;
     private UserDTO user;
 }

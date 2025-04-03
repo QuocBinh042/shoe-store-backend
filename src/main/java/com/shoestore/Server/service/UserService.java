@@ -22,4 +22,5 @@ public interface UserService {
     List<UserDTO> searchUsers(String keyword);
     int countDeliveredOrdersByUserId(int userId);
     Double calculateTotalAmountByUserId(int userId);
+    UserDTO updateUserStatus(int id, String status);
 }

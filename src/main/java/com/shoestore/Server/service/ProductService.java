@@ -1,12 +1,9 @@
 package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.ProductDTO;
-import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.response.FeaturedProductResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.dto.response.ProductSearchResponse;
-import com.shoestore.Server.entities.Product;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

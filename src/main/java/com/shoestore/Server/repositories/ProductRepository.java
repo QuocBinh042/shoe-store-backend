@@ -2,8 +2,6 @@ package com.shoestore.Server.repositories;
 
 import com.shoestore.Server.dto.response.FeaturedProductResponse;
 import com.shoestore.Server.entities.Product;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

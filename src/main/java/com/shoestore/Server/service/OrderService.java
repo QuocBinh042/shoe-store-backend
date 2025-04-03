@@ -2,16 +2,12 @@ package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.response.OrderResponse;
-import com.shoestore.Server.entities.Order;
-import com.shoestore.Server.entities.OrderDetail;
-import com.shoestore.Server.entities.Product;
-
-import java.time.LocalDate;
+import com.shoestore.Server.dto.response.PaginationResponse;
 import java.util.List;
-import java.util.Map;
+
 
 public interface OrderService {
-    List<OrderDTO> getAll();
+    List<OrderDTO> getAllOrders();
 
     OrderDTO updateOrderStatus(int orderId, String status);
 
@@ -26,4 +22,49 @@ public interface OrderService {
     int getOrderQuantityByUserId(int id);
 
     Double getTotalAmountByUserId(int id);
+
+    long getTotalOrdersByDay();
+
+    long getTotalOrdersByMonth();
+
+    long getTotalOrdersByYear();
+
+    long getTotalOrders();
+
+    Double getTotalOrderAmount();
+
+    Double getTotalOrderAmountByDay();
+
+    Double getTotalOrderAmountByMonth();
+
+    Double getTotalOrderAmountByYear();
+
+    long getCompletedOrders();
+
+    long getCompletedOrdersByDay();
+
+    long getCompletedOrdersByMonth();
+
+    long getCompletedOrdersByYear();
+
+    long getCanceledOrders();
+
+    long getCanceledOrdersByDay();
+
+    long getCanceledOrdersByMonth();
+
+    long getCanceledOrdersByYear();
+
+    List<OrderDTO> searchOrders(String query);
+
+    PaginationResponse<OrderDTO> getAllOrdersSorted(String sort, int page, int pageSize);
+
+    PaginationResponse<OrderDTO> getAllOrdersPaged(int page, int pageSize);
+
+    PaginationResponse<OrderDTO> getOrdersByDay(int page, int pageSize);
+
+    PaginationResponse<OrderDTO> getOrdersByMonth(int page, int pageSize);
+
+    PaginationResponse<OrderDTO> getOrdersByYear(int page, int pageSize);
+
 }

@@ -14,8 +14,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
 public class ProductDetail extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
