@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "Address")
-@ToString
 public class Address extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,12 +10,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.util.List;
 
-@Entity
 @Table
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,6 @@ package com.shoestore.Server.entities;
 
 import com.shoestore.Server.enums.VoucherType;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,17 +11,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "Voucher")
 public class Voucher extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int voucherID;
-    @Column(name = "code", unique = true, nullable = false)
+
+    @Column(unique = true, nullable = false)
     private String code;
-    @Column(name = "description", nullable = false)
+
+    @Column(nullable = false)
     private String description;
 
     private BigDecimal discountValue;
+
     @Enumerated(EnumType.STRING)
     private VoucherType discountType;
 
@@ -35,4 +36,10 @@ public class Voucher extends BaseEntity{
     private LocalDateTime endDate;
 
     private boolean status;
+
+    private Integer maxUses;
+
+    private Integer usedCount;
+
+    private String productRestriction;
 }
