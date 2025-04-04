@@ -2,6 +2,7 @@ package com.shoestore.Server.entities;
 
 import com.shoestore.Server.enums.ApplicableTo;
 import com.shoestore.Server.enums.CustomerGroup;
+import com.shoestore.Server.enums.PromotionStatus;
 import com.shoestore.Server.enums.PromotionType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -81,7 +82,8 @@ public class Promotion extends BaseEntity{
 
     private String code;
 
-    private boolean status;
+    @Enumerated(EnumType.STRING)
+    private PromotionStatus status;
 
     private Boolean stackable;
 

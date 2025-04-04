@@ -1,7 +1,9 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.service.MailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.utils.AppConstants;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -209,5 +212,18 @@ public class OrderController {
         PaginationResponse<OrderDTO> response = orderService.getOrdersByYear(page, pageSize);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/revenue/with-promotions")
+    public ResponseEntity<RestResponse<BigDecimal>> getRevenueFromPromotions() {
+        BigDecimal revenue = orderService.getRevenueFromPromotions();
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Revenue from promotions", null, revenue));
+    }
+
+    @GetMapping("/count/with-promotions")
+    public ResponseEntity<RestResponse<Long>> countOrdersWithPromotions() {
+        long count = orderService.countOrdersWithPromotions();
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Count of orders with promotions", null, count));
+    }
+
 
 }
