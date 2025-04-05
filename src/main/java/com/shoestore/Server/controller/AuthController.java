@@ -2,14 +2,12 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.LoginRequest;
 import com.shoestore.Server.dto.request.SignUpRequest;
-import com.shoestore.Server.dto.request.UserDTO;
 import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.exception.UserNotActiveException;
 import com.shoestore.Server.security.CustomUserDetailsService;
 import com.shoestore.Server.service.UserService;
 import com.shoestore.Server.security.JwtUtils;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,6 +50,7 @@ public class AuthController {
 
     @Value("${jwt.refreshExpiration}")
     private long refreshExpirationMs;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
@@ -61,7 +59,7 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new RestResponse<>(HttpStatus.UNAUTHORIZED.value(), "Password is invalid", null, null));
             }
-            UserDTO userDB = userService.findByEmail(loginRequest.getEmail());
+            UserResponse userDB = userService.findByEmail(loginRequest.getEmail());
             LoginResponse loginResponse = new LoginResponse();
             if (userDB != null && userDB.getStatus().equals("Active")) {
                 UserLoginResponse user = new UserLoginResponse(
@@ -107,7 +105,7 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<RestResponse<Object>> register(@Valid @RequestBody SignUpRequest signUpRequest) {
         try {
-            UserDTO newUser = userService.addUserByRegister(signUpRequest);
+            UserResponse newUser = userService.addUserByRegister(signUpRequest);
             return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "User registered successfully", null, newUser));
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode())
@@ -138,7 +136,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(@CookieValue(value = "refresh_token",  required = false) String refreshToken) throws UserNotActiveException {
+    public ResponseEntity<?> refreshToken(@CookieValue(value = "refresh_token", required = false) String refreshToken) throws UserNotActiveException {
         System.out.println("Đã xin access token");
         if (refreshToken == null || refreshToken.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -152,7 +150,7 @@ public class AuthController {
 
         Claims claims = claimsOpt.get();
         String email = claims.getSubject();
-        UserDTO userDB = userService.findByEmail(email);
+        UserResponse userDB = userService.findByEmail(email);
         if (!userDB.getStatus().equalsIgnoreCase("Active")) {
             throw new UserNotActiveException("User is not activated.");
         }
@@ -189,6 +187,7 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(loginResponse);
     }
+
     @GetMapping("/me")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -207,12 +206,10 @@ public class AuthController {
         Object userObj = claims.get("user");
         Map<String, Object> userMap = (Map<String, Object>) userObj;
         int userId = (Integer) userMap.get("id");
-        UserDTO userDTO=userService.getUserById(userId);
+        UserResponse userDTO = userService.getUserById(userId);
 
         return ResponseEntity.ok().body(userDTO);
     }
-
-
 
 
 }
