@@ -3,6 +3,7 @@ package com.shoestore.Server.service;
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.response.PaginationResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
@@ -65,5 +66,9 @@ public interface OrderService {
     PaginationResponse<OrderDTO> getOrdersByMonth(int page, int pageSize);
 
     PaginationResponse<OrderDTO> getOrdersByYear(int page, int pageSize);
+
+    BigDecimal getRevenueFromPromotions();
+
+    long countOrdersWithPromotions();
 
 }
