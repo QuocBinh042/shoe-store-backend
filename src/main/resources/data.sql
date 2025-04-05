@@ -1,5 +1,4 @@
-﻿-- Sử dụng database
-USE ShoeStore;
+﻿USE ShoeStore;
 
 -- Thêm dữ liệu cho bảng Role
 INSERT INTO role (roleType, description, createdAt, updatedAt) VALUES
@@ -224,40 +223,78 @@ VALUES
 -- Thêm dữ liệu cho bảng Promotion (sau khi Product đã có dữ liệu)
 INSERT INTO Promotion (
     name, description, type, discountValue, buyQuantity, getQuantity, gift_product_id,
-    startDate, endDate, applicableTo, customerGroup, status, usageCount,
+    startDate, endDate, applicableTo, status, usageCount,
     createdAt, updatedAt
 ) VALUES
     ('Summer Sale 2023', 'Percentage (10%)', 'PERCENTAGE', 10.00, NULL, NULL, NULL,
-     '2023-06-01 00:00:00', '2023-08-31 23:59:59', 'ALL', 'EXISTING', 'ACTIVE', 328,
+     '2023-06-01 00:00:00', '2023-08-31 23:59:59', 'ALL', 'ACTIVE', 328,
      NOW(), NOW()),
     ('New Customer Discount', 'Fixed Amount ($20)', 'FIXED', 20.00, NULL, NULL, NULL,
-     '2023-05-15 00:00:00', '2023-12-31 23:59:59', 'ALL', 'NEW', 'ACTIVE', 145,
+     '2023-05-15 00:00:00', '2023-12-31 23:59:59', 'ALL', 'ACTIVE', 145,
      NOW(), NOW()),
     ('Back to School', 'Buy 2 Get 1 Free', 'BUYX', NULL, 2, 1, NULL,
-     '2023-08-01 00:00:00', '2023-09-15 23:59:59', 'CATEGORIES', 'EXISTING', 'UPCOMING', 0,
+     '2023-08-01 00:00:00', '2023-09-15 23:59:59', 'CATEGORIES', 'UPCOMING', 0,
      NOW(), NOW()),
     ('Holiday Gift', 'Free Gift', 'GIFT', NULL, NULL, NULL, 1, -- productID = 1 đã tồn tại
-     '2023-12-01 00:00:00', '2023-12-25 23:59:59', 'ALL', 'EXISTING', 'UPCOMING', 0,
+     '2023-12-01 00:00:00', '2023-12-25 23:59:59', 'ALL', 'UPCOMING', 0,
      NOW(), NOW()),
     ('Black Friday', 'Percentage (30%)', 'PERCENTAGE', 30.00, NULL, NULL, NULL,
-     '2022-11-24 00:00:00', '2022-11-28 23:59:59', 'ALL', 'EXISTING', 'EXPIRED', 512,
+     '2022-11-24 00:00:00', '2022-11-28 23:59:59', 'ALL', 'EXPIRED', 512,
      NOW(), NOW()),
     ('Sale 10%', '10% off promotion for products', 'PERCENTAGE', 10.00, NULL, NULL, NULL,
-     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'EXISTING', 'ACTIVE', 0,
+     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'ACTIVE', 0,
      NOW(), NOW()),
     ('Sale 20%', '20% off promotion for products', 'PERCENTAGE', 20.00, NULL, NULL, NULL,
-     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'EXISTING', 'ACTIVE', 0,
+     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'ACTIVE', 0,
      NOW(), NOW()),
     ('Sale 50%', '50% off promotion', 'PERCENTAGE', 50.00, NULL, NULL, NULL,
-     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'EXISTING', 'ACTIVE', 0,
+     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'ACTIVE', 0,
      NOW(), NOW()),
     ('Sale 70%', '70% off promotion', 'PERCENTAGE', 70.00, NULL, NULL, NULL,
-     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'EXISTING', 'ACTIVE', 0,
+     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'ACTIVE', 0,
      NOW(), NOW()),
     ('Sale 5%', '5% off promotion for products', 'PERCENTAGE', 5.00, NULL, NULL, NULL,
-     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'EXISTING', 'ACTIVE', 0,
+     '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'ACTIVE', 0,
      NOW(), NOW());
 
+-- Thêm dữ liệu cho bảng promotion_customer_groups
+-- Promotion 1: Summer Sale 2023 (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (1, 'EXISTING');
+
+-- Promotion 2: New Customer Discount (customerGroup: NEW)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (2, 'NEW');
+
+-- Promotion 3: Back to School (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (3, 'EXISTING');
+
+-- Promotion 4: Holiday Gift (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (4, 'EXISTING');
+
+-- Promotion 5: Black Friday (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (5, 'EXISTING');
+
+-- Promotion 6: Sale 10% (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (6, 'EXISTING');
+
+-- Promotion 7: Sale 20% (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (7, 'EXISTING');
+
+-- Promotion 8: Sale 50% (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (8, 'EXISTING');
+
+-- Promotion 9: Sale 70% (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (9, 'EXISTING');
+
+-- Promotion 10: Sale 5% (customerGroup: EXISTING)
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES (10, 'EXISTING');
+
+DELETE FROM promotion_customer_groups WHERE promotion_id = 1;
+
+-- Thêm tất cả các nhóm khách hàng cho promotion 1
+INSERT INTO promotion_customer_groups (promotion_id, customer_group) VALUES
+(1, 'NEW'),
+(1, 'EXISTING'),
+(1, 'VIP');
 -- Cập nhật lại Product để gán promotionID (sau khi Promotion đã có dữ liệu)
 UPDATE Product SET promotionID = 1 WHERE productID = 1;
 UPDATE Product SET promotionID = 2 WHERE productID = 2;

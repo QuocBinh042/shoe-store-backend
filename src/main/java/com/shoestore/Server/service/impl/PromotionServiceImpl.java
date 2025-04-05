@@ -16,6 +16,7 @@ import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.PromotionService;
 import com.shoestore.Server.specifications.PromotionSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -104,24 +105,40 @@ public class PromotionServiceImpl implements PromotionService {
 
         Promotion promotion = promotionMapper.toEntity(promotionDTO);
 
-        if (promotionDTO.getCategoryIDs() != null) {
-            List<Category> categories = promotionDTO.getCategoryIDs().stream()
-                    .map(id -> categoryRepository.findById(id)
-                            .orElseThrow(() -> new NotFoundException("Category not found with ID: " + id)))
-                    .toList();
+        if (promotionDTO.getCategoryIDs() != null && !promotionDTO.getCategoryIDs().isEmpty()) {
+            List<Category> categories = new ArrayList<>();
+            for (Integer id : promotionDTO.getCategoryIDs()) {
+                if (id != null && id != 0) {
+                    Category category = categoryRepository.findById(id)
+                            .orElseThrow(() -> new NotFoundException("Category not found with ID: " + id));
+                    categories.add(category);
+                }
+            }
             promotion.setCategories(categories);
         } else {
             promotion.setCategories(new ArrayList<>());
         }
 
-        if (promotionDTO.getApplicableProductIDs() != null) {
-            List<Product> products = promotionDTO.getApplicableProductIDs().stream()
-                    .map(id -> productRepository.findById(id)
-                            .orElseThrow(() -> new NotFoundException("Product not found with ID: " + id)))
-                    .toList();
+        if (promotionDTO.getApplicableProductIDs() != null && !promotionDTO.getApplicableProductIDs().isEmpty()) {
+            List<Product> products = new ArrayList<>();
+            for (Integer id : promotionDTO.getApplicableProductIDs()) {
+                if (id != null && id != 0) {
+                    Product product = productRepository.findById(id)
+                            .orElseThrow(() -> new NotFoundException("Product not found with ID: " + id));
+                    products.add(product);
+                }
+            }
             promotion.setApplicableProducts(products);
         } else {
             promotion.setApplicableProducts(new ArrayList<>());
+        }
+
+        if (promotionDTO.getGiftProductID() != null && promotionDTO.getGiftProductID() != 0) {
+            Product giftProduct = productRepository.findById(promotionDTO.getGiftProductID())
+                    .orElseThrow(() -> new NotFoundException("Gift Product not found with ID: " + promotionDTO.getGiftProductID()));
+            promotion.setGiftProduct(giftProduct);
+        } else {
+            promotion.setGiftProduct(null);
         }
 
         Promotion savedPromotion = promotionRepository.save(promotion);
@@ -138,23 +155,46 @@ public class PromotionServiceImpl implements PromotionService {
 
         promotionMapper.updateEntityFromDto(promotionDTO, promotion);
 
-        if (promotionDTO.getCategoryIDs() != null) {
-            List<Category> categories = promotionDTO.getCategoryIDs().stream()
-                    .map(cid -> categoryRepository.findById(cid)
-                            .orElseThrow(() -> new NotFoundException("Category not found: " + cid)))
-                    .collect(Collectors.toList());
+        if (promotionDTO.getCategoryIDs() != null && !promotionDTO.getCategoryIDs().isEmpty()) {
+            List<Category> categories = new ArrayList<>();
+            for (Integer cid : promotionDTO.getCategoryIDs()) {
+                if (cid != null && cid != 0) {
+                    Category category = categoryRepository.findById(cid)
+                            .orElseThrow(() -> new NotFoundException("Category not found with ID: " + cid));
+                    categories.add(category);
+                }
+            }
             promotion.setCategories(categories);
+        } else {
+            promotion.setCategories(new ArrayList<>());
         }
 
-        if (promotionDTO.getApplicableProductIDs() != null) {
-            List<Product> products = promotionDTO.getApplicableProductIDs().stream()
-                    .map(pid -> productRepository.findById(pid)
-                            .orElseThrow(() -> new NotFoundException("Product not found: " + pid)))
-                    .collect(Collectors.toList());
+        if (promotionDTO.getApplicableProductIDs() != null && !promotionDTO.getApplicableProductIDs().isEmpty()) {
+            List<Product> products = new ArrayList<>();
+            for (Integer pid : promotionDTO.getApplicableProductIDs()) {
+                if (pid != null && pid != 0) {
+                    Product product = productRepository.findById(pid)
+                            .orElseThrow(() -> new NotFoundException("Product not found with ID: " + pid));
+                    products.add(product);
+                }
+            }
             promotion.setApplicableProducts(products);
+        } else {
+            promotion.setApplicableProducts(new ArrayList<>());
         }
 
-        return promotionMapper.toResponse(promotionRepository.save(promotion));
+        if (promotionDTO.getGiftProductID() != null && promotionDTO.getGiftProductID() != 0) {
+            Product giftProduct = productRepository.findById(promotionDTO.getGiftProductID())
+                    .orElseThrow(() -> new NotFoundException("Gift Product not found with ID: " + promotionDTO.getGiftProductID()));
+            promotion.setGiftProduct(giftProduct);
+        } else {
+            promotion.setGiftProduct(null);
+        }
+
+        Promotion updatedPromotion = promotionRepository.save(promotion);
+        log.info("Promotion updated successfully with ID: {}", updatedPromotion.getPromotionID());
+
+        return promotionMapper.toResponse(updatedPromotion);
     }
 
 

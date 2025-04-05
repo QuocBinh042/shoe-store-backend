@@ -45,11 +45,6 @@ public class Promotion extends BaseEntity{
 
     private LocalDateTime endDate;
 
-    @ElementCollection
-    @CollectionTable(name = "promotion_time_ranges", joinColumns = @JoinColumn(name = "promotion_id"))
-    @Column(name = "time_range")
-    private List<String> timeRanges;
-
     private BigDecimal minOrderValue;
 
     private BigDecimal maxDiscount;
@@ -74,9 +69,11 @@ public class Promotion extends BaseEntity{
     )
     private List<Product> applicableProducts;
 
+    @ElementCollection
+    @CollectionTable(name = "promotion_customer_groups", joinColumns = @JoinColumn(name = "promotion_id"))
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CustomerGroup customerGroup;
+    @Column(name = "customer_group")
+    private List<CustomerGroup> customerGroups;
 
     private Boolean useCode;
 

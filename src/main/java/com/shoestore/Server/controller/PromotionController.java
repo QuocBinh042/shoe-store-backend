@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -46,7 +48,8 @@ public class PromotionController {
     public ResponseEntity<RestResponse<PromotionResponse>> createPromotion(@Valid @RequestBody PromotionDTO promotionDTO) {
         PromotionResponse response = promotionService.createPromotion(promotionDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RestResponse<>(ApiStatusResponse.CREATED.getCode(), ApiStatusResponse.CREATED.getMessage(), null, response));
+                .body(new RestResponse<>(ApiStatusResponse.CREATED.getCode(),
+                        ApiStatusResponse.CREATED.getMessage(), null, response));
     }
 
     @PutMapping("/{id}")
@@ -81,6 +84,7 @@ public class PromotionController {
         PaginationResponse<PromotionResponse> response = promotionService.searchPromotions(status, type, name, startDate, endDate, page, pageSize);
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), ApiStatusResponse.SUCCESS.getMessage(), null, response));
     }
+
     @GetMapping("/count/upcoming")
     public ResponseEntity<RestResponse<Long>> countUpcomingPromotions() {
         long count = promotionService.countUpcomingPromotions();

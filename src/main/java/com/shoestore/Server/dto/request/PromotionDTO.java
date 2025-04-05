@@ -33,7 +33,6 @@ public class PromotionDTO {
     private Integer buyQuantity;
     private Integer getQuantity;
 
-    // For request, pass gift product's ID
     private Integer giftProductID;
 
     @NotNull(message = "Start date is required")
@@ -42,23 +41,17 @@ public class PromotionDTO {
     @NotNull(message = "End date is required")
     private LocalDateTime endDate;
 
-    // For simplicity, assuming time ranges are passed as list of strings
-    private List<String> timeRanges;
-
     private BigDecimal minOrderValue;
     private BigDecimal maxDiscount;
 
-    @NotNull(message = "Applicable To is required")
     private ApplicableTo applicableTo;
 
-    // For request, pass category IDs
     private List<Integer> categoryIDs;
 
-    // For request, pass applicable product IDs
     private List<Integer> applicableProductIDs;
 
-    @NotNull(message = "Customer group is required")
-    private CustomerGroup customerGroup;
+    @NotEmpty(message = "Customer groups cannot be empty")
+    private List<CustomerGroup> customerGroups;
 
     private Boolean useCode;
     private String code;

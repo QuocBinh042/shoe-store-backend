@@ -20,9 +20,10 @@ public class PromotionResponse {
     private Integer buyQuantity;
     private Integer getQuantity;
     private Integer giftProductID;
+
     private LocalDateTime startDate;
+
     private LocalDateTime endDate;
-    private List<String> timeRanges;
     private BigDecimal minOrderValue;
     private BigDecimal maxDiscount;
     private ApplicableTo applicableTo;
