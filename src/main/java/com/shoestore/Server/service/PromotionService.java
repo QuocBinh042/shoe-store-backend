@@ -7,6 +7,7 @@ import com.shoestore.Server.enums.PromotionStatus;
 import com.shoestore.Server.enums.PromotionType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface PromotionService {
     double getDiscountedPrice(int productID);
@@ -34,5 +35,8 @@ public interface PromotionService {
     );
 
     long countUpcomingPromotions();
+
     long countActivePromotions();
+
+    List<PromotionResponse> getAppliedPromotionsForProduct(int productId);
 }

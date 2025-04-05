@@ -96,4 +96,9 @@ public class PromotionController {
         long count = promotionService.countActivePromotions();
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Count of active promotions", null, count));
     }
+    @GetMapping("/applied/{productId}")
+    public ResponseEntity<RestResponse<List<PromotionResponse>>> getAppliedPromotionsForProduct(@PathVariable int productId) {
+        List<PromotionResponse> appliedPromotions = promotionService.getAppliedPromotionsForProduct(productId);
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Applied promotions retrieved successfully", null, appliedPromotions));
+    }
 }

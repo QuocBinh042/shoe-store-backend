@@ -6,6 +6,7 @@ import com.shoestore.Server.dto.response.PromotionResponse;
 import com.shoestore.Server.entities.Category;
 import com.shoestore.Server.entities.Promotion;
 import com.shoestore.Server.entities.Product;
+import com.shoestore.Server.enums.ApplicableTo;
 import com.shoestore.Server.enums.PromotionStatus;
 import com.shoestore.Server.enums.PromotionType;
 import com.shoestore.Server.exception.NotFoundException;
@@ -256,5 +257,36 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public long countActivePromotions() {
         return promotionRepository.countByStatus(PromotionStatus.ACTIVE);
+    }
+
+    @Override
+    public List<PromotionResponse> getAppliedPromotionsForProduct(int productId) {
+        log.info("Fetching applied promotions for Product ID: {}", productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found with ID: " + productId));
+
+        LocalDateTime now = LocalDateTime.now();
+        List<Promotion> appliedPromotions = new ArrayList<>();
+
+        List<Promotion> activePromotions = promotionRepository.findByStatusAndStartDateBeforeAndEndDateAfter(
+                PromotionStatus.ACTIVE, now, now);
+
+        for (Promotion promo : activePromotions) {
+            if (promo.getApplicableTo() == ApplicableTo.ALL) {
+                appliedPromotions.add(promo);
+            } else if (promo.getApplicableTo() == ApplicableTo.CATEGORIES) {
+                if (promo.getCategories().contains(product.getCategory())) {
+                    appliedPromotions.add(promo);
+                }
+            } else if (promo.getApplicableTo() == ApplicableTo.PRODUCTS) {
+                if (promo.getApplicableProducts().contains(product)) {
+                    appliedPromotions.add(promo);
+                }
+            }
+        }
+
+        return appliedPromotions.stream()
+                .map(promotionMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }
