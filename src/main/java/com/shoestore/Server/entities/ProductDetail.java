@@ -37,4 +37,5 @@ public class ProductDetail extends BaseEntity{
     @JsonBackReference
     private List<OrderDetail> orderDetails;
 
+
 }

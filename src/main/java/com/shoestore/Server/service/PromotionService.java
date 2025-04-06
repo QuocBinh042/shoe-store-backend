@@ -6,6 +6,7 @@ import com.shoestore.Server.dto.response.PromotionResponse;
 import com.shoestore.Server.enums.PromotionStatus;
 import com.shoestore.Server.enums.PromotionType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,4 +40,6 @@ public interface PromotionService {
     long countActivePromotions();
 
     List<PromotionResponse> getAppliedPromotionsForProduct(int productId);
+
+    BigDecimal calculateFinalPriceWithPromotions(int productId);
 }
