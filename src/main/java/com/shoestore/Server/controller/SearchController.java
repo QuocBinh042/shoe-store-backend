@@ -44,7 +44,7 @@ public class SearchController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") int pageSize) {
 
-        PaginationResponse<ProductSearchResponse> paginatedProducts = productService.getAllProduct(page, pageSize);
+        PaginationResponse<ProductSearchResponse> paginatedProducts = productService.getAllProducts(page, pageSize);
         return ResponseEntity.ok(paginatedProducts);
     }
 

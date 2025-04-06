@@ -5,16 +5,14 @@ import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.dto.response.ProductSearchResponse;
 import com.shoestore.Server.dto.response.RestResponse;
-import com.shoestore.Server.entities.Product;
-import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.ProductService;
+import com.shoestore.Server.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -134,9 +132,9 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PaginationResponse<ProductSearchResponse>> getAllProducts(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "12") int size) {
-        PaginationResponse<ProductSearchResponse> productPage = productService.getAllProduct(page, size);
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int size) {
+        PaginationResponse<ProductSearchResponse> productPage = productService.getAllProducts(page, size);
         return ResponseEntity.ok(productPage);
     }
 }
