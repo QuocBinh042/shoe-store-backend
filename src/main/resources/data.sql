@@ -219,9 +219,9 @@ VALUES
 ('Luxury red sole heels.', 8000000, 'Christian Louboutin So Kate', 'AVAILABLE', 5, 10, NULL, 10, NOW(), NOW()),
 ('Lightweight walking shoes.', 600000, 'Skechers Flex Appeal', 'AVAILABLE', 1, 1, NULL, 1, NOW(), NOW()),
 ('Responsive basketball shoes.', 1300000, 'Nike Zoom Freak', 'AVAILABLE', 2, 2, NULL, 2, NOW(), NOW()),
-('Rugged hiking boots.', 1700000, 'Scarpa Zodiac Plus', 'AVAILABLE', 3, 3, NULL, 3, NOW(), NOW()),
-('Casual street sneakers.', 950000, 'Adidas Superstar', 'AVAILABLE', 4, 4, NULL, 4, NOW(), NOW()),
-('Italian leather dress shoes.', 2500000, 'Santoni Double Monk', 'AVAILABLE', 5, 5, NULL, 5, NOW(), NOW());
+('Rugged hiking boots.', 1700000, 'Scarpa Zodiac Plus', 'DISCONTINUED', 3, 3, NULL, 3, NOW(), NOW()),
+('Casual street sneakers.', 950000, 'Adidas Superstar', 'UNAVAILABLE', 4, 4, NULL, 4, NOW(), NOW()),
+('Italian leather dress shoes.', 2500000, 'Santoni Double Monk', 'LIMITED_STOCK', 5, 5, NULL, 5, NOW(), NOW());
 
 -- Thêm dữ liệu cho bảng Promotion (sau khi Product đã có dữ liệu)
 INSERT INTO Promotion (
@@ -307,29 +307,29 @@ UPDATE Product SET promotionID = 1 WHERE productID = 5;
 UPDATE Product SET promotionID = 3 WHERE productID = 6;
 UPDATE Product SET promotionID = 2 WHERE productID = 7;
 
--- Thêm dữ liệu cho bảng ProductDetail
-INSERT INTO ProductDetail (color, size, stockQuantity, productID, createdAt, updatedAt)
+INSERT INTO ProductDetail (color, size, stockQuantity, productID, status, image, createdAt, updatedAt)
 VALUES
-('RED', 'SIZE_40', 50, 1, NOW(), NOW()),
-('BLUE', 'SIZE_41', 30, 1, NOW(), NOW()),
-('BLACK', 'SIZE_42', 25, 2, NOW(), NOW()),
-('WHITE', 'SIZE_43', 40, 2, NOW(), NOW()),
-('WHITE', 'SIZE_44', 20, 3, NOW(), NOW()),
-('PINK', 'SIZE_40', 15, 3, NOW(), NOW()),
-('YELLOW', 'SIZE_41', 35, 4, NOW(), NOW()),
-('WHITE', 'SIZE_42', 18, 5, NOW(), NOW()),
-('GREEN', 'SIZE_43', 22, 6, NOW(), NOW()),
-('YELLOW', 'SIZE_44', 28, 7, NOW(), NOW()),
-('BLACK', 'SIZE_40', 10, 8, NOW(), NOW()),
-('WHITE', 'SIZE_41', 14, 9, NOW(), NOW()),
-('BLUE', 'SIZE_42', 33, 10, NOW(), NOW()),
-('RED', 'SIZE_43', 27, 11, NOW(), NOW()),
-('PINK', 'SIZE_44', 12, 12, NOW(), NOW()),
-('PINK', 'SIZE_40', 31, 13, NOW(), NOW()),
-('GREEN', 'SIZE_41', 19, 14, NOW(), NOW()),
-('YELLOW', 'SIZE_42', 21, 15, NOW(), NOW()),
-('GREEN', 'SIZE_43', 26, 16, NOW(), NOW()),
-('YELLOW', 'SIZE_44', 17, 17, NOW(), NOW());
+('RED',    'SIZE_40', 50,  1, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 1, '/product', 1, '_1'), NOW(), NOW()),
+('BLUE',   'SIZE_41', 30,  1, 'LIMITED_STOCK', CONCAT('project_ShoeStore/ImageProduct/', 1, '/product', 1, '_2'), NOW(), NOW()),
+('BLACK',  'SIZE_42', 25,  2, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 2, '/product', 2, '_1'), NOW(), NOW()),
+('WHITE',  'SIZE_43', 40,  2, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 2, '/product', 2, '_2'), NOW(), NOW()),
+('WHITE',  'SIZE_44', 20,  3, 'LIMITED_STOCK', CONCAT('project_ShoeStore/ImageProduct/', 3, '/product', 3, '_1'), NOW(), NOW()),
+('PINK',   'SIZE_40', 15,  3, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 3, '/product', 3, '_2'), NOW(), NOW()),
+('YELLOW', 'SIZE_41', 35,  4, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 4, '/product', 4, '_1'), NOW(), NOW()),
+('WHITE',  'SIZE_42', 18,  5, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 5, '/product', 5, '_1'), NOW(), NOW()),
+('GREEN',  'SIZE_43', 22,  6, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 6, '/product', 6, '_1'), NOW(), NOW()),
+('YELLOW', 'SIZE_44', 28,  7, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 7, '/product', 7, '_1'), NOW(), NOW()),
+('BLACK',  'SIZE_40', 10,  8, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 8, '/product', 8, '_1'), NOW(), NOW()),
+('WHITE',  'SIZE_41', 14,  9, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 9, '/product', 9, '_1'), NOW(), NOW()),
+('BLUE',   'SIZE_42', 33, 10, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 10, '/product', 10, '_1'), NOW(), NOW()),
+('RED',    'SIZE_43', 27, 11, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 11, '/product', 11, '_1'), NOW(), NOW()),
+('PINK',   'SIZE_44', 12, 12, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 12, '/product', 12, '_1'), NOW(), NOW()),
+('PINK',   'SIZE_40', 31, 13, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 13, '/product', 13, '_1'), NOW(), NOW()),
+('GREEN',  'SIZE_41', 19, 14, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 14, '/product', 14, '_1'), NOW(), NOW()),
+('YELLOW', 'SIZE_42', 21, 15, 'LIMITED_STOCK', CONCAT('project_ShoeStore/ImageProduct/', 15, '/product', 15, '_1'), NOW(), NOW()),
+('GREEN',  'SIZE_43', 26, 16, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 16, '/product', 16, '_1'), NOW(), NOW()),
+('YELLOW', 'SIZE_44', 17, 17, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 17, '/product', 17, '_1'), NOW(), NOW());
+
 
 -- Thêm dữ liệu cho bảng Product_ImageURL
 INSERT INTO Product_ImageURL (productID, imageURL)

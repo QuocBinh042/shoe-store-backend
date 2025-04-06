@@ -11,8 +11,11 @@ import java.util.List;
 
 public interface ProductDetailService {
     List<ProductDetailDTO> getByProductId(int productId);
+
     ProductDetailDTO save(ProductDetailDTO productDetail);
+
     ProductDetailDTO getProductDetailById(int id);
+
     ProductDetailDTO getProductDetailByProductIdAndColorAndSize(int productId, Color color, Size size);
 
     ProductDetailsResponse createProductDetail(int productId, ProductDetailRequest productDetailRequest);

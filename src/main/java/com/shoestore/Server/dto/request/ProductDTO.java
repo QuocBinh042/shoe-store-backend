@@ -15,7 +15,7 @@ public class ProductDTO {
     private int brandID;
     private int categoryID;
     private int supplierID;
-    private List<ProductDetailDTO> productDetails;
+    private List<ProductDetailRequest> productDetails;
 
 }
 
