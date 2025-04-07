@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse<ProductSearchResponse> getAllProduct(int page, int pageSize) {
+    public PaginationResponse<ProductSearchResponse> getAllProducts(int page, int pageSize) {
         List<Product> products = productRepository.findAll();
 
         PaginationResponse<Product> paginatedProducts = paginationService.paginate(products, page, pageSize);

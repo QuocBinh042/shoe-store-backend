@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -95,5 +96,32 @@ public class PromotionController {
     public ResponseEntity<RestResponse<Long>> countActivePromotions() {
         long count = promotionService.countActivePromotions();
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Count of active promotions", null, count));
+    }
+
+    @GetMapping("/applied/{productId}")
+    public ResponseEntity<RestResponse<List<PromotionResponse>>> getAppliedPromotionsForProduct(@PathVariable int productId) {
+        List<PromotionResponse> appliedPromotions = promotionService.getAppliedPromotionsForProduct(productId);
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Applied promotions retrieved successfully", null, appliedPromotions));
+    }
+
+    @GetMapping("/discounted-price/{productId}")
+    public ResponseEntity<RestResponse<Double>> getDiscountedPrice(@PathVariable int productId) {
+        double discountedPrice = promotionService.getDiscountedPrice(productId);
+        return ResponseEntity.ok(new RestResponse<>(
+                ApiStatusResponse.SUCCESS.getCode(),
+                "Discounted price retrieved successfully",
+                null,
+                discountedPrice
+        ));
+    }
+    @GetMapping("/final-price/{productId}")
+    public ResponseEntity<RestResponse<BigDecimal>> getFinalPriceWithPromotions(@PathVariable int productId) {
+        BigDecimal finalPrice = promotionService.calculateFinalPriceWithPromotions(productId);
+        return ResponseEntity.ok(new RestResponse<>(
+                ApiStatusResponse.SUCCESS.getCode(),
+                "Final price with promotions retrieved successfully",
+                null,
+                finalPrice
+        ));
     }
 }

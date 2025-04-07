@@ -2,6 +2,7 @@ package com.shoestore.Server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.shoestore.Server.enums.ProductStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +41,8 @@ public class Product extends BaseEntity {
     @DecimalMin(value = "0", inclusive = false, message = "Price must be greater than 0")
     private double price;
 
-    private String status;
+    @Enumerated (EnumType.STRING)
+    private ProductStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brandID")

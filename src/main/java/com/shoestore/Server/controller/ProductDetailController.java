@@ -2,8 +2,10 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.request.ProductDetailDTO;
+import com.shoestore.Server.dto.request.ProductDetailRequest;
 import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.dto.response.ProductDetailResponse;
+import com.shoestore.Server.dto.response.ProductDetailsResponse;
 import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.service.*;
 import jakarta.validation.Valid;
@@ -23,7 +25,6 @@ public class ProductDetailController {
     private final BrandService brandService;
     private final CategoryService categoryService;
     private final PromotionService promotionService;
-
 
     @GetMapping("/by-product-id/{id}")
     public ResponseEntity<ProductDetailResponse> getProductDetailsByProductId(@PathVariable int id) {
@@ -61,9 +62,9 @@ public class ProductDetailController {
     @PostMapping("/{productId}")
     public ResponseEntity<RestResponse<Object>> createProductDetail(
             @PathVariable int productId,
-            @Valid @RequestBody ProductDetailDTO productDetailDTO) {
+            @Valid @RequestBody ProductDetailRequest productDetailRequest) {
 
-        ProductDetailDTO createdDetail = productDetailService.createProductDetail(productId, productDetailDTO);
+        ProductDetailsResponse createdDetail = productDetailService.createProductDetail(productId, productDetailRequest);
         RestResponse<Object> resp = new RestResponse<>();
 
         if (createdDetail != null) {
@@ -78,12 +79,13 @@ public class ProductDetailController {
             return ResponseEntity.status(ApiStatusResponse.NOT_FOUND.getCode()).body(resp);
         }
     }
+
     @PutMapping("/{detailId}")
     public ResponseEntity<RestResponse<Object>> updateProductDetail(
             @PathVariable int detailId,
-            @Valid @RequestBody ProductDetailDTO productDetailDTO) {
+            @Valid @RequestBody ProductDetailRequest productDetailRequest) {
 
-        ProductDetailDTO updatedDetail = productDetailService.updateProductDetail(detailId, productDetailDTO);
+        ProductDetailsResponse updatedDetail = productDetailService.updateProductDetail(detailId, productDetailRequest);
         RestResponse<Object> resp = new RestResponse<>();
 
         if (updatedDetail != null) {
@@ -98,7 +100,6 @@ public class ProductDetailController {
             return ResponseEntity.status(ApiStatusResponse.NOT_FOUND.getCode()).body(resp);
         }
     }
-
 
 
 }

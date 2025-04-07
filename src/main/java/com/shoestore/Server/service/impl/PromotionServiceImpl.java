@@ -6,6 +6,7 @@ import com.shoestore.Server.dto.response.PromotionResponse;
 import com.shoestore.Server.entities.Category;
 import com.shoestore.Server.entities.Promotion;
 import com.shoestore.Server.entities.Product;
+import com.shoestore.Server.enums.ApplicableTo;
 import com.shoestore.Server.enums.PromotionStatus;
 import com.shoestore.Server.enums.PromotionType;
 import com.shoestore.Server.exception.NotFoundException;
@@ -26,8 +27,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -256,5 +260,97 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public long countActivePromotions() {
         return promotionRepository.countByStatus(PromotionStatus.ACTIVE);
+    }
+
+    private List<Promotion> fetchAppliedPromotions(int productId) {
+        log.info("Fetching applied promotions for Product ID: {}", productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found with ID: " + productId));
+
+        LocalDateTime now = LocalDateTime.now();
+        List<Promotion> appliedPromotions = new ArrayList<>();
+
+        List<Promotion> activePromotions = promotionRepository.findByStatusAndStartDateBeforeAndEndDateAfter(
+                PromotionStatus.ACTIVE, now, now);
+
+        for (Promotion promo : activePromotions) {
+            if (promo.getApplicableTo() == ApplicableTo.ALL) {
+                appliedPromotions.add(promo);
+            } else if (promo.getApplicableTo() == ApplicableTo.CATEGORIES) {
+                if (promo.getCategories().contains(product.getCategory())) {
+                    appliedPromotions.add(promo);
+                }
+            } else if (promo.getApplicableTo() == ApplicableTo.PRODUCTS) {
+                if (promo.getApplicableProducts().contains(product)) {
+                    appliedPromotions.add(promo);
+                }
+            }
+        }
+
+        return appliedPromotions;
+    }
+
+    @Override
+    public List<PromotionResponse> getAppliedPromotionsForProduct(int productId) {
+        List<Promotion> appliedPromotions = fetchAppliedPromotions(productId);
+        return appliedPromotions.stream()
+                .map(promotionMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BigDecimal calculateFinalPriceWithPromotions(int productId) {
+        log.info("Calculating final price with promotions for Product ID: {}", productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found with ID: " + productId));
+
+        List<Promotion> appliedPromotions = fetchAppliedPromotions(productId);
+        if (appliedPromotions.isEmpty()) {
+            log.info("No active promotions found for Product ID: {}", productId);
+            return BigDecimal.valueOf(product.getPrice()).setScale(2, RoundingMode.HALF_UP);
+        }
+
+        BigDecimal finalPrice = BigDecimal.valueOf(product.getPrice());
+
+        boolean hasNonStackable = appliedPromotions.stream()
+                .anyMatch(promo -> promo.getStackable() == null || !promo.getStackable());
+
+        if (hasNonStackable) {
+            // Nếu có ít nhất một promotion không cho phép cộng dồn, chọn promotion có giá trị giảm lớn nhất
+            Promotion bestPromotion = appliedPromotions.stream()
+                    .filter(promo -> promo.getDiscountValue() != null) // Lọc bỏ các promotion có discountValue null
+                    .max(Comparator.comparing(Promotion::getDiscountValue, Comparator.nullsLast(Comparator.naturalOrder())))
+                    .orElse(null);
+
+            if (bestPromotion != null) {
+                BigDecimal discountValue = bestPromotion.getDiscountValue();
+                BigDecimal discountRate = discountValue.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+                BigDecimal discountAmount = finalPrice.multiply(discountRate);
+                finalPrice = finalPrice.subtract(discountAmount);
+                log.info("Applied best promotion (non-stackable): {} with discount: {}%, New price: {}",
+                        bestPromotion.getName(), discountValue, finalPrice);
+            }
+        } else {
+            // Nếu tất cả promotion đều cho phép cộng dồn, áp dụng lần lượt
+            // Sắp xếp theo discountValue giảm dần để áp dụng các promotion lớn trước
+            List<Promotion> sortedPromotions = appliedPromotions.stream()
+                    .filter(promo -> promo.getDiscountValue() != null) // Lọc bỏ các promotion có discountValue null
+                    .sorted(Comparator.comparing(Promotion::getDiscountValue, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                    .collect(Collectors.toList());
+
+            for (Promotion promotion : sortedPromotions) {
+                BigDecimal discountValue = promotion.getDiscountValue();
+                BigDecimal discountRate = discountValue.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+                BigDecimal discountAmount = finalPrice.multiply(discountRate);
+                finalPrice = finalPrice.subtract(discountAmount);
+                log.info("Applied stackable promotion: {} with discount: {}%, New price: {}",
+                        promotion.getName(), discountValue, finalPrice);
+            }
+        }
+
+        finalPrice = finalPrice.max(BigDecimal.ZERO);
+        finalPrice = finalPrice.setScale(2, RoundingMode.HALF_UP);
+        log.info("Final price after promotions for Product ID {}: {}", productId, finalPrice);
+        return finalPrice;
     }
 }
