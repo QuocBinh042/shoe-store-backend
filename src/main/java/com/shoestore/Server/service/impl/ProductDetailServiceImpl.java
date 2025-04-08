@@ -1,6 +1,8 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDetailDTO;
+import com.shoestore.Server.dto.request.ProductDetailRequest;
+import com.shoestore.Server.dto.response.ProductDetailsResponse;
 import com.shoestore.Server.entities.Product;
 import com.shoestore.Server.entities.ProductDetail;
 
@@ -11,6 +13,7 @@ import com.shoestore.Server.mapper.ProductMapper;
 import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.ProductDetailService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,27 +23,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProductDetailServiceImpl implements ProductDetailService {
     private final ProductDetailRepository productDetailRepository;
     private final ProductDetailMapper productDetailMapper;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-
-    public ProductDetailServiceImpl(ProductDetailRepository productDetailRepository, ProductDetailMapper productDetailMapper, ProductRepository productRepository, ProductMapper productMapper) {
-        this.productDetailRepository = productDetailRepository;
-        this.productDetailMapper = productDetailMapper;
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-    }
-
-    @Override
-    public ProductDetailDTO addProductDetail(ProductDetailDTO productDetailDTO) {
-        ProductDetail productDetail = productDetailMapper.toEntity(productDetailDTO);
-        ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
-
-        log.info("Added product detail with ID: {}", savedProductDetail.getProductDetailID());
-        return productDetailMapper.toDto(savedProductDetail);
-    }
 
     @Override
     public List<ProductDetailDTO> getByProductId(int productID) {
@@ -98,37 +86,36 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
 
-        @Override
-        @Transactional
-        public ProductDetailDTO createProductDetail(int productId, ProductDetailDTO productDetailDTO) {
-            Optional<Product> productOpt = productRepository.findById(productId);
+    @Override
+    @Transactional
+    public ProductDetailsResponse createProductDetail(int productId, ProductDetailRequest productDetailRequest) {
+        Optional<Product> productOpt = productRepository.findById(productId);
 
-            if (productOpt.isPresent()) {
-                ProductDetail productDetail = productDetailMapper.toEntity(productDetailDTO);
-                productDetail.setProduct(productOpt.get());
+        if (productOpt.isPresent()) {
+            ProductDetail productDetail = productDetailMapper.toEntity(productDetailRequest);
+            productDetail.setProduct(productOpt.get());
 
-                ProductDetail savedDetail = productDetailRepository.save(productDetail);
-                return productDetailMapper.toDto(savedDetail);
-            }
-
-            return null;
+            ProductDetail savedDetail = productDetailRepository.save(productDetail);
+            return productDetailMapper.toResponse(savedDetail);
         }
 
+        return null;
+    }
 
     @Override
     @Transactional
-    public ProductDetailDTO updateProductDetail(int productDetailId, ProductDetailDTO productDetailDTO) {
+    public ProductDetailsResponse updateProductDetail(int productDetailId, ProductDetailRequest productDetailRequest) {
         Optional<ProductDetail> existingDetail = productDetailRepository.findById(productDetailId);
 
         if (existingDetail.isPresent()) {
             ProductDetail detail = existingDetail.get();
 
-            detail.setColor(Color.valueOf(productDetailDTO.getColor()));
-            detail.setSize(Size.valueOf(productDetailDTO.getSize()));
-            detail.setStockQuantity(productDetailDTO.getStockQuantity());
+            detail.setColor(productDetailRequest.getColor());
+            detail.setSize(productDetailRequest.getSize());
+            detail.setStockQuantity(productDetailRequest.getStockQuantity());
 
             ProductDetail updatedDetail = productDetailRepository.save(detail);
-            return productDetailMapper.toDto(updatedDetail);
+            return productDetailMapper.toResponse(updatedDetail);
         }
 
         return null;

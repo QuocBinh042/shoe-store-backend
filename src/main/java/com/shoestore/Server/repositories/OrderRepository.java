@@ -8,6 +8,7 @@
   import org.springframework.data.jpa.repository.Query;
   import org.springframework.data.repository.query.Param;
 
+  import java.math.BigDecimal;
   import java.time.LocalDate;
   import java.util.List;
 
@@ -82,4 +83,17 @@
     @Query("SELECT o FROM Order o WHERE FUNCTION('YEAR', o.orderDate) = :year")
     Page<Order> findByYear(@Param("year") int year, Pageable pageable);
 
+    @Query("SELECT SUM(o.total) FROM Order o " +
+            "WHERE EXISTS (SELECT od FROM OrderDetail od " +
+            "JOIN od.productDetail pd " +
+            "JOIN pd.product p " +
+            "WHERE od.order = o AND p.promotion IS NOT NULL)")
+    BigDecimal getRevenueFromPromotions();
+
+    @Query("SELECT COUNT(DISTINCT o) FROM Order o " +
+            "WHERE EXISTS (SELECT od FROM OrderDetail od " +
+            "JOIN od.productDetail pd " +
+            "JOIN pd.product p " +
+            "WHERE od.order = o AND p.promotion IS NOT NULL)")
+    long countOrdersWithPromotions();
   }

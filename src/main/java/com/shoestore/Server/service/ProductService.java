@@ -8,7 +8,7 @@ import com.shoestore.Server.dto.response.ProductSearchResponse;
 import java.util.List;
 
 public interface ProductService {
-    PaginationResponse<ProductSearchResponse> getAllProduct(int page, int pageSize);
+    PaginationResponse<ProductSearchResponse> getAllProducts(int page, int pageSize);
     ProductDTO getProductByProductDetailsId(int id);
 
     ProductDTO getProductById(int id);

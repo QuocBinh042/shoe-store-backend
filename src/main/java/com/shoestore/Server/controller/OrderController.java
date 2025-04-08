@@ -1,19 +1,21 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.ApiStatusResponse;
+import com.shoestore.Server.dto.response.OrderResponse;
+import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.service.EmailService;
-import com.shoestore.Server.service.MailService;
 import com.shoestore.Server.service.OrderService;
-import jakarta.mail.MessagingException;
+import com.shoestore.Server.utils.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -36,18 +38,12 @@ public class OrderController {
         return orderDTO != null ? ResponseEntity.ok(orderDTO) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping("/update-status")
-    public ResponseEntity<OrderDTO> updateOrderStatus(@RequestParam int orderId, @RequestParam String status) {
-
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
-    }
-    @PreAuthorize("hasAnyAuthority('VIEW_ORDER')")
-    @GetMapping("/get-all")
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
-        return ResponseEntity.ok(orderService.getAll());
+    @PostMapping("/{id}/status")
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable int id, @RequestParam String status) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 
-    @GetMapping("/by-user-id/{userId}")
+    @GetMapping("/by-user/{userId}")
     public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable int userId) {
         return ResponseEntity.ok(orderService.getOrderByByUser(userId));
     }
@@ -158,8 +154,33 @@ public class OrderController {
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping("/total-cost-order/{user-id}")
-    public ResponseEntity<Double> getTotalSpent(@PathVariable("user-id") int id) {
-        return ResponseEntity.ok(orderService.getTotalAmountByUserId(id));
+    @GetMapping("/month")
+    public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByMonth(
+            @RequestParam(value = "page", defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        PaginationResponse<OrderDTO> response = orderService.getOrdersByMonth(page, pageSize);
+        return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/year")
+    public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByYear(
+            @RequestParam(value = "page", defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        PaginationResponse<OrderDTO> response = orderService.getOrdersByYear(page, pageSize);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/revenue/with-promotions")
+    public ResponseEntity<RestResponse<BigDecimal>> getRevenueFromPromotions() {
+        BigDecimal revenue = orderService.getRevenueFromPromotions();
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Revenue from promotions", null, revenue));
+    }
+
+    @GetMapping("/count/with-promotions")
+    public ResponseEntity<RestResponse<Long>> countOrdersWithPromotions() {
+        long count = orderService.countOrdersWithPromotions();
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Count of orders with promotions", null, count));
+    }
+
+
 }

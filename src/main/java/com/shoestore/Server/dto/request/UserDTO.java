@@ -1,8 +1,8 @@
 package com.shoestore.Server.dto.request;
 
+import com.shoestore.Server.enums.CustomerGroup;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -31,11 +31,10 @@ public class UserDTO {
 //    @NotBlank(message = "Status cannot be blank")
     private String status;
 
-//    @NotBlank(message = "CI cannot be blank")
-    private String CI;
-
 //    @NotNull(message = "Roles cannot be null")
     private Set<RoleDTO> roles;
 
     private String refreshToken;
+
+    private CustomerGroup customerGroup;
 }

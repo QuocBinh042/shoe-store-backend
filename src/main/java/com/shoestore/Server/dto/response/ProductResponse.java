@@ -1,11 +1,14 @@
-package com.shoestore.Server.dto.request;
+package com.shoestore.Server.dto.response;
+
+import com.shoestore.Server.dto.request.ProductDetailDTO;
+
+import java.util.List;
 
 import com.shoestore.Server.enums.ProductStatus;
 import lombok.Data;
 
-import java.util.List;
 @Data
-public class ProductDTO {
+public class ProductResponse {
     private int productID;
     private String productName;
     private List<String> imageURL;
@@ -15,7 +18,5 @@ public class ProductDTO {
     private int brandID;
     private int categoryID;
     private int supplierID;
-    private List<ProductDetailRequest> productDetails;
-
+    private List<ProductDetailDTO> productDetails;
 }
-
