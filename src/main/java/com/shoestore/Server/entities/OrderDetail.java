@@ -1,11 +1,7 @@
 package com.shoestore.Server.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.springframework.data.domain.Auditable;
-
 
 @NoArgsConstructor
 @AllArgsConstructor

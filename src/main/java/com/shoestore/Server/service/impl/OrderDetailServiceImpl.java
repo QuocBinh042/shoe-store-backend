@@ -1,6 +1,7 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
+import com.shoestore.Server.dto.response.OrderDetailResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.entities.ProductDetail;
@@ -72,6 +73,18 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .collect(Collectors.toList());
 
         log.info("Found {} order details for Order ID: {}", orderDetails.size(), orderID);
+        return orderDetails;
+    }
+
+    @Override
+    public List<OrderDetailResponse> getOrderDetailByOrderID(int orderID) {
+        log.info("Fetching order details for Order ID: {}", orderID);
+
+        List<OrderDetailResponse> orderDetails = orderDetailRepository.findByOrder_OrderID(orderID)
+                .stream()
+                .map(orderDetailMapper::toDResponse)
+                .collect(Collectors.toList());
+
         return orderDetails;
     }
 }
