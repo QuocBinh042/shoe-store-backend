@@ -1,9 +1,11 @@
 package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.OrderResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -71,4 +73,14 @@ public interface OrderService {
 
     long countOrdersWithPromotions();
 
+    PaginationResponse<OrderResponse> filterOrders(
+            String status,
+            String query,
+            LocalDate from,
+            LocalDate to,
+            int page,
+            int pageSize,
+            String sort,
+            String mode
+    );
 }
