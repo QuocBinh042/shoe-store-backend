@@ -12,16 +12,17 @@ import com.shoestore.Server.mapper.OrderMapper;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.repositories.VoucherRepository;
-import com.shoestore.Server.service.OrderDetailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.PaymentService;
+import com.shoestore.Server.specifications.OrderSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,14 +35,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
     private final PaginationService paginationService;
-    private OrderDetailMapper orderDetailMapper;
-    private PaymentService paymentService;
+    private final OrderDetailMapper orderDetailMapper;
+    private final PaymentService paymentService;
     @Override
     public List<OrderDTO> getAllOrders() {
         log.info("Fetching all orders...");
@@ -351,5 +351,61 @@ public class OrderServiceImpl implements OrderService {
         return revenue != null ? revenue : BigDecimal.ZERO;
     }
 
+    @Override
+    public PaginationResponse<OrderResponse> filterOrders(
+            String status, String query, LocalDate from, LocalDate to,
+            int page, int pageSize, String sort, String mode) {
+
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = from;
+        LocalDate endDate = to;
+
+        if (mode != null) {
+            switch (mode) {
+                case "day":
+                    startDate = today;
+                    endDate = today;
+                    break;
+                case "month":
+                    startDate = today.withDayOfMonth(1);
+                    endDate = today;
+                    break;
+                case "year":
+                    startDate = today.withDayOfYear(1);
+                    endDate = today;
+                    break;
+                case "all":
+                default:
+                    startDate = null;
+                    endDate = null;
+                    break;
+            }
+        }
+
+        Sort sorting = switch (sort) {
+            case "newest" -> Sort.by(Sort.Direction.DESC, "orderDate");
+            case "oldest" -> Sort.by(Sort.Direction.ASC, "orderDate");
+            case "highestTotal" -> Sort.by(Sort.Direction.DESC, "total");
+            case "lowestTotal" -> Sort.by(Sort.Direction.ASC, "total");
+            default -> Sort.by(Sort.Direction.DESC, "orderDate");
+        };
+
+        Pageable pageable = PageRequest.of(page - 1, pageSize, sorting);
+
+        Specification<Order> spec = Specification
+                .where(OrderSpecification.hasStatus(status))
+                .and(OrderSpecification.hasKeyword(query))
+                .and(OrderSpecification.hasDateFrom(startDate))
+                .and(OrderSpecification.hasDateTo(endDate));
+
+        Page<Order> orders;
+        if ("all".equals(mode)) {
+            orders = orderRepository.findAll(spec, pageable);
+        } else {
+            orders = orderRepository.findAll(spec, pageable);
+        }
+
+        return paginationService.paginate(orders.map(orderMapper::toResponse));
+    }
 
 }

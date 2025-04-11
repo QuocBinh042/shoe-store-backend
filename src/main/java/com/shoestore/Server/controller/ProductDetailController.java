@@ -4,14 +4,13 @@ import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.request.ProductDetailRequest;
 import com.shoestore.Server.dto.response.ApiStatusResponse;
-import com.shoestore.Server.dto.response.ProductDetailResponse;
+import com.shoestore.Server.dto.response.ProductResponse;
 import com.shoestore.Server.dto.response.ProductDetailsResponse;
 import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,14 +26,14 @@ public class ProductDetailController {
     private final PromotionService promotionService;
 
     @GetMapping("/by-product-id/{id}")
-    public ResponseEntity<ProductDetailResponse> getProductDetailsByProductId(@PathVariable int id) {
+    public ResponseEntity<ProductResponse> getProductDetailsByProductId(@PathVariable int id) {
         ProductDTO productDTO = productService.getProductById(id);
         if (productDTO == null) {
             return ResponseEntity.notFound().build();
         }
 
         List<ProductDetailDTO> productDetails = productDetailService.getByProductId(id);
-        ProductDetailResponse response = new ProductDetailResponse(
+        ProductResponse response = new ProductResponse(
                 productDetails,
                 productDTO.getProductName(),
                 categoryService.getCategory(productDTO.getCategoryID()).getName(),

@@ -67,12 +67,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         return orderDetailMapper.toDto(savedOrderDetail);
     }
-
-
     @Override
-    public List<OrderDetailsResponse> getProductDetailByOrderID(int orderID) {
-        log.info("Fetching order details for Order ID: {}", orderID);
-
+    public List<OrderDetailsResponse> getOrderDetailByOrderID(int orderID) {
         List<OrderDetailsResponse> responses = orderDetailRepository.findByOrder_OrderID(orderID)
                 .stream()
                 .map(orderDetail -> {
@@ -91,6 +87,4 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         log.info("Found {} order details for Order ID: {}", responses.size(), orderID);
         return responses;
     }
-
-
 }

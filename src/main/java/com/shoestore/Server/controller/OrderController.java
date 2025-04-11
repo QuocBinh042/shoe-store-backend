@@ -10,12 +10,14 @@ import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.utils.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -182,5 +184,20 @@ public class OrderController {
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Count of orders with promotions", null, count));
     }
 
-
+    @GetMapping("/filter")
+    public ResponseEntity<PaginationResponse<OrderResponse>> filterOrders(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String mode
+    ) {
+        PaginationResponse<OrderResponse> result = orderService.filterOrders(
+                status, q, from, to, page, pageSize, sort, mode
+        );
+        return ResponseEntity.ok(result);
+    }
 }
