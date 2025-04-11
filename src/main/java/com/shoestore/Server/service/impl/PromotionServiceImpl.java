@@ -50,29 +50,51 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public double getDiscountedPrice(int productID) {
         log.info("Calculating discounted price for Product ID: {}", productID);
-        Optional<Product> optionalProduct = productRepository.findById(productID);
-        if (optionalProduct.isEmpty()) {
-            log.warn("Product with ID {} not found!", productID);
-            return 0.0;
-        }
-        Product product = optionalProduct.get();
-        Optional<Promotion> optionalPromotion = promotionRepository.findPromotionByProductId(productID);
-        if (optionalPromotion.isEmpty()) {
-            log.info("No active promotion found for Product ID: {}", productID);
+        Product product = productRepository.findById(productID)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        if(product.getPromotion()==null){
             return product.getPrice();
         }
-        Promotion promotion = optionalPromotion.get();
-        if (promotion.getEndDate().isBefore(LocalDateTime.now())) {
-            log.info("Promotion for Product ID: {} has expired.", productID);
+        Promotion promotion=promotionRepository.findById(product.getPromotion().getPromotionID())
+                .orElseThrow(() -> new RuntimeException("Promotion not found"));;
+        if (promotion.getStatus() != PromotionStatus.ACTIVE ||
+                promotion.getStartDate().isAfter(LocalDateTime.now()) ||
+                promotion.getEndDate().isBefore(LocalDateTime.now())) {
+            log.info("Promotion is not currently active for Product ID: {}", productID);
             return product.getPrice();
         }
-        double discountPrice = product.getPrice();
-        double discountValue = promotion.getDiscountValue().doubleValue();
-        discountPrice -= discountPrice * (discountValue / 100.0);
-        log.info("Applied percentage discount: {}%, New price: {}", discountValue, discountPrice);
-        double finalPrice = Math.max(discountPrice, 0.0);
-        log.info("Final discounted price for Product ID {}: {}", productID, finalPrice);
-        return finalPrice;
+        double originalPrice = product.getPrice();
+        double discountedPrice = originalPrice;
+        switch (promotion.getType()) {
+            case PERCENTAGE -> {
+                if (promotion.getDiscountValue() != null) {
+                    double discountPercent = promotion.getDiscountValue().doubleValue();
+                    discountedPrice -= originalPrice * (discountPercent / 100.0);
+                    log.info("Applied {}% discount. New price: {}", discountPercent, discountedPrice);
+                }
+            }
+            case FIXED -> {
+                if (promotion.getDiscountValue() != null) {
+                    double discountAmount = promotion.getDiscountValue().doubleValue();
+                    discountedPrice -= discountAmount;
+                    log.info("Applied fixed discount: {}đ. New price: {}", discountAmount, discountedPrice);
+                }
+            }
+            case BUYX,GIFT -> {
+                log.info("BUY_X_GET_Y promotion applicable. Handled in cart/order logic.");
+                return originalPrice;
+            }
+            default -> log.warn("Unknown promotion type for Product ID: {}", productID);
+        }
+        if (promotion.getMaxDiscount() != null) {
+            double maxDiscount = promotion.getMaxDiscount().doubleValue();
+            double actualDiscount = originalPrice - discountedPrice;
+            if (actualDiscount > maxDiscount) {
+                discountedPrice = originalPrice - maxDiscount;
+                log.info("Max discount {}đ applied. Final price: {}", maxDiscount, discountedPrice);
+            }
+        }
+        return Math.max(discountedPrice, 0.0);
     }
 
     @Override
@@ -352,5 +374,42 @@ public class PromotionServiceImpl implements PromotionService {
         finalPrice = finalPrice.setScale(2, RoundingMode.HALF_UP);
         log.info("Final price after promotions for Product ID {}: {}", productId, finalPrice);
         return finalPrice;
+    }
+
+    @Override
+    public String getPromotionTypeByProductId(int productID) {
+        log.info("Fetching promotion info for Product ID: {}", productID);
+
+        Product product = productRepository.findById(productID)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Promotion promotion = product.getPromotion();
+        if (promotion == null ||
+                promotion.getStatus() != PromotionStatus.ACTIVE ||
+                promotion.getStartDate().isAfter(LocalDateTime.now()) ||
+                promotion.getEndDate().isBefore(LocalDateTime.now())) {
+            return null;
+        }
+        PromotionType type = promotion.getType();
+        String result = null;
+        switch (type) {
+            case PERCENTAGE:
+                if (promotion.getDiscountValue() != null) {
+                    result = "Discount " + promotion.getDiscountValue().intValue() + "%";
+                }
+                break;
+            case BUYX:
+                result = "Buy " + promotion.getBuyQuantity() + " gift " + promotion.getGetQuantity();
+                break;
+            case GIFT:
+                if (promotion.getGiftProduct() != null) {
+                    result = "Gift ";
+                }
+                break;
+            case FIXED:
+                result = "Fix: " + promotion.getDiscountValue();
+                break;
+        }
+        log.info("Promotion string for Product ID {}: {}", productID, result);
+        return result;
     }
 }

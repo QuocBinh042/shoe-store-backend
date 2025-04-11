@@ -1,6 +1,7 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.PlacedOrderResponse;
 import com.shoestore.Server.dto.response.OrderResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.entities.Order;
@@ -120,15 +121,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> getOrderByByUser(int userId) {
+    public List<PlacedOrderResponse> getOrderByByUser(int userId) {
         log.info("Fetching orders for User ID: {}", userId);
 
-        List<OrderResponse> orders = orderRepository.findByUser_UserID(userId)
+        List<PlacedOrderResponse> orders = orderRepository.findByUser_UserID(userId)
                 .stream()
                 .map(order -> {
                     int orderId = order.getOrderID();
 
-                    return new OrderResponse(
+                    return new PlacedOrderResponse(
                             orderMapper.toDto(order),
                             orderDetailMapper.toListDto(order.getOrderDetails()),
                             paymentService.getPaymentByOrderId(orderId)

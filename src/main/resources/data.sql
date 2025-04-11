@@ -232,7 +232,7 @@ INSERT INTO Promotion (
     ('Summer Sale 2023', 'Percentage (10%)', 'PERCENTAGE', 10.00, NULL, NULL, NULL,
      '2023-06-01 00:00:00', '2023-08-31 23:59:59', 'ALL', 'ACTIVE', 328,
      NOW(), NOW()),
-    ('New Customer Discount', 'Fixed Amount ($20)', 'FIXED', 20.00, NULL, NULL, NULL,
+    ('New Customer Discount', 'Fixed Amount ($20)', 'FIXED', 20000, NULL, NULL, NULL,
      '2023-05-15 00:00:00', '2023-12-31 23:59:59', 'ALL', 'ACTIVE', 145,
      NOW(), NOW()),
     ('Back to School', 'Buy 2 Get 1 Free', 'BUYX', NULL, 2, 1, NULL,
@@ -439,7 +439,7 @@ VALUES
 (1, 10, 20, NOW(), NOW());
 
 -- Thêm dữ liệu cho bảng Orders
-INSERT INTO Orders (orderDate, status, total, feeShip, code, voucherID, shippingAddress, paymentMethod, discount, userID, createdAt, updatedAt)
+INSERT INTO Orders (orderDate, status, total, feeShip, code, voucherID, shippingAddress, paymentMethod,voucherDiscount, userID, createdAt, updatedAt)
 VALUES
 (NOW(), 'PENDING', 4400000, 30000, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '123 Maple St, City, Country', 'CASH', 0, 4, NOW(), NOW()),
 (NOW(), 'SHIPPED', 3200000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '456 Pine Rd, City, Country', 'CASH', 0, 5, NOW(), NOW()),
@@ -454,18 +454,29 @@ VALUES
 (2150000, NOW(), 5, NOW(), NOW());
 
 -- Thêm dữ liệu cho bảng OrderDetail
-INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt)
-VALUES
-(1, 3, 2, 1500000, NOW(), NOW()),
-(1, 5, 1, 1400000, NOW(), NOW()),
-(2, 2, 2, 1200000, NOW(), NOW()),
-(2, 4, 1, 800000, NOW(), NOW()),
-(3, 6, 1, 1800000, NOW(), NOW()),
-(3, 7, 3, 750000, NOW(), NOW()),
-(4, 1, 2, 1000000, NOW(), NOW()),
-(4, 3, 1, 1500000, NOW(), NOW()),
-(5, 2, 1, 1200000, NOW(), NOW()),
-(5, 6, 1, 950000, NOW(), NOW());
+INSERT INTO OrderDetail (
+    orderID, 
+    productDetailID, 
+    quantity, 
+    price, 
+    createdAt, 
+    updatedAt, 
+    promotionID, 
+    giftProductDetailID, 
+    giftedQuantity, 
+    promoDiscount
+) VALUES
+(1, 3, 2, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(1, 5, 1, 1400000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(2, 2, 2, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(2, 4, 1, 800000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(3, 6, 1, 1800000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(3, 7, 3, 750000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(4, 1, 2, 1000000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(4, 3, 1, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(5, 2, 1, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
+(5, 6, 1, 950000, NOW(), NOW(), NULL, NULL, 0, NULL);
+
 
 -- Thêm dữ liệu cho bảng Payment
 INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES

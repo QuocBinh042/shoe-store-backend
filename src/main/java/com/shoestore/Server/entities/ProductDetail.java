@@ -37,9 +37,7 @@ public class ProductDetail extends BaseEntity{
     @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<OrderDetail> orderDetails;
-
     @Enumerated (EnumType.STRING)
     private ProductStatus status;
-
     private String image;
 }

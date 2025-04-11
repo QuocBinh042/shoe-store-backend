@@ -1,11 +1,13 @@
 package com.shoestore.Server.dto.response;
 
 import com.shoestore.Server.dto.request.ProductDetailDTO;
+import com.shoestore.Server.entities.Promotion;
+import com.shoestore.Server.enums.PromotionType;
 import lombok.Data;
 
 import java.util.List;
 @Data
-public class ProductSearchResponse {
+public class SearchProductResponse {
     private int productID;
     private String productName;
     private List<String> imageURL;
@@ -15,4 +17,5 @@ public class ProductSearchResponse {
     private List<ProductDetailDTO> productDetails;
     private double discountPrice;
     private double rating;
+    private String promotionValue;
 }

@@ -4,7 +4,7 @@ import com.shoestore.Server.dto.request.ProductDTO;
 
 import com.shoestore.Server.dto.response.FeaturedProductResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.ProductSearchResponse;
+import com.shoestore.Server.dto.response.SearchProductResponse;
 
 import com.shoestore.Server.entities.Product;
 
@@ -41,20 +41,21 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewRepository reviewRepository;
     private final PromotionService promotionService;
 
-    private List<ProductSearchResponse> enhanceProductSearchResponses(List<ProductSearchResponse> products) {
-        for (ProductSearchResponse p : products) {
+    private List<SearchProductResponse> enhanceProductSearchResponses(List<SearchProductResponse> products) {
+        for (SearchProductResponse p : products) {
             p.setRating(getAverageRating(p.getProductID()));
             p.setDiscountPrice(promotionService.getDiscountedPrice(p.getProductID()));
+            p.setPromotionValue(promotionService.getPromotionTypeByProductId(p.getProductID()));
         }
         return products;
     }
 
     @Override
-    public PaginationResponse<ProductSearchResponse> getAllProducts(int page, int pageSize) {
+    public PaginationResponse<SearchProductResponse> getAllProducts(int page, int pageSize) {
         List<Product> products = productRepository.findAll();
 
         PaginationResponse<Product> paginatedProducts = paginationService.paginate(products, page, pageSize);
-        List<ProductSearchResponse> productDTOs = productMapper.toProductSearchResponse(paginatedProducts.getItems());
+        List<SearchProductResponse> productDTOs = productMapper.toProductSearchResponse(paginatedProducts.getItems());
 
         return new PaginationResponse<>(
                 enhanceProductSearchResponses(productDTOs),
@@ -66,13 +67,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse<ProductSearchResponse> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
+    public PaginationResponse<SearchProductResponse> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
                                                                          String keyword, Double minPrice, Double maxPrice, String sortBy, int page, int pageSize) {
         Specification<Product> spec = buildProductSpecification(categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice);
         Pageable pageable = PageRequest.of(page - 1, pageSize, getSortOrder(sortBy));
         Page<Product> pagedProducts = productRepository.findAll(spec, pageable);
 
-        List<ProductSearchResponse> productDTOs = productMapper.toProductSearchResponse(pagedProducts.getContent());
+        List<SearchProductResponse> productDTOs = productMapper.toProductSearchResponse(pagedProducts.getContent());
         return new PaginationResponse<>(
                 enhanceProductSearchResponses(productDTOs),
                 pagedProducts.getTotalElements(),
@@ -216,7 +217,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductSearchResponse> getRelatedProducts(int productId, int categoryId, int brandId) {
+    public List<SearchProductResponse> getRelatedProducts(int productId, int categoryId, int brandId) {
         List<Product> relatedProducts = productRepository.findTop10ByCategory_CategoryIDAndProductIDNot(categoryId, productId);
 
         if (relatedProducts.size() < 10) {
@@ -226,7 +227,7 @@ public class ProductServiceImpl implements ProductService {
                     .toList();
             relatedProducts.addAll(brandProducts);
         }
-        List<ProductSearchResponse> productSearchResponse = productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+        List<SearchProductResponse> productSearchResponse = productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
         return enhanceProductSearchResponses(productSearchResponse);
     }
 

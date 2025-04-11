@@ -1,7 +1,7 @@
 package com.shoestore.Server.mapper;
 
 import com.shoestore.Server.dto.request.ProductDTO;
-import com.shoestore.Server.dto.response.ProductSearchResponse;
+import com.shoestore.Server.dto.response.SearchProductResponse;
 import com.shoestore.Server.entities.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,6 +19,6 @@ public interface ProductMapper {
     @Mapping(source = "categoryID", target = "category.categoryID")
     @Mapping(source = "supplierID", target = "supplier.supplierID")
     Product toEntity(ProductDTO productDTO);
-    List<ProductSearchResponse> toProductSearchResponse(List<Product> products);
+    List<SearchProductResponse> toProductSearchResponse(List<Product> products);
     List<ProductDTO> toDto(List<Product> products);
 }

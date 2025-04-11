@@ -1,7 +1,7 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
-import com.shoestore.Server.dto.response.OrderDetailsResponse;
+import com.shoestore.Server.dto.response.PlacedOrderDetailsResponse;
 import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.entities.ProductDetail;
@@ -68,14 +68,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return orderDetailMapper.toDto(savedOrderDetail);
     }
     @Override
-    public List<OrderDetailsResponse> getOrderDetailByOrderID(int orderID) {
-        List<OrderDetailsResponse> responses = orderDetailRepository.findByOrder_OrderID(orderID)
+    public List<PlacedOrderDetailsResponse> getOrderDetailByOrderID(int orderID) {
+        List<PlacedOrderDetailsResponse> responses = orderDetailRepository.findByOrder_OrderID(orderID)
                 .stream()
                 .map(orderDetail -> {
                     var productDetailDTO = productDetailMapper.toDto(orderDetail.getProductDetail());
 //                    var product = productService.getProductByProductDetailsId(productDetailDTO.getProductDetailID());
                     log.info("Product image: {}", productDetailDTO.getProductDetailID());
-                    return new OrderDetailsResponse(
+                    return new PlacedOrderDetailsResponse(
                             productDetailDTO,
                             orderDetail.getQuantity(),
                             orderDetail.getPrice(),

@@ -1,8 +1,7 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
-import com.shoestore.Server.dto.response.OrderDetailResponse;
-import com.shoestore.Server.dto.response.OrderDetailsResponse;
+import com.shoestore.Server.dto.response.PlacedOrderDetailsResponse;
 import com.shoestore.Server.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class OrderDetailController {
 //    }
 
     @GetMapping("/order/{orderId}/details")
-    public ResponseEntity<List<OrderDetailsResponse>> getOrderDetailByOrderID(@PathVariable("orderId") int orderId) {
+    public ResponseEntity<List<PlacedOrderDetailsResponse>> getOrderDetailByOrderID(@PathVariable("orderId") int orderId) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderId));
     }
 

@@ -1,10 +1,7 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
-import com.shoestore.Server.dto.response.ApiStatusResponse;
-import com.shoestore.Server.dto.response.OrderResponse;
-import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.RestResponse;
+import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.utils.AppConstants;
@@ -46,7 +43,7 @@ public class OrderController {
     }
 
     @GetMapping("/by-user/{userId}")
-    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable int userId) {
+    public ResponseEntity<List<PlacedOrderResponse>> getOrdersByUserId(@PathVariable int userId) {
         return ResponseEntity.ok(orderService.getOrderByByUser(userId));
     }
 

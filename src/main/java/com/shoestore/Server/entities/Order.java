@@ -41,7 +41,7 @@ public class Order extends BaseEntity{
     private String shippingAddress;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-    private double discount;
+    private double voucherDiscount;
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
