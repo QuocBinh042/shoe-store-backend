@@ -1,29 +1,33 @@
 package com.shoestore.Server.service.impl;
 
-import com.shoestore.Server.dto.response.KpiItemResponse;
-import com.shoestore.Server.dto.response.KpiResponse;
-import com.shoestore.Server.dto.response.RevenueOrdersResponse;
-import com.shoestore.Server.dto.response.RevenueSeriesResponse;
+import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.enums.RoleType;
 import com.shoestore.Server.repositories.OrderRepository;
+import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.service.DashboardService;
+import com.shoestore.Server.service.PaginationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-
+    private final ProductRepository productRepository;
+    private final PaginationService paginationService;
     @Override
     public KpiResponse getKpiOverview(String timeFrame) {
         LocalDate now = LocalDate.now();
@@ -136,4 +140,25 @@ public class DashboardServiceImpl implements DashboardService {
         dto.setOrderStatus(status);
         return dto;
     }
+
+    @Override
+    public PaginationResponse<BestSellerResponse> getBestSellers(int page, int pageSize) {
+        LocalDate end   = LocalDate.now();
+        LocalDate start = end.minusDays(30);
+
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+
+        Page<BestSellerResponse> dtoPage = productRepository.fetchRawBestSellers(start, end, pageable);
+
+        return paginationService.paginate(dtoPage);
+    }
+
+    @Override
+    public PaginationResponse<StockAlertResponse> getStockAlerts(int threshold, int page, int pageSize) {
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        Page<StockAlertResponse> dtoPage = productRepository.findLowStock(threshold, pageable);
+        return paginationService.paginate(dtoPage);
+    }
+
+
 }

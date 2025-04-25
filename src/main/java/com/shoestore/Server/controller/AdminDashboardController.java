@@ -1,8 +1,8 @@
 package com.shoestore.Server.controller;
 
-import com.shoestore.Server.dto.response.KpiResponse;
-import com.shoestore.Server.dto.response.RevenueOrdersResponse;
+import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.service.DashboardService;
+import com.shoestore.Server.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,5 +30,22 @@ public class AdminDashboardController {
     ) {
         var data = dashboardService.getRevenueAndOrders(timeFrame);
         return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/best-sellers")
+    public PaginationResponse<BestSellerResponse> getBestSellers(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize
+    ) {
+        return dashboardService.getBestSellers(page, pageSize);
+    }
+
+    @GetMapping("/stock-alerts")
+    public PaginationResponse<StockAlertResponse> getStockAlerts(
+            @RequestParam(defaultValue = "10") int threshold,
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER)  int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE)  int pageSize
+    ) {
+        return dashboardService.getStockAlerts(threshold, page, pageSize);
     }
 }
