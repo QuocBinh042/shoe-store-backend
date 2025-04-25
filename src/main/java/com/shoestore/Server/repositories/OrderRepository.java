@@ -95,4 +95,7 @@
             "JOIN pd.product p " +
             "WHERE od.order = o AND p.promotion IS NOT NULL)")
     long countOrdersWithPromotions();
+
+    @Query("SELECT SUM(o.total) FROM Order o")
+    Double sumTotalAmount();
   }
