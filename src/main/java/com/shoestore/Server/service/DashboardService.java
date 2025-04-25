@@ -18,4 +18,6 @@ public interface DashboardService {
     List<CustomerRetentionResponse> getCustomerRetention(int year);
 
     CustomerMetricsResponse getCustomerMetrics(int year);
+
+    PaginationResponse<InventoryForecastResponse> getInventoryForecast(int page, int pageSize);
 }

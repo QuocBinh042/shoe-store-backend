@@ -1,7 +1,9 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.response.*;
+import com.shoestore.Server.entities.Product;
 import com.shoestore.Server.enums.RoleType;
+import com.shoestore.Server.repositories.OrderDetailRepository;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.UserRepository;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
     private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PaginationService paginationService;
@@ -224,4 +227,37 @@ public class DashboardServiceImpl implements DashboardService {
                 Math.round(repeatRate * 10) / 10.0
         );
     }
+    @Override
+    public PaginationResponse<InventoryForecastResponse> getInventoryForecast(int page, int pageSize) {
+        Pageable pageable = paginationService.createPageable(page, pageSize);
+        // Fetch paged products
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        Page<InventoryForecastResponse> dtoPage = productPage.map(product -> {
+            int currentStock = productRepository.getTotalStockByProductId(product.getProductID());
+            int totalSold = orderDetailRepository.getTotalSoldByProductId(product.getProductID());
+            double ratio = currentStock == 0
+                    ? 0.0
+                    : ((double) totalSold / currentStock) * 100;
+            double roundedRatio = Math.round(ratio * 10.0) / 10.0;
+            String urgency = totalSold == 0 ? "Low" : calculateRestockUrgency(roundedRatio);
+            return new InventoryForecastResponse(
+                    product.getProductName(),
+                    currentStock,
+                    totalSold,
+                    roundedRatio,
+                    urgency
+            );
+        });
+
+        return paginationService.paginate(dtoPage);
+    }
+
+    private String calculateRestockUrgency(double ratio) {
+        if (ratio <= 10) return "Critical";
+        else if (ratio <= 30) return "High";
+        else if (ratio <= 60) return "Medium";
+        else return "Low";
+    }
+
 }

@@ -76,4 +76,11 @@ public class AdminDashboardController {
         CustomerMetricsResponse data = dashboardService.getCustomerMetrics(y);
         return ResponseEntity.ok(data);
     }
+    @GetMapping("/inventory-forecast")
+    public PaginationResponse<InventoryForecastResponse> getInventoryForecast(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize
+    ) {
+        return dashboardService.getInventoryForecast(page, pageSize);
+    }
 }

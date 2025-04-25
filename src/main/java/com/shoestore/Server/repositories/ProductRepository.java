@@ -107,5 +107,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
             Pageable pageable
     );
 
-
+    @Query("SELECT COALESCE(SUM(pd.stockQuantity), 0) FROM ProductDetail pd WHERE pd.product.productID = :productId")
+    int getTotalStockByProductId(int productId);
 }

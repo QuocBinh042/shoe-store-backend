@@ -207,4 +207,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpeci
             """, nativeQuery = true)
     Double findRepeatPurchaseRate(@Param("year") int year);
 
+
 }
