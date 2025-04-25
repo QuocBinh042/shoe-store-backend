@@ -1,6 +1,7 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.response.KpiResponse;
+import com.shoestore.Server.dto.response.RevenueOrdersResponse;
 import com.shoestore.Server.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,13 @@ public class AdminDashboardController {
     public ResponseEntity<KpiResponse> getKpiOverview(
             @RequestParam(defaultValue = "monthly") String timeFrame) {
         return ResponseEntity.ok(dashboardService.getKpiOverview(timeFrame));
+    }
+
+    @GetMapping("/revenue-orders")
+    public ResponseEntity<RevenueOrdersResponse> getRevenueAndOrders(
+            @RequestParam(defaultValue = "monthly") String timeFrame
+    ) {
+        var data = dashboardService.getRevenueAndOrders(timeFrame);
+        return ResponseEntity.ok(data);
     }
 }

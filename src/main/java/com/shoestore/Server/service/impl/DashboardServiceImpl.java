@@ -2,6 +2,8 @@ package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.response.KpiItemResponse;
 import com.shoestore.Server.dto.response.KpiResponse;
+import com.shoestore.Server.dto.response.RevenueOrdersResponse;
+import com.shoestore.Server.dto.response.RevenueSeriesResponse;
 import com.shoestore.Server.enums.RoleType;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.UserRepository;
@@ -93,5 +95,45 @@ public class DashboardServiceImpl implements DashboardService {
         }
         item.setChangePercent(change);
         return item;
+    }
+
+    @Override
+    public RevenueOrdersResponse getRevenueAndOrders(String timeFrame) {
+        LocalDate now = LocalDate.now();
+        LocalDate start, end;
+        start = switch (timeFrame.toLowerCase()) {
+            case "daily" -> {
+                end = now;
+                yield now.minusDays(30);
+            }
+            case "weekly" -> {
+                end = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+                yield end.minusWeeks(8).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            }
+            case "yearly" -> {
+                end = now;
+                yield now.minusYears(3).withDayOfYear(1);
+            }
+            default -> {
+                end = now.withDayOfMonth(now.lengthOfMonth());
+                yield end.minusMonths(11).withDayOfMonth(1);
+            }
+        };
+
+        List<Object[]> raw = orderRepository.fetchRawRevenueSeries(timeFrame, start, end);
+        List<RevenueSeriesResponse> series = raw.stream()
+                .map(r -> new RevenueSeriesResponse(
+                        (String)    r[0],
+                        ((Number)   r[1]).doubleValue(),
+                        ((Number)   r[2]).longValue()
+                ))
+                .toList();
+
+        var status = orderRepository.fetchOrderStatusCounts(start, end);
+
+        var dto = new RevenueOrdersResponse();
+        dto.setRevenueSeries(series);
+        dto.setOrderStatus(status);
+        return dto;
     }
 }
