@@ -2,10 +2,9 @@ package com.shoestore.Server.dto.response;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class KpiResponse {
-    private double totalRevenue;
-    private long totalOrders;
-    private double avgOrderValue;
-    private long newCustomers;
+    private List<KpiItemResponse> items;
 }

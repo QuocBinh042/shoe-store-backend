@@ -11,6 +11,7 @@
   import java.math.BigDecimal;
   import java.time.LocalDate;
   import java.util.List;
+  import java.util.Optional;
 
   public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpecificationExecutor<Order> {
     List<Order> findByUser_UserID(int userID);
@@ -98,4 +99,10 @@
 
     @Query("SELECT SUM(o.total) FROM Order o")
     Double sumTotalAmount();
+
+    @Query("SELECT SUM(o.total) FROM Order o WHERE o.orderDate BETWEEN :start AND :end")
+    Optional<Double> sumTotalBetween(@Param("start") LocalDate start,
+                                     @Param("end")   LocalDate end);
+
+    long countByOrderDateBetween(LocalDate start, LocalDate end);
   }

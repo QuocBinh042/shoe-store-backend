@@ -26,10 +26,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT COUNT(u) " +
             "FROM User u JOIN u.roles r " +
-            "WHERE r.roleType = :role " +
-            "  AND u.createdAt > :fromDateTime")
-    int countByRoleTypeAndCreatedAtAfter(
+            "WHERE r.roleType   = :role " +
+            "  AND u.createdAt >= :start " +
+            "  AND u.createdAt <= :end")
+    int countByRoleTypeAndCreatedAtBetween(
             @Param("role") RoleType role,
-            @Param("fromDateTime") LocalDateTime fromDateTime
+            @Param("start") LocalDateTime start,
+            @Param("end")   LocalDateTime end
     );
 }
