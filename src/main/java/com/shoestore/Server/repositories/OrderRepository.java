@@ -150,4 +150,61 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpeci
             @Param("end") LocalDate end
     );
 
+    @Query(value = """
+              WITH first_order AS (
+                SELECT userID,
+                       MIN(orderDate) AS first_date
+                FROM Orders
+                GROUP BY userID
+              )
+              SELECT
+                DATE_FORMAT(o.orderDate, '%Y-%m')              AS month,
+                COUNT(DISTINCT CASE WHEN fo.first_date BETWEEN
+                     STR_TO_DATE(CONCAT(DATE_FORMAT(o.orderDate, '%Y-%m'), '-01'), '%Y-%m-%d')
+                   AND LAST_DAY(o.orderDate)
+                   THEN o.userID END)                          AS new_customers,
+                COUNT(DISTINCT CASE WHEN fo.first_date <
+                     STR_TO_DATE(CONCAT(DATE_FORMAT(o.orderDate, '%Y-%m'), '-01'), '%Y-%m-%d')
+                   THEN o.userID END)                          AS returning_customers
+              FROM Orders o
+              JOIN first_order fo ON fo.userID = o.userID
+              WHERE YEAR(o.orderDate) = :year
+              GROUP BY month
+              ORDER BY month
+            """, nativeQuery = true)
+    List<Object[]> findCustomerGrowth(@Param("year") int year);
+
+    @Query(value = """
+              SELECT
+                o.userID,
+                DATE_FORMAT(o.orderDate, '%Y-%m') AS month
+              FROM Orders o
+              WHERE YEAR(o.orderDate) = :year
+            """, nativeQuery = true)
+    List<Object[]> findMonthlyUsers(@Param("year") int year);
+
+    @Query(value = """
+            SELECT AVG(customer_total) FROM (
+              SELECT SUM(o.total) AS customer_total
+              FROM Orders o
+              WHERE YEAR(o.orderDate) = :year
+              GROUP BY o.userID
+            ) t
+            """, nativeQuery = true)
+    Double findAvgCustomerLifetimeValue(@Param("year") int year);
+
+    @Query(value = """
+            SELECT ROUND(
+              SUM(CASE WHEN t.order_count >= 2 THEN 1 ELSE 0 END) * 100.0
+              / COUNT(*)
+            , 1)
+            FROM (
+              SELECT userID, COUNT(*) AS order_count
+              FROM Orders
+              WHERE YEAR(orderDate) = :year
+              GROUP BY userID
+            ) t
+            """, nativeQuery = true)
+    Double findRepeatPurchaseRate(@Param("year") int year);
+
 }

@@ -12,13 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +28,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PaginationService paginationService;
+
     @Override
     public KpiResponse getKpiOverview(String timeFrame) {
         LocalDate now = LocalDate.now();
@@ -77,7 +78,6 @@ public class DashboardServiceImpl implements DashboardService {
                 buildItem("newCustomers", BigDecimal.valueOf(currNewCustomer), BigDecimal.valueOf(prevNewCustomer))
         );
 
-        // Đóng gói và trả về
         KpiResponse response = new KpiResponse();
         response.setItems(items);
         return response;
@@ -127,9 +127,9 @@ public class DashboardServiceImpl implements DashboardService {
         List<Object[]> raw = orderRepository.fetchRawRevenueSeries(timeFrame, start, end);
         List<RevenueSeriesResponse> series = raw.stream()
                 .map(r -> new RevenueSeriesResponse(
-                        (String)    r[0],
-                        ((Number)   r[1]).doubleValue(),
-                        ((Number)   r[2]).longValue()
+                        (String) r[0],
+                        ((Number) r[1]).doubleValue(),
+                        ((Number) r[2]).longValue()
                 ))
                 .toList();
 
@@ -143,7 +143,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public PaginationResponse<BestSellerResponse> getBestSellers(int page, int pageSize) {
-        LocalDate end   = LocalDate.now();
+        LocalDate end = LocalDate.now();
         LocalDate start = end.minusDays(30);
 
         Pageable pageable = paginationService.createPageable(page, pageSize);
@@ -160,5 +160,68 @@ public class DashboardServiceImpl implements DashboardService {
         return paginationService.paginate(dtoPage);
     }
 
+    @Override
+    public List<CustomerGrowthResponse> getCustomerGrowth(int year) {
+        return orderRepository.findCustomerGrowth(year)
+                .stream()
+                .map(r -> new CustomerGrowthResponse(
+                        (String) r[0],
+                        ((Number) r[1]).longValue(),
+                        ((Number) r[2]).longValue()
+                ))
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<CustomerRetentionResponse> getCustomerRetention(int year) {
+        // Lấy danh sách [userId, month] cho tất cả orders trong năm
+        Map<String, Set<Integer>> usersByMonth = orderRepository.findMonthlyUsers(year).stream()
+                .collect(Collectors.groupingBy(
+                        rec -> (String) rec[1],
+                        LinkedHashMap::new,  // giữ thứ tự tháng
+                        Collectors.mapping(rec -> ((Number) rec[0]).intValue(), Collectors.toSet())
+                ));
+
+        List<CustomerRetentionResponse> retention = new ArrayList<>();
+        String prevMonth = null;
+
+        // Duyệt theo thứ tự tháng
+        for (String month : usersByMonth.keySet()) {
+            if (prevMonth != null) {
+                Set<Integer> prev = usersByMonth.get(prevMonth);
+                Set<Integer> curr = usersByMonth.get(month);
+
+                // Tính giao nhau
+                Set<Integer> inter = new HashSet<>(curr);
+                inter.retainAll(prev);
+
+                // Tính tỷ lệ
+                double rate = prev.isEmpty()
+                        ? 0.0
+                        : (inter.size() * 100.0 / prev.size());
+
+                // Làm tròn 1 chữ số thập phân
+                double rounded = Math.round(rate * 10) / 10.0;
+                retention.add(new CustomerRetentionResponse(month, rounded));
+            }
+            prevMonth = month;
+        }
+
+        return retention;
+    }
+
+    @Override
+    public CustomerMetricsResponse getCustomerMetrics(int year) {
+        List<CustomerRetentionResponse> retList = getCustomerRetention(year);
+        double retentionRate = retList.isEmpty() ? 0.0 : retList.get(retList.size() - 1).retentionRate();
+
+        double avgLifetime = Optional.ofNullable(orderRepository.findAvgCustomerLifetimeValue(year)).orElse(0.0);
+        double repeatRate = Optional.ofNullable(orderRepository.findRepeatPurchaseRate(year)).orElse(0.0);
+
+        return new CustomerMetricsResponse(
+                Math.round(retentionRate * 10) / 10.0,
+                Math.round(avgLifetime * 100) / 100.0,
+                Math.round(repeatRate * 10) / 10.0
+        );
+    }
 }

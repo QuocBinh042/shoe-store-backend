@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Year;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin/dashboard")
 @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -43,9 +46,34 @@ public class AdminDashboardController {
     @GetMapping("/stock-alerts")
     public PaginationResponse<StockAlertResponse> getStockAlerts(
             @RequestParam(defaultValue = "10") int threshold,
-            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER)  int page,
-            @RequestParam(defaultValue = AppConstants.PAGE_SIZE)  int pageSize
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize
     ) {
         return dashboardService.getStockAlerts(threshold, page, pageSize);
+    }
+
+    @GetMapping("/customers-growth")
+    public List<CustomerGrowthResponse> getCustomerGrowth(
+            @RequestParam(value = "year", required = false) Integer year
+    ) {
+        int y = (year != null) ? year : Year.now().getValue();
+        return dashboardService.getCustomerGrowth(y);
+    }
+
+    @GetMapping("/customers-retention")
+    public List<CustomerRetentionResponse> getCustomerRetention(
+            @RequestParam(value = "year", required = false) Integer year
+    ) {
+        int y = (year != null) ? year : Year.now().getValue();
+        return dashboardService.getCustomerRetention(y);
+    }
+
+    @GetMapping("/customers-metrics")
+    public ResponseEntity<?> getCustomerMetrics(
+            @RequestParam(value = "year", required = false) Integer year
+    ) {
+        int y = (year != null) ? year : Year.now().getValue();
+        CustomerMetricsResponse data = dashboardService.getCustomerMetrics(y);
+        return ResponseEntity.ok(data);
     }
 }
