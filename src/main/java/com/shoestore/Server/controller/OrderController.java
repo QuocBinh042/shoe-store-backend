@@ -181,6 +181,18 @@ public class OrderController {
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Count of orders with promotions", null, count));
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAllOrders(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        if (page != null && pageSize != null) {
+            PaginationResponse<OrderDTO> response = orderService.getAllOrdersPaged(page, pageSize);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.ok(orderService.getAllOrders());
+        }
+    }
+
     @GetMapping("/filter")
     public ResponseEntity<PaginationResponse<OrderResponse>> filterOrders(
             @RequestParam(required = false) String status,
