@@ -1,12 +1,14 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
 import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.utils.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -208,5 +210,17 @@ public class OrderController {
                 status, q, from, to, page, pageSize, sort, mode
         );
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/{id}/status")
+    public OrderStatusHistoryResponse changeStatus(
+            @PathVariable int id,
+            @RequestBody UpdateOrderStatusRequest request) throws BadRequestException {
+        return orderService.updateOrderStatus(id, request);
+    }
+
+    @GetMapping("/{id}/history")
+    public List<OrderStatusHistoryResponse> getHistory(@PathVariable int id) {
+        return orderService.getOrderHistory(id);
     }
 }

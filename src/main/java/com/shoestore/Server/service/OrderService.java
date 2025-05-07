@@ -1,9 +1,9 @@
 package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.OrderDTO;
-import com.shoestore.Server.dto.response.PlacedOrderResponse;
-import com.shoestore.Server.dto.response.OrderResponse;
-import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
+import com.shoestore.Server.dto.response.*;
+import org.apache.coyote.BadRequestException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -84,4 +84,7 @@ public interface OrderService {
             String sort,
             String mode
     );
+
+    OrderStatusHistoryResponse updateOrderStatus(int id, UpdateOrderStatusRequest request);
+    List<OrderStatusHistoryResponse> getOrderHistory(int orderID);
 }

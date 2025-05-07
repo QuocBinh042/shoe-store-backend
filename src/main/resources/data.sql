@@ -494,3 +494,74 @@ VALUES
 (3, 3, 6, 3, 'Rất tiếc, sản phẩm không như mong đợi.', NOW(), NOW()),
 (4, 1, 8, 5, 'Rất hài lòng với sản phẩm!', NOW(), NOW()),
 (5, 1, 10, 2, 'Màu sắc không giống như hình.', NOW(), NOW());
+
+
+-- ==============================
+-- Chèn dữ liệu Orders
+-- ==============================
+INSERT INTO Orders (
+    orderID,
+    createdAt,
+    updatedAt,
+    code,
+    feeShip,
+    orderDate,
+    paymentMethod,
+    shippingAddress,
+    status,
+    total,
+    voucherDiscount,
+    userID,
+    voucherID
+) VALUES
+    (15, '2023-10-01 10:00:00', '2023-10-03 15:00:00', 'ORD015', 30000.0, '2023-10-01', 'CASH',  '123 Đường Láng, Hà Nội', 'DELIVERED', 500000.0,    0.0, 1, NULL),
+    (16, '2023-10-05 08:00:00', '2023-10-06 14:00:00', 'ORD016', 40000.0, '2023-10-05', 'VNPAY', '456 Nguyễn Huệ, TP.HCM', 'CANCELED',  750000.0, 50000.0, 2, NULL);
+
+-- ==============================
+-- Chèn dữ liệu OrderStatusHistory
+-- ==============================
+INSERT INTO OrderStatusHistory (
+    orderID,
+    status,
+    cancelReason,
+    trackingNumber,
+    deliveredAt,
+    createdAt,
+    updatedAt
+) VALUES
+    (15, 'PENDING',   NULL,            NULL,                NULL,                '2023-10-01 10:00:00', '2023-10-01 10:00:00'),
+    (15, 'CONFIRMED', NULL,            NULL,                NULL,                '2023-10-01 12:00:00', '2023-10-01 12:00:00'),
+    (15, 'SHIPPED',   NULL,            'VN123456789',       NULL,                '2023-10-02 09:00:00', '2023-10-02 09:00:00'),
+    (15, 'DELIVERED', NULL,            NULL,                '2023-10-03 15:00:00','2023-10-03 15:00:00','2023-10-03 15:00:00'),
+    (16, 'PENDING',   NULL,            NULL,                NULL,                '2023-10-05 08:00:00', '2023-10-05 08:00:00'),
+    (16, 'CONFIRMED', NULL,            NULL,                NULL,                '2023-10-05 10:00:00', '2023-10-05 10:00:00'),
+    (16, 'CANCELED',  'Khách hàng đổi ý', NULL,             NULL,                '2023-10-06 14:00:00', '2023-10-06 14:00:00');
+
+-- ==============================
+-- Chèn dữ liệu OrderDetail
+-- ==============================
+INSERT INTO OrderDetail (
+    orderID,
+    productDetailID,
+    quantity,
+    price,
+    giftedQuantity,
+    promoDiscount,
+    createdAt,
+    updatedAt
+) VALUES
+    (15, 1, 2, 250000.0, 0, NULL, '2023-10-01 10:00:00', '2023-10-01 10:00:00'),
+    (16, 2, 3, 250000.0, 0, 50000.0, '2023-10-05 08:00:00', '2023-10-05 08:00:00');
+
+-- ==============================
+-- Chèn dữ liệu Payment
+-- ==============================
+INSERT INTO Payment (
+    orderID,
+    paymentDate,
+    status,
+    createdAt,
+    updatedAt
+) VALUES
+    (15, '2023-10-01', 'SUCCESS', '2023-10-01 10:05:00', '2023-10-01 10:05:00'),
+    (16, '2023-10-05', 'FAILED',  '2023-10-05 08:05:00', '2023-10-05 08:05:00');
