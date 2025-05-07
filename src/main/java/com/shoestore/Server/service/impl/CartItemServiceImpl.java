@@ -1,11 +1,10 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.CartItemDTO;
-import com.shoestore.Server.dto.response.CartItemResponse;
+import com.shoestore.Server.dto.response.OverviewCartItemResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.entities.Cart;
-import com.shoestore.Server.entities.CartItem;
-import com.shoestore.Server.entities.ProductDetail;
+import com.shoestore.Server.dto.response.SearchProductResponse;
+import com.shoestore.Server.entities.*;
 import com.shoestore.Server.mapper.CartItemMapper;
 import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.mapper.ProductMapper;
@@ -20,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -45,36 +46,62 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public PaginationResponse<CartItemResponse> getCartItemsByCartId(int cartId, int page, int pageSize) {
+    public PaginationResponse<OverviewCartItemResponse> getCartItemsByCartId(int cartId, int page, int pageSize) {
         log.info("Fetching cart items for cart id: {}", cartId);
         Pageable pageable = paginationService.createPageable(page, pageSize);
         Page<CartItem> cartItemsPage = cartItemRepository.findCartItemsByCartId(cartId, pageable);
+
         return paginationService.paginate(cartItemsPage.map(cartItem -> {
             ProductDetail productDetail = cartItem.getProductDetail();
-            CartItemResponse cartItemResponse = new CartItemResponse();
+            Product product = productDetail.getProduct();
+
+            OverviewCartItemResponse cartItemResponse = new OverviewCartItemResponse();
             cartItemResponse.setCartItemDTO(cartItemMapper.toCartItemDTO(cartItem));
             cartItemResponse.setProductDetailDTO(productDetailMapper.toDto(productDetail));
-           cartItemResponse.setProductDTO(productMapper.toDto(productDetail.getProduct()));
+            cartItemResponse.setProductDTO(productMapper.toDto(productDetail.getProduct()));
+            cartItemResponse.setDiscountPrice(promotionService.getDiscountedPrice(product.getProductID()));
+
+            Promotion promotion = product.getPromotion();
+            if (promotion != null) {
+                cartItemResponse.setPromotion(promotionService.getPromotionById(promotion.getPromotionID()));
+            } else {
+                cartItemResponse.setPromotion(null);
+            }
+
             return cartItemResponse;
         }));
     }
 
+
     @Override
     public CartItemDTO addCartItem(CartItemDTO cartItemDTO) {
         log.info("Adding new cart item: {}", cartItemDTO);
+
         Cart cart = cartRepository.findById(cartItemDTO.getCart().getCartID())
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
+
         ProductDetail productDetail = productDetailRepository.findById(cartItemDTO.getProductDetail().getProductDetailID())
                 .orElseThrow(() -> new IllegalArgumentException("ProductDetail not found"));
 
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setProductDetail(productDetail);
-        cartItem.setQuantity(cartItemDTO.getQuantity());
+        Optional<CartItem> existingCartItemOpt = cartItemRepository.findByCartIdAndProductDetailId(cart.getCartID(), productDetail.getProductDetailID());
 
-        log.info("Cart item saved successfully: {}", cartItem);
+        CartItem cartItem;
+
+        if (existingCartItemOpt.isPresent()) {
+            cartItem = existingCartItemOpt.get();
+            cartItem.setQuantity(cartItem.getQuantity() + cartItemDTO.getQuantity());
+            log.info("Updated quantity for existing cart item: {}", cartItem);
+        } else {
+            cartItem = new CartItem();
+            cartItem.setCart(cart);
+            cartItem.setProductDetail(productDetail);
+            cartItem.setQuantity(cartItemDTO.getQuantity());
+            log.info("Created new cart item: {}", cartItem);
+        }
+
         return cartItemMapper.toCartItemDTO(cartItemRepository.save(cartItem));
     }
+
 
     @Override
     public CartItemDTO getCartItemById(int id) {

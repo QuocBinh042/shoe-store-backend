@@ -2,6 +2,7 @@ package com.shoestore.Server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shoestore.Server.enums.CustomerGroup;
+import com.shoestore.Server.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +26,9 @@ public class User extends BaseEntity{
     @Column(name = "phoneNumber")
     private String phoneNumber;
     private String password;
-    private String CI;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private UserStatus status;
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Address> addresses;

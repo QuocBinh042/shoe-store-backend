@@ -31,19 +31,19 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     private final ProductMapper productMapper;
 
     @Override
-    public List<ProductDetailDTO> getByProductId(int productID) {
+    public List<ProductDetailsResponse> getByProductId(int productID) {
         log.info("Fetching product details for Product ID: {}", productID);
 
         List<ProductDetail> productDetails = productDetailRepository.findByProduct_ProductID(productID);
         log.info("Found {} product details for Product ID: {}", productDetails.size(), productID);
 
         return productDetails.stream()
-                .map(productDetailMapper::toDto)
+                .map(productDetailMapper::toResponse)
                 .toList();
     }
 
     @Override
-    public ProductDetailDTO save(ProductDetailDTO productDetailDTO) {
+    public ProductDetailsResponse save(ProductDetailDTO productDetailDTO) {
         if (productDetailDTO == null) {
             log.error("Attempted to save a null ProductDetailDTO");
             throw new IllegalArgumentException("ProductDetail không được để trống.");
@@ -53,17 +53,17 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
 
         log.info("Saved product detail with ID: {}", savedProductDetail.getProductDetailID());
-        return productDetailMapper.toDto(savedProductDetail);
+        return productDetailMapper.toResponse(savedProductDetail);
     }
 
     @Override
-    public ProductDetailDTO getProductDetailById(int id) {
+    public ProductDetailsResponse getProductDetailById(int id) {
         log.info("Fetching product detail with ID: {}", id);
 
         return productDetailRepository.findById(id)
                 .map(productDetail -> {
                     log.info("Found product detail with ID: {}", id);
-                    return productDetailMapper.toDto(productDetail);
+                    return productDetailMapper.toResponse(productDetail);
                 })
                 .orElseGet(() -> {
                     log.warn("Product detail with ID {} not found", id);
@@ -72,13 +72,13 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public ProductDetailDTO getProductDetailByProductIdAndColorAndSize(int productId, Color color, Size size) {
+    public ProductDetailsResponse getProductDetailByProductIdAndColorAndSize(int productId, Color color, Size size) {
         log.info("Fetching product detail for Product ID: {}, Color: {}, Size: {}", productId, color, size);
 
         ProductDetail productDetail = productDetailRepository.findOneByColorSizeAndProductId(productId, color, size);
         if (productDetail != null) {
             log.info("Found product detail with ID: {}", productDetail.getProductDetailID());
-            return productDetailMapper.toDto(productDetail);
+            return productDetailMapper.toResponse(productDetail);
         } else {
             log.warn("No product detail found for Product ID: {}, Color: {}, Size: {}", productId, color, size);
             return null;

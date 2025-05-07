@@ -39,7 +39,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                     .collect(Collectors.toSet()));
         });
-        System.out.println("Final Authorities: " + authorities);
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),

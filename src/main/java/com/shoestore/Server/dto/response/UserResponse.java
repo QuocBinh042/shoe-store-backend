@@ -2,6 +2,7 @@ package com.shoestore.Server.dto.response;
 
 import com.shoestore.Server.dto.request.RoleDTO;
 import com.shoestore.Server.enums.CustomerGroup;
+import com.shoestore.Server.enums.UserStatus;
 import lombok.Data;
 
 import java.util.Set;
@@ -18,7 +19,7 @@ public class UserResponse {
 
     private String phoneNumber;
 
-    private String status;
+    private UserStatus status;
 
     private Set<RoleDTO> roles;
 

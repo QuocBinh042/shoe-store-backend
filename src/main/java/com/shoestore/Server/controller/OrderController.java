@@ -23,9 +23,10 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final EmailService emailService;
-
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('CREATE_ORDER')")
     public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO){
+        System.out.println(orderDTO);
         OrderDTO saveOrder=orderService.addOrder(orderDTO);
 //        emailService.sendOrderSuccessEmail(saveOrder.getUser().getEmail(), saveOrder.getUser().getName(), saveOrder.getCode());
         return ResponseEntity.ok(saveOrder);

@@ -1,6 +1,7 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDTO;
+import com.shoestore.Server.dto.response.PlacedOrderDetailsResponse;
 import com.shoestore.Server.dto.response.PlacedOrderResponse;
 import com.shoestore.Server.dto.response.OrderResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
@@ -13,6 +14,7 @@ import com.shoestore.Server.mapper.OrderMapper;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.repositories.VoucherRepository;
+import com.shoestore.Server.service.OrderDetailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.PaymentService;
@@ -41,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
     private final PaginationService paginationService;
-    private final OrderDetailMapper orderDetailMapper;
+    private final OrderDetailService orderDetailService;
     private final PaymentService paymentService;
     @Override
     public List<OrderDTO> getAllOrders() {
@@ -128,17 +130,23 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(order -> {
                     int orderId = order.getOrderID();
+                    List<PlacedOrderDetailsResponse> orderDetails = order.getOrderDetails()
+                            .stream()
+                            .map(orderDetailService::mapToPlacedOrderDetailsResponse)
+                            .collect(Collectors.toList());
 
                     return new PlacedOrderResponse(
-                            orderMapper.toDto(order),
-                            orderDetailMapper.toListDto(order.getOrderDetails()),
+                            orderMapper.toResponse(order),
+                            orderDetails,
                             paymentService.getPaymentByOrderId(orderId)
                     );
                 })
                 .collect(Collectors.toList());
+
         log.info("Found {} orders for User ID: {}", orders.size(), userId);
         return orders;
     }
+
 
     @Override
     public OrderDTO getOrderByCode(String code) {

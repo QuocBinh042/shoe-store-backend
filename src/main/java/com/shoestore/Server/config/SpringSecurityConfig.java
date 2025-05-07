@@ -63,16 +63,17 @@ public class SpringSecurityConfig {
 				"/api/auth/logout",
 				"/api/auth/sign-up",
 				"/api/auth/refresh-token",
+				"/api/auth/resend-verification",
+				"/api/auth/verify-otp",
+				"/api/auth/check-email",
 				"/api/promotion/**",
-				"/api/payment/**",
+				"/api/orders/**",
+				"/api/order-details/**",
 				"/api/search/**",
 				"/api/brands/**",
-				"/api/order-details/**",
 				"/api/review/**",
 				"/api/product-details/**",
 				"/api/products/**",
-				"/api/cart-item/**",
-				"/api/cart/**",
 				"/swagger-ui/**",
 				"/swagger-ui.html",
 				"/v3/api-docs/**",
@@ -83,7 +84,6 @@ public class SpringSecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(whiteList).permitAll()
-						.requestMatchers("/api/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated()
 				)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

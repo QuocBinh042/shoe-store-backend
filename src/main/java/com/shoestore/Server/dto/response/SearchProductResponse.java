@@ -17,5 +17,5 @@ public class SearchProductResponse {
     private List<ProductDetailDTO> productDetails;
     private double discountPrice;
     private double rating;
-    private String promotionValue;
+    private PromotionResponse promotion;
 }

@@ -20,9 +20,9 @@ public class OrderResponse  {
 
     private String shippingAddress;
 
-    private String typePayment;
+    private String paymentMethod;
 
-    private double discount;
+    private double voucherDiscount;
 
     private VoucherDTO voucher;
 

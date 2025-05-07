@@ -34,5 +34,6 @@ public interface UserService {
     int countDeliveredOrdersByUserId(int userId);
 
     Double calculateTotalAmountByUserId(int userId);
+    boolean isEmailExists(String email);
 
 }

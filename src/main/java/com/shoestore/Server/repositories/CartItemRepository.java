@@ -8,11 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
 
   @Query("SELECT ci FROM CartItem ci WHERE ci.cart.cartID = :cartId")
   Page<CartItem> findCartItemsByCartId(@Param("cartId") int cartId, Pageable pageable);
+  @Query("SELECT ci FROM CartItem ci WHERE ci.cart.cartID = :cartId AND ci.productDetail.productDetailID = :productDetailId")
+  Optional<CartItem> findByCartIdAndProductDetailId(@Param("cartId") int cartId, @Param("productDetailId") int productDetailId);
 
 }
 

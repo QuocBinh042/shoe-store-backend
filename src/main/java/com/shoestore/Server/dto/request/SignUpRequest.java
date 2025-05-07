@@ -23,7 +23,4 @@ public class SignUpRequest {
     @Pattern(regexp = "^\\d{10,15}$", message = "Phone number must be between 10 and 15 digits")
     private String phoneNumber;
 
-    @NotBlank(message = "CI cannot be blank")
-    @JsonProperty("CI")
-    private String CI;
 }

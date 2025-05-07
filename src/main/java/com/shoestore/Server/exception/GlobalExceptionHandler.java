@@ -183,18 +183,25 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<RestResponse<Object>> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
-        RestResponse<Object> res = new RestResponse<>();
-        res.setStatusCode(HttpStatus.CONFLICT.value());
-        res.setMessage(ex.getMessage());
-        res.setError("Conflict");
-        res.setData(null);
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new RestResponse<>(
+                        HttpStatus.CONFLICT.value(),
+                        ex.getMessage(),
+                        "Conflict",
+                        null
+                ));
     }
     @ExceptionHandler(UserNotActiveException.class)
     public ResponseEntity<RestResponse<Object>> handleUserNotActiveException(UserNotActiveException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new RestResponse<>(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), "Unauthorized", null));
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new RestResponse<>(
+                        HttpStatus.CONFLICT.value(),
+                        ex.getMessage(),
+                        "Conflict",
+                        null
+                ));
     }
 
 

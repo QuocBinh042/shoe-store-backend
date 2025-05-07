@@ -2,13 +2,11 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.CartDTO;
 import com.shoestore.Server.dto.request.CartItemDTO;
-import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.CartItemResponse;
+import com.shoestore.Server.dto.response.OverviewCartItemResponse;
 import com.shoestore.Server.service.CartItemService;
 import com.shoestore.Server.service.CartService;
 
-import com.shoestore.Server.service.ProductDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +26,11 @@ public class CartController {
     return ResponseEntity.ok(cartService.getCartByUserId(id));
   }
   @PostMapping("/cart/add")
-  public ResponseEntity<CartDTO> addCartItem(@Valid @RequestBody CartDTO cartDTO) {
+  public ResponseEntity<CartDTO> addCart(@Valid @RequestBody CartDTO cartDTO) {
     return ResponseEntity.ok(cartService.addCartByRegister(cartDTO));
   }
   @GetMapping("/cart-item/by-cart-id/{id}")
-  public ResponseEntity<PaginationResponse<CartItemResponse>> getCartItemsByCartId(
+  public ResponseEntity<PaginationResponse<OverviewCartItemResponse>> getCartItemsByCartId(
           @PathVariable int id,
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "3") int pageSize) {

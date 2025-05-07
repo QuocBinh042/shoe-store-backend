@@ -1,19 +1,21 @@
 package com.shoestore.Server.dto.response;
 
-import com.shoestore.Server.dto.request.ProductDetailDTO;
-import lombok.AllArgsConstructor;
+import com.shoestore.Server.dto.request.ProductDetailRequest;
+import com.shoestore.Server.enums.ProductStatus;
 import lombok.Data;
 
 import java.util.List;
-@AllArgsConstructor
 @Data
 public class ProductResponse {
-    private List<ProductDetailDTO> productDetails;
+    private int productID;
     private String productName;
-    private String categoryName;
-    private String brandName;
+    private List<String> imageURL;
     private String description;
     private double price;
-    private List<String> imageURL;
-    private double discountPrice;
+    private ProductStatus status;
+    private int brandID;
+    private int categoryID;
+    private int supplierID;
+    private List<ProductDetailRequest> productDetails;
+    private PromotionResponse promotion;
 }

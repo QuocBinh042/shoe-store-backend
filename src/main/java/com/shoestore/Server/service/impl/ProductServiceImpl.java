@@ -41,11 +41,11 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewRepository reviewRepository;
     private final PromotionService promotionService;
 
-    private List<SearchProductResponse> enhanceProductSearchResponses(List<SearchProductResponse> products) {
+    public List<SearchProductResponse> enhanceProductSearchResponses(List<SearchProductResponse> products) {
         for (SearchProductResponse p : products) {
             p.setRating(getAverageRating(p.getProductID()));
             p.setDiscountPrice(promotionService.getDiscountedPrice(p.getProductID()));
-            p.setPromotionValue(promotionService.getPromotionTypeByProductId(p.getProductID()));
+            p.setPromotion(promotionService.getPromotionTypeByProductId(p.getProductID()));
         }
         return products;
     }
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findAll();
 
         PaginationResponse<Product> paginatedProducts = paginationService.paginate(products, page, pageSize);
-        List<SearchProductResponse> productDTOs = productMapper.toProductSearchResponse(paginatedProducts.getItems());
+        List<SearchProductResponse> productDTOs = productMapper.toListProductSearchResponse(paginatedProducts.getItems());
 
         return new PaginationResponse<>(
                 enhanceProductSearchResponses(productDTOs),
@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(page - 1, pageSize, getSortOrder(sortBy));
         Page<Product> pagedProducts = productRepository.findAll(spec, pageable);
 
-        List<SearchProductResponse> productDTOs = productMapper.toProductSearchResponse(pagedProducts.getContent());
+        List<SearchProductResponse> productDTOs = productMapper.toListProductSearchResponse(pagedProducts.getContent());
         return new PaginationResponse<>(
                 enhanceProductSearchResponses(productDTOs),
                 pagedProducts.getTotalElements(),
@@ -227,7 +227,7 @@ public class ProductServiceImpl implements ProductService {
                     .toList();
             relatedProducts.addAll(brandProducts);
         }
-        List<SearchProductResponse> productSearchResponse = productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+        List<SearchProductResponse> productSearchResponse = productMapper.toListProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
         return enhanceProductSearchResponses(productSearchResponse);
     }
 
