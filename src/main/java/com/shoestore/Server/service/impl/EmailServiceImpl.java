@@ -1,7 +1,16 @@
 package com.shoestore.Server.service.impl;
+
+import com.shoestore.Server.dto.request.OrderEmailRequest;
+import com.shoestore.Server.entities.Order;
+import com.shoestore.Server.enums.OrderStatus;
+import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.service.EmailService;
+import com.shoestore.Server.service.ProductService;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.thymeleaf.context.Context;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,15 +18,22 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
-
-    public EmailServiceImpl(JavaMailSender mailSender, TemplateEngine templateEngine) {
-        this.mailSender = mailSender;
-        this.templateEngine = templateEngine;
-    }
+    private final OrderRepository orderRepository;
+    private final ProductService productService;
+    @Value("${app.mail.from.address}")
+    private String fromAddress;
+    @Value("${app.mail.from.name}")
+    private String fromName;
 
     @Async
     @Override
@@ -39,4 +55,63 @@ public class EmailServiceImpl implements EmailService {
             e.printStackTrace();
         }
     }
+
+    @Async
+    @Override
+    public void sendOrderStatusEmail(int orderId, OrderStatus status) {
+        try {
+            Order order = orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+
+            MimeMessage msg = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
+
+            // Set From/Reply-To
+            helper.setFrom(new InternetAddress(fromAddress, fromName));
+            helper.setReplyTo(fromAddress);
+
+            // Set To & Subject
+            helper.setTo(order.getUser().getEmail());
+            System.out.println(status);
+            String subject = switch (status) {
+                case CONFIRMED -> "Order Confirmed – Code: " + order.getCode();
+                case CANCELED -> "Order Canceled  – Code: " + order.getCode();
+                default -> "Order Update    – Code: " + order.getCode();
+            };
+            helper.setSubject(subject);
+
+            // Build context
+            Context ctx = new Context();
+            ctx.setVariable("customerName", order.getUser().getName());
+            ctx.setVariable("orderCode", order.getCode());
+            ctx.setVariable("status", status.name());
+            ctx.setVariable("orderDate", order.getOrderDate().toString());
+            ctx.setVariable("shippingFee", order.getFeeShip());
+            ctx.setVariable("totalPrice", order.getTotal());
+
+            // Map items with product name lookup
+            var emailItems = order.getOrderDetails().stream().map(detail -> {
+                var prodDto = productService.getProductByProductDetailsId(detail.getProductDetail().getProductDetailID());
+                Map<String, Object> m = new HashMap<>();
+                m.put("productName", prodDto.getProductName());
+                m.put("color", detail.getProductDetail().getColor());
+                m.put("size", detail.getProductDetail().getSize());
+                m.put("quantity", detail.getQuantity());
+                m.put("price", detail.getPrice());
+                return m;
+            }).collect(Collectors.toList());
+            ctx.setVariable("items", emailItems);
+
+            // Render HTML & text
+            String html = templateEngine.process("email/order-status", ctx);
+            String text = new StringBuilder().append("Hello ").append(order.getUser().getName()).append("\n").append("Order Code: ").append(order.getCode()).append("\n").append("Order Date: ").append(order.getOrderDate()).append("\n\n").append("Thank you for shopping with us!").toString();
+            helper.setText(text, html);
+
+            mailSender.send(msg);
+            log.info("Sent order status email to {}", order.getUser().getEmail());
+
+        } catch (Exception ex) {
+            log.error("Failed to send order status email for order {}", orderId, ex);
+        }
+    }
+
 }

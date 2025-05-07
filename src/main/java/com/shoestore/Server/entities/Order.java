@@ -14,9 +14,9 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name ="Orders")
+@Table(name = "Orders")
 @ToString
-public class Order extends BaseEntity{
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
@@ -28,7 +28,7 @@ public class Order extends BaseEntity{
     private double feeShip;
     private String code;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "voucherID",nullable = true)
+    @JoinColumn(name = "voucherID", nullable = true)
     private Voucher voucher;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Column(nullable = true)
@@ -45,8 +45,9 @@ public class Order extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
-    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonIgnore
     private Receipt receipt;
-
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderStatusHistory> statusHistory;
 }
