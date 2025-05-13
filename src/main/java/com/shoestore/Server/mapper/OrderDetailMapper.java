@@ -12,7 +12,6 @@ import java.util.List;
 public interface OrderDetailMapper {
     OrderDetailDTO toDto(OrderDetail entity);
     OrderDetail toEntity(OrderDetailDTO dto);
-    List<PlacedOrderDetailsResponse> toListDto(List<OrderDetail> entity);
-    OrderDetailResponse toDResponse(OrderDetail entity);
+
 
 }

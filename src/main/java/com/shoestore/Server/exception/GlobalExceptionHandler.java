@@ -203,7 +203,17 @@ public class GlobalExceptionHandler {
                         null
                 ));
     }
-
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<RestResponse<Object>> handleAuthenticationException(AuthenticationException ex) {
+       return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new RestResponse<>(
+                        HttpStatus.UNAUTHORIZED.value(),
+                        ex.getMessage(),
+                        "Conflict",
+                        null
+                ));
+    }
 
 }
 

@@ -29,7 +29,6 @@ public class OrderDetailController {
 
     @PostMapping("/add")
     public ResponseEntity<OrderDetailDTO> addOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
-        System.out.println(orderDetailDTO);
         return ResponseEntity.ok(orderDetailService.save(orderDetailDTO));
     }
 }

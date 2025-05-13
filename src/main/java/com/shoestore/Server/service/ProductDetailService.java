@@ -3,6 +3,7 @@ package com.shoestore.Server.service;
 
 import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.request.ProductDetailRequest;
+import com.shoestore.Server.dto.response.OverviewProductResponse;
 import com.shoestore.Server.dto.response.ProductDetailsResponse;
 import com.shoestore.Server.enums.Color;
 import com.shoestore.Server.enums.Size;
@@ -12,11 +13,9 @@ import java.util.List;
 public interface ProductDetailService {
     List<ProductDetailsResponse> getByProductId(int productId);
 
-    ProductDetailsResponse save(ProductDetailDTO productDetail);
-
     ProductDetailsResponse getProductDetailById(int id);
 
-    ProductDetailsResponse getProductDetailByProductIdAndColorAndSize(int productId, Color color, Size size);
+    OverviewProductResponse getProductOverviewById(int productId);
 
     ProductDetailsResponse createProductDetail(int productId, ProductDetailRequest productDetailRequest);
 

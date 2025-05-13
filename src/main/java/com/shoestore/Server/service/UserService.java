@@ -35,5 +35,6 @@ public interface UserService {
 
     Double calculateTotalAmountByUserId(int userId);
     boolean isEmailExists(String email);
+    void changePassword(int userId, String currentPassword, String newPassword);
 
 }

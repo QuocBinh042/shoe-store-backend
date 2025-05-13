@@ -13,7 +13,6 @@ public class OverviewProductResponse {
     private String brandName;
     private String description;
     private double price;
-    private List<String> imageURL;
     private double discountPrice;
     private PromotionResponse promotion;
 }

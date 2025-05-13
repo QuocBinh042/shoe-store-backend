@@ -1,8 +1,11 @@
 package com.shoestore.Server.service.impl;
 
+import com.shoestore.Server.dto.request.ProductDTO;
 import com.shoestore.Server.dto.request.ProductDetailDTO;
 import com.shoestore.Server.dto.request.ProductDetailRequest;
+import com.shoestore.Server.dto.response.OverviewProductResponse;
 import com.shoestore.Server.dto.response.ProductDetailsResponse;
+import com.shoestore.Server.dto.response.PromotionResponse;
 import com.shoestore.Server.entities.Product;
 import com.shoestore.Server.entities.ProductDetail;
 
@@ -13,11 +16,14 @@ import com.shoestore.Server.mapper.ProductMapper;
 import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.ProductDetailService;
+import com.shoestore.Server.service.ProductService;
+import com.shoestore.Server.service.PromotionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +34,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     private final ProductDetailRepository productDetailRepository;
     private final ProductDetailMapper productDetailMapper;
     private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
+    private final PromotionService promotionService;
 
     @Override
     public List<ProductDetailsResponse> getByProductId(int productID) {
@@ -40,20 +46,6 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         return productDetails.stream()
                 .map(productDetailMapper::toResponse)
                 .toList();
-    }
-
-    @Override
-    public ProductDetailsResponse save(ProductDetailDTO productDetailDTO) {
-        if (productDetailDTO == null) {
-            log.error("Attempted to save a null ProductDetailDTO");
-            throw new IllegalArgumentException("ProductDetail không được để trống.");
-        }
-
-        ProductDetail productDetail = productDetailMapper.toEntity(productDetailDTO);
-        ProductDetail savedProductDetail = productDetailRepository.save(productDetail);
-
-        log.info("Saved product detail with ID: {}", savedProductDetail.getProductDetailID());
-        return productDetailMapper.toResponse(savedProductDetail);
     }
 
     @Override
@@ -72,18 +64,27 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public ProductDetailsResponse getProductDetailByProductIdAndColorAndSize(int productId, Color color, Size size) {
-        log.info("Fetching product detail for Product ID: {}, Color: {}, Size: {}", productId, color, size);
+    public OverviewProductResponse getProductOverviewById(int productId) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) return null;
 
-        ProductDetail productDetail = productDetailRepository.findOneByColorSizeAndProductId(productId, color, size);
-        if (productDetail != null) {
-            log.info("Found product detail with ID: {}", productDetail.getProductDetailID());
-            return productDetailMapper.toResponse(productDetail);
-        } else {
-            log.warn("No product detail found for Product ID: {}, Color: {}, Size: {}", productId, color, size);
-            return null;
-        }
+        List<ProductDetailsResponse> productDetails = getByProductId(productId);
+        String categoryName = product.getCategory().getName();
+        String brandName = product.getBrand().getName();
+        PromotionResponse promotion = promotionService.getPromotionByProductID(productId);
+
+        return new OverviewProductResponse(
+                productDetails,
+                product.getProductName(),
+                categoryName,
+                brandName,
+                product.getDescription(),
+                product.getPrice(),
+                promotionService.getDiscountedPrice(productId),
+                promotion
+        );
     }
+
 
 
     @Override

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border: 1px solid #ccc; text-align: center; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<h2 th:switch="${status}">
+    <span th:case="'CONFIRMED'">Your order has been confirmed</span>
+    <span th:case="'CANCELED'">Your order has been cancelled</span>
+    <span th:case="*">Order update</span>
+</h2>
+
+<p>Hello <strong th:text="${customerName}">Customer</strong>,</p>
+<p>Order Code: <strong th:text="${orderCode}">ORD12345</strong></p>
+<p>Order Date: <strong th:text="${orderDate}">2025-04-25</strong></p>
+
+<h3>Order Details:</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Color</th>
+        <th>Size</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.productName}">Sneaker</td>
+        <td th:text="${item.color}">White</td>
+        <td th:text="${item.size}">42</td>
+        <td th:text="${item.quantity}">2</td>
+        <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')} + ' ₫'">
+            1,000,000 ₫
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p>Shipping Fee:
+    <strong th:text="${#numbers.formatDecimal(shippingFee, 0, 'COMMA', 2, 'POINT')} + ' ₫'">30,000 ₫</strong>
+</p>
+<p>Total Amount:
+    <strong th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')} + ' ₫'">2,030,000 ₫</strong>
+</p>
+
+<p>Thank you for shopping with us!</p>
+</body>
+</html>

@@ -46,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
             p.setRating(getAverageRating(p.getProductID()));
             p.setDiscountPrice(promotionService.getDiscountedPrice(p.getProductID()));
             p.setPromotion(promotionService.getPromotionTypeByProductId(p.getProductID()));
+            p.setImage(p.getProductDetails().get(0).getImage());
         }
         return products;
     }
@@ -196,8 +197,8 @@ public class ProductServiceImpl implements ProductService {
             product.setDescription(productDTO.getDescription());
             product.setPrice(productDTO.getPrice());
             product.setStatus(productDTO.getStatus());
-            product.getImageURL().clear();
-            product.getImageURL().addAll(productDTO.getImageURL());
+//            product.getImageURL().clear();
+//            product.getImageURL().addAll(productDTO.getImageURL());
             Product updatedProduct = productRepository.save(product);
             return productMapper.toDto(updatedProduct);
         }

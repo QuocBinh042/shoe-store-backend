@@ -1,5 +1,6 @@
 package com.shoestore.Server.controller;
 
+import com.shoestore.Server.dto.request.ChangePasswordRequest;
 import com.shoestore.Server.dto.request.LoginRequest;
 import com.shoestore.Server.dto.request.SignUpRequest;
 import com.shoestore.Server.dto.request.UserDTO;
@@ -12,6 +13,7 @@ import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.UserService;
 import com.shoestore.Server.security.JwtUtils;
 import io.jsonwebtoken.Claims;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -222,7 +226,13 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(loginResponse);
     }
-
+    private int getCurrentUserId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Integer) {
+            return (Integer) principal;
+        }
+        throw new BadCredentialsException("User ID not found in JWT or invalid type");
+    }
     @GetMapping("/me")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -245,6 +255,25 @@ public class AuthController {
 
         return ResponseEntity.ok().body(userDTO);
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        int userId = getCurrentUserId();
+        try {
+            userService.changePassword(userId, request.getCurrentPassword(), request.getNewPassword());
+            return ResponseEntity.ok(new RestResponse<>(HttpStatus.OK.value(), "Password changed successfully", null, null));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RestResponse<>(HttpStatus.NOT_FOUND.value(), e.getMessage(), null, null));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RestResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new RestResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An error occurred", e.getMessage(), null));
+        }
+    }
+
 
 
 }

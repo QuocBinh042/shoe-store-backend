@@ -2,15 +2,11 @@ package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
 import com.shoestore.Server.dto.response.PlacedOrderDetailsResponse;
-import com.shoestore.Server.dto.response.ProductDetailsResponse;
-import com.shoestore.Server.dto.response.PromotionResponse;
 import com.shoestore.Server.entities.*;
 import com.shoestore.Server.mapper.OrderDetailMapper;
-import com.shoestore.Server.mapper.OrderMapper;
 import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.repositories.*;
 import com.shoestore.Server.service.OrderDetailService;
-import com.shoestore.Server.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,9 +55,19 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                             log.error("Gift product detail not found with ID: {}", orderDetailDTO.getGiftProductDetail().getProductDetailID());
                             return new RuntimeException("Product detail not found");
                         });
+
+                if (giftProductDetail.getStockQuantity() < 1) {
+                    log.error("Not enough stock for gift productDetail ID: {}. Available: {}, Required: {}",
+                            giftProductDetail.getProductDetailID(), giftProductDetail.getStockQuantity(), 1);
+                    throw new RuntimeException("Not enough stock for gift product");
+                }
+                giftProductDetail.setStockQuantity(giftProductDetail.getStockQuantity() - 1);
+                productDetailRepository.save(giftProductDetail);
+
                 orderDetail.setGiftProductDetail(giftProductDetail);
                 orderDetail.setGiftedQuantity(1);
             }
+
         }
 
         int quantityToBuy = orderDetailDTO.getQuantity();
@@ -108,10 +114,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                     productDetailMapper.toResponse(giftProductDetail),
                     orderDetail.getQuantity(),
                     orderDetail.getPrice(),
-                    giftProduct.getImageURL().get(0),
                     giftProduct.getProductName(),
-                    orderDetail.getGiftedQuantity(),
-                    product.getImageURL().get(0)
+                    orderDetail.getGiftedQuantity()
             );
         }
 
@@ -122,9 +126,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 orderDetail.getQuantity(),
                 orderDetail.getPrice(),
                 null,
-                null,
-                orderDetail.getGiftedQuantity(),
-                product.getImageURL().get(0)
+                null
         );
     }
 

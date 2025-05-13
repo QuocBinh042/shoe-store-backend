@@ -12,8 +12,6 @@ public class PlacedOrderDetailsResponse {
     private ProductDetailsResponse giftProductDetail;
     private Integer quantity;
     private Double price;
-    private String giftImageURL;
     private String giftProductName;
     private Integer giftedQuantity;
-    private String imageURL;
 }

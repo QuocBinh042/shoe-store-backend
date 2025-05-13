@@ -67,13 +67,13 @@ public class SpringSecurityConfig {
 				"/api/auth/verify-otp",
 				"/api/auth/check-email",
 				"/api/promotion/**",
-				"/api/orders/**",
-				"/api/order-details/**",
 				"/api/search/**",
 				"/api/brands/**",
 				"/api/review/**",
 				"/api/product-details/**",
 				"/api/products/**",
+				"/api/cart/**",
+				"/api/orders/**",
 				"/swagger-ui/**",
 				"/swagger-ui.html",
 				"/v3/api-docs/**",
@@ -84,6 +84,7 @@ public class SpringSecurityConfig {
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(whiteList).permitAll()
+						.requestMatchers("/api/admin/**").hasRole("SUPER_ADMIN")
 						.anyRequest().authenticated()
 				)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

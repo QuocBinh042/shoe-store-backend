@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class OverviewCartItemResponse {
     private CartItemDTO cartItemDTO;
-    private ProductDetailDTO productDetailDTO;
+    private ProductDetailsResponse productDetailDTO;
     private ProductDTO productDTO;
     private PromotionResponse promotion;
     private double discountPrice;

@@ -10,12 +10,12 @@ import java.util.List;
 public class SearchProductResponse {
     private int productID;
     private String productName;
-    private List<String> imageURL;
     private String description;
     private double price;
     private String status;
-    private List<ProductDetailDTO> productDetails;
+    private List<ProductDetailsResponse> productDetails;
     private double discountPrice;
     private double rating;
     private PromotionResponse promotion;
+    private String image;
 }

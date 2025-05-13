@@ -21,30 +21,13 @@ import java.util.List;
 public class ProductDetailController {
     private final ProductDetailService productDetailService;
     private final ProductService productService;
-    private final BrandService brandService;
-    private final CategoryService categoryService;
-    private final PromotionService promotionService;
 
     @GetMapping("/by-product-id/{id}")
     public ResponseEntity<OverviewProductResponse> getProductDetailsByProductId(@PathVariable int id) {
-        ProductDTO productDTO = productService.getProductById(id);
-        if (productDTO == null) {
+        OverviewProductResponse response = productDetailService.getProductOverviewById(id);
+        if (response == null) {
             return ResponseEntity.notFound().build();
         }
-        List<ProductDetailsResponse> productDetails = productDetailService.getByProductId(id);
-        OverviewProductResponse response = new OverviewProductResponse(
-                productDetails,
-                productDTO.getProductName(),
-                categoryService.getCategory(productDTO.getCategoryID()).getName(),
-                brandService.getBrandById(productDTO.getBrandID()).getName(),
-                productDTO.getDescription(),
-                productDTO.getPrice(),
-                productDTO.getImageURL(),
-                promotionService.getDiscountedPrice(productDTO.getProductID()),
-                promotionService.getPromotionByProductID(productDTO.getProductID())
-
-        );
-
         return ResponseEntity.ok(response);
     }
 
