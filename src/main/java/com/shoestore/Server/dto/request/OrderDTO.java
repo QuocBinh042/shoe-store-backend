@@ -35,7 +35,7 @@ public class OrderDTO {
 
     @NotNull(message = "Discount cannot be null")
     @PositiveOrZero(message = "Discount cannot be negative")
-    private double discount;
+    private double voucherDiscount;
 
     private VoucherDTO voucher;
     private UserDTO user;

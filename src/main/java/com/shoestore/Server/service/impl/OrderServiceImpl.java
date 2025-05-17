@@ -1,18 +1,25 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDTO;
-import com.shoestore.Server.dto.response.PlacedOrderResponse;
-import com.shoestore.Server.dto.response.OrderResponse;
-import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
+import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
+import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.entities.Order;
+import com.shoestore.Server.entities.OrderStatusHistory;
 import com.shoestore.Server.entities.User;
 import com.shoestore.Server.entities.Voucher;
 import com.shoestore.Server.enums.OrderStatus;
+import com.shoestore.Server.enums.PaymentMethod;
+import com.shoestore.Server.exception.BadRequestException;
+import com.shoestore.Server.exception.NotFoundException;
 import com.shoestore.Server.mapper.OrderDetailMapper;
 import com.shoestore.Server.mapper.OrderMapper;
+import com.shoestore.Server.mapper.OrderStatusHistoryMapper;
 import com.shoestore.Server.repositories.OrderRepository;
+import com.shoestore.Server.repositories.OrderStatusHistoryRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.repositories.VoucherRepository;
+import com.shoestore.Server.service.OrderDetailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaginationService;
 import com.shoestore.Server.service.PaymentService;
@@ -25,9 +32,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +51,10 @@ public class OrderServiceImpl implements OrderService {
     private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
     private final PaginationService paginationService;
-    private final OrderDetailMapper orderDetailMapper;
+    private final OrderDetailService orderDetailService;
     private final PaymentService paymentService;
+    private final OrderStatusHistoryRepository orderStatusHistoryRepository;
+    private final OrderStatusHistoryMapper orderStatusHistoryMapper;
     @Override
     public List<OrderDTO> getAllOrders() {
         log.info("Fetching all orders...");
@@ -128,10 +140,14 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(order -> {
                     int orderId = order.getOrderID();
+                    List<PlacedOrderDetailsResponse> orderDetails = order.getOrderDetails()
+                            .stream()
+                            .map(orderDetailService::mapToPlacedOrderDetailsResponse)
+                            .collect(Collectors.toList());
 
                     return new PlacedOrderResponse(
-                            orderMapper.toDto(order),
-                            orderDetailMapper.toListDto(order.getOrderDetails()),
+                            orderMapper.toResponse(order),
+                            orderDetails,
                             paymentService.getPaymentByOrderId(orderId)
                     );
                 })
@@ -407,6 +423,135 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return paginationService.paginate(orders.map(orderMapper::toResponse));
+    }
+
+    @Override
+    public OrderStatusHistoryResponse updateOrderStatus(int id, UpdateOrderStatusRequest request) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Order not found with id: " + id));
+
+        OrderStatus newStatus;
+        try {
+            newStatus = OrderStatus.valueOf(request.getStatus());
+        } catch (IllegalArgumentException ex) {
+            throw new BadRequestException("Invalid order status: " + request.getStatus());
+        }
+        if (!isValidTransition(order.getStatus(), newStatus)) {
+            throw new BadRequestException(
+                    "Cannot transition status from " + order.getStatus() + " to " + newStatus);
+        }
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + request.getUserId()));
+
+        order.setStatus(newStatus);
+        orderRepository.save(order);
+
+        OrderStatusHistory hist = new OrderStatusHistory();
+        hist.setOrder(order);
+        hist.setStatus(newStatus);
+        hist.setChangedBy(user);
+
+        if (newStatus == OrderStatus.SHIPPED) {
+            hist.setTrackingNumber(request.getTrackingNumber());
+        } else if (newStatus == OrderStatus.CANCELED) {
+            hist.setCancelReason(request.getCancelReason());
+        } else if (newStatus == OrderStatus.DELIVERED) {
+            hist.setDeliveredAt(LocalDateTime.now());
+        }
+
+        hist = orderStatusHistoryRepository.save(hist);
+
+        return OrderStatusHistoryResponse.builder()
+                .orderID(order.getOrderID())
+                .status(hist.getStatus().name())
+                .changedAt(hist.getCreatedAt())
+                .trackingNumber(hist.getTrackingNumber())
+                .cancelReason(hist.getCancelReason())
+                .changedById(user.getUserID())
+                .changedByName(user.getName())
+                .build();
+    }
+
+
+
+    private boolean isValidTransition(OrderStatus current, OrderStatus next) {
+        return switch (current) {
+            case PENDING -> next == OrderStatus.CONFIRMED || next == OrderStatus.CANCELED;
+            case CONFIRMED -> next == OrderStatus.PROCESSING || next == OrderStatus.CANCELED;
+            case PROCESSING -> next == OrderStatus.SHIPPED || next == OrderStatus.CANCELED;
+            case SHIPPED -> next == OrderStatus.DELIVERED;
+            case DELIVERED, CANCELED -> false;
+        };
+    }
+
+    @Override
+    public List<OrderStatusHistoryResponse> getOrderHistory(int orderID) {
+        return orderStatusHistoryRepository
+                .findByOrderOrderIDOrderByCreatedAtAsc(orderID)
+                .stream()
+                .map(hist -> {
+                    User changedBy = hist.getChangedBy();  // lấy user từ history
+                    return OrderStatusHistoryResponse.builder()
+                            .status(hist.getStatus().name())
+                            .changedAt(hist.getCreatedAt())
+                            .trackingNumber(hist.getTrackingNumber())
+                            .cancelReason(hist.getCancelReason())
+                            .changedById(changedBy != null ? changedBy.getUserID() : 0)
+                            .changedByName(changedBy != null ? changedBy.getName() : null)
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderStatusHistoryResponse create(OrderHistoryStatusDTO orderHistoryStatusDTO) {
+        Order order = orderRepository.findById(orderHistoryStatusDTO.getOrder().getOrderID())
+                .orElseThrow(() -> new NotFoundException("Order not found with id: " + orderHistoryStatusDTO.getOrder().getOrderID()));
+        User user = userRepository.findById(orderHistoryStatusDTO.getChangedBy().getUserID())
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + orderHistoryStatusDTO.getChangedBy().getUserID()));
+        orderHistoryStatusDTO.setOrder(order);
+        orderHistoryStatusDTO.setChangedBy(user);
+        OrderStatusHistory hist=orderStatusHistoryRepository.save(orderStatusHistoryMapper.toEntity(orderHistoryStatusDTO));
+        return OrderStatusHistoryResponse.builder()
+                .orderID(hist.getOrder().getOrderID())
+                .status(hist.getStatus().name())
+                .changedAt(hist.getCreatedAt())
+                .trackingNumber(hist.getTrackingNumber())
+                .cancelReason(hist.getCancelReason())
+                .changedById(hist.getChangedBy().getUserID())
+                .changedByName(hist.getChangedBy().getName())
+                .build();
+
+    }
+    @Transactional
+    public void cancelUnpaidVNPayOrders() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Order> expiredOrders = orderRepository.findByPaymentMethodAndStatusAndOrderDateBefore(
+                PaymentMethod.VNPAY,
+                OrderStatus.PENDING,
+                LocalDate.now()
+        );
+
+        for (Order order : expiredOrders) {
+            if (order.getOrderDate().atStartOfDay().plusHours(12).isBefore(now)) {
+                order.setStatus(OrderStatus.CANCELED);
+
+                OrderStatusHistory history = new OrderStatusHistory();
+                history.setOrder(order);
+                history.setStatus(OrderStatus.CANCELED);
+                history.setCancelReason("Automatically cancel due to overdue VNPay payment");
+                history.setDeliveredAt(now);
+                history.setChangedBy(null);
+
+                if (order.getStatusHistory() == null) {
+                    order.setStatusHistory(new ArrayList<>());
+                }
+                order.getStatusHistory().add(history);
+
+                orderRepository.save(order);
+            }
+        }
     }
 
 }

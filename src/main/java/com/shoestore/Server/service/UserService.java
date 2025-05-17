@@ -34,5 +34,7 @@ public interface UserService {
     int countDeliveredOrdersByUserId(int userId);
 
     Double calculateTotalAmountByUserId(int userId);
+    boolean isEmailExists(String email);
+    void changePassword(int userId, String currentPassword, String newPassword);
 
 }

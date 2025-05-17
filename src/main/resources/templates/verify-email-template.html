@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Xác thực tài khoản</title>
+    <style>
+        .email-container {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+            color: #333;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            border: 1px solid #ddd;
+        }
+        .code-box {
+            font-size: 24px;
+            letter-spacing: 5px;
+            background-color: #fff;
+            padding: 10px;
+            border: 2px dashed #007BFF;
+            color: #007BFF;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <h2>Xin chào <span th:text="${customerName}">bạn</span>,</h2>
+    <p>Cảm ơn bạn đã đăng ký tài khoản tại ShoeStore.</p>
+    <p>Vui lòng sử dụng mã xác thực dưới đây để hoàn tất đăng ký:</p>
+    <div class="code-box" th:text="${verificationCode}">123456</div>
+    <p>Mã xác thực sẽ hết hạn sau 10 phút.</p>
+    <p>Trân trọng,<br/>Đội ngũ ShoeStore</p>
+</div>
+</body>
+</html>

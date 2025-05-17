@@ -14,5 +14,5 @@ public class FeaturedProductResponse {
     private long totalQuantity;
     private long viewCount;
     private LocalDateTime createdAt;
-    private String imageURLs;
+    private String imageURL;
 }

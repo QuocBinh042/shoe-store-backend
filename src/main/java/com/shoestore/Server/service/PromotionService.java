@@ -42,5 +42,5 @@ public interface PromotionService {
     List<PromotionResponse> getAppliedPromotionsForProduct(int productId);
 
     BigDecimal calculateFinalPriceWithPromotions(int productId);
-    String getPromotionTypeByProductId(int productID);
+    PromotionResponse getPromotionTypeByProductId(int productID);
 }

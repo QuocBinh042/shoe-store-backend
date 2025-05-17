@@ -19,6 +19,7 @@ public interface ProductMapper {
     @Mapping(source = "categoryID", target = "category.categoryID")
     @Mapping(source = "supplierID", target = "supplier.supplierID")
     Product toEntity(ProductDTO productDTO);
-    List<SearchProductResponse> toProductSearchResponse(List<Product> products);
+    List<SearchProductResponse> toListProductSearchResponse(List<Product> products);
+    SearchProductResponse toProductSearchResponse(Product products);
     List<ProductDTO> toDto(List<Product> products);
 }

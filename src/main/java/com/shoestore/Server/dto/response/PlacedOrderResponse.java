@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class PlacedOrderResponse {
-    private OrderDTO order;
-    private List<PlacedOrderDetailsResponse> orderDetailsResponses;
+    private OrderResponse orderResponse;
+    private List<PlacedOrderDetailsResponse> orderDetailsResponse;
     private PaymentResponse paymentResponse;
 }
