@@ -1,7 +1,9 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
+import com.shoestore.Server.dto.request.UpdateOrderDetailRequest;
 import com.shoestore.Server.dto.response.PlacedOrderDetailsResponse;
+import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +32,13 @@ public class OrderDetailController {
     @PostMapping("/add")
     public ResponseEntity<OrderDetailDTO> addOrderDetail(@Valid @RequestBody OrderDetailDTO orderDetailDTO) {
         return ResponseEntity.ok(orderDetailService.save(orderDetailDTO));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateOrderDetail(
+            @PathVariable int id,
+            @RequestBody UpdateOrderDetailRequest request) {
+        System.out.println(request);
+        OrderDetail updated = orderDetailService.updateOrderDetail(id, request);
+        return ResponseEntity.ok(updated);
     }
 }

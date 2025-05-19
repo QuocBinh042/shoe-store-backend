@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetail,Integer> {
@@ -23,7 +21,6 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail,Int
             @Param("color") Color color,
             @Param("size") Size size
     );
-
 
 }
 

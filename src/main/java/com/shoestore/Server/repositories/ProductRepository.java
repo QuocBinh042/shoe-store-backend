@@ -93,7 +93,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
                       SELECT new com.shoestore.Server.dto.response.StockAlertResponse(
                         pd.productDetailID,
                         pd.product.productName,
-                        pd.stockQuantity
+                        pd.stockQuantity,
+                        pd.image           
                       )
                       FROM ProductDetail pd
                       WHERE pd.stockQuantity <= :threshold

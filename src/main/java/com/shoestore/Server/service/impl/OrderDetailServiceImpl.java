@@ -1,8 +1,11 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.OrderDetailDTO;
+import com.shoestore.Server.dto.request.UpdateOrderDetailRequest;
 import com.shoestore.Server.dto.response.PlacedOrderDetailsResponse;
 import com.shoestore.Server.entities.*;
+import com.shoestore.Server.enums.Color;
+import com.shoestore.Server.enums.Size;
 import com.shoestore.Server.mapper.OrderDetailMapper;
 import com.shoestore.Server.mapper.ProductDetailMapper;
 import com.shoestore.Server.repositories.*;
@@ -128,6 +131,29 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 null,
                 null
         );
+    }
+
+    @Override
+    public OrderDetail updateOrderDetail(int id, UpdateOrderDetailRequest request) {
+        OrderDetail orderDetail = orderDetailRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("OrderDetail not found"));
+
+        int productId = orderDetail.getProductDetail().getProduct().getProductID();
+
+        ProductDetail productDetail = productDetailRepository.findOneByColorSizeAndProductId(
+                productId,
+                request.getColor(),
+                request.getSize()
+        );
+        if (productDetail == null) {
+            throw new RuntimeException("Product variant not found");
+        }
+
+        orderDetail.setProductDetail(productDetail);
+        orderDetail.setQuantity(request.getQuantity());
+        orderDetail.setPrice(productDetail.getProduct().getPrice());
+
+        return orderDetailRepository.save(orderDetail);
     }
 
 }
