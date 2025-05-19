@@ -68,4 +68,17 @@ public class VoucherServiceImpl implements VoucherService {
         log.info("Found {} eligible vouchers for order value: {}", eligibleVouchers.size(), orderValue);
         return eligibleVouchers;
     }
+
+    @Override
+    public List<VoucherDTO> createVouchers(List<VoucherDTO> voucherDTOList) {
+        List<Voucher> vouchers = voucherDTOList.stream()
+                .map(voucherMapper::toEntity)
+                .collect(Collectors.toList());
+        // Validate trùng code nếu muốn
+        List<Voucher> saved = voucherRepository.saveAll(vouchers);
+        return saved.stream()
+                .map(voucherMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

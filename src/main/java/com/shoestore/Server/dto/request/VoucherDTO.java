@@ -29,6 +29,8 @@ public class VoucherDTO {
     @DecimalMin(value = "0.0", message = "Minimum order value cannot be negative")
     private BigDecimal minOrderValue;
 
+    private Integer maxUses;
+
     private boolean freeShipping;
 
     @NotNull(message = "Start date cannot be null")
@@ -38,4 +40,8 @@ public class VoucherDTO {
     private LocalDateTime endDate;
 
     private boolean status;
+
+    private Integer usedCount;
+
+    private String productRestriction;
 }

@@ -25,7 +25,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpeci
     @Query("SELECT COUNT(o) FROM Order o WHERE o.user.userID = :userId")
     int countOrdersByUserId(int userId);
 
-    @Query("SELECT SUM(o.total) FROM Order o WHERE o.user.userID = :userId")
+    @Query("SELECT SUM(o.total) FROM Order o WHERE o.user.userID = :userId AND o.status = 'DELIVERED'")
     Double sumTotalAmountByUserId(int userId);
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.user.userID = :userId AND o.status = 'DELIVERED'")
@@ -52,16 +52,16 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpeci
     @Query("SELECT COALESCE(SUM(o.total), 0) FROM Order o WHERE FUNCTION('YEAR', o.orderDate) = :year")
     Double sumTotalOrderAmountByYear(@Param("year") int year);
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'COMPLETED'")
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'DELIVERED'")
     long countCompletedOrders();
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'COMPLETED' AND o.orderDate = :today")
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'DELIVERED' AND o.orderDate = :today")
     long countCompletedOrdersByDay(@Param("today") LocalDate today);
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'COMPLETED' AND FUNCTION('MONTH', o.orderDate) = :month AND FUNCTION('YEAR', o.orderDate) = :year")
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'DELIVERED' AND FUNCTION('MONTH', o.orderDate) = :month AND FUNCTION('YEAR', o.orderDate) = :year")
     long countCompletedOrdersByMonth(@Param("month") int month, @Param("year") int year);
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'COMPLETED' AND FUNCTION('YEAR', o.orderDate) = :year")
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'DELIVERED' AND FUNCTION('YEAR', o.orderDate) = :year")
     long countCompletedOrdersByYear(@Param("year") int year);
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'CANCELED'")
