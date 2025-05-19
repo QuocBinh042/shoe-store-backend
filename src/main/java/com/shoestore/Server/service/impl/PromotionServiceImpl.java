@@ -101,7 +101,7 @@ public class PromotionServiceImpl implements PromotionService {
     public PromotionResponse getPromotionByProductID(int id) {
         log.info("Fetching promotion for Product ID: {}", id);
         Optional<Promotion> promotionOpt = promotionRepository.findPromotionByProductId(id);
-        if (promotionOpt.isPresent()) {
+        if (promotionOpt.isPresent() && promotionOpt.get().getStatus().equals(PromotionStatus.ACTIVE)) {
             log.info("Promotion found for Product ID: {}", id);
             return promotionMapper.toResponse(promotionOpt.get());
         } else {
@@ -377,7 +377,7 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public String getPromotionTypeByProductId(int productID) {
+    public PromotionResponse getPromotionTypeByProductId(int productID) {
         log.info("Fetching promotion info for Product ID: {}", productID);
 
         Product product = productRepository.findById(productID)
@@ -389,27 +389,6 @@ public class PromotionServiceImpl implements PromotionService {
                 promotion.getEndDate().isBefore(LocalDateTime.now())) {
             return null;
         }
-        PromotionType type = promotion.getType();
-        String result = null;
-        switch (type) {
-            case PERCENTAGE:
-                if (promotion.getDiscountValue() != null) {
-                    result = "Discount " + promotion.getDiscountValue().intValue() + "%";
-                }
-                break;
-            case BUYX:
-                result = "Buy " + promotion.getBuyQuantity() + " gift " + promotion.getGetQuantity();
-                break;
-            case GIFT:
-                if (promotion.getGiftProduct() != null) {
-                    result = "Gift ";
-                }
-                break;
-            case FIXED:
-                result = "Fix: " + promotion.getDiscountValue();
-                break;
-        }
-        log.info("Promotion string for Product ID {}: {}", productID, result);
-        return result;
+        return promotionMapper.toResponse(promotion);
     }
 }

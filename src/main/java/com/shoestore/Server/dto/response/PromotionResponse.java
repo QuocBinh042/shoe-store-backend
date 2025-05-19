@@ -22,7 +22,6 @@ public class PromotionResponse {
     private Integer giftProductID;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private BigDecimal minOrderValue;
     private BigDecimal maxDiscount;
     private ApplicableTo applicableTo;
     private List<Integer> categoryIDs;

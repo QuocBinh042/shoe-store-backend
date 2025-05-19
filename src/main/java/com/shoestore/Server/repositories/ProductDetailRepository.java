@@ -15,15 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetail,Integer> {
-    @Query("SELECT pd FROM ProductDetail pd " +
-            "JOIN pd.product p " +
-            "WHERE p.productID = :productId " +
-            "AND pd.color = :color " +
-            "AND pd.size = :size")
-    Optional<ProductDetail> findByProductIdAndColorAndSize(int productId, Color color, Size size);
 
     List<ProductDetail> findByProduct_ProductID(int productID);
-
     @Query("SELECT pd FROM ProductDetail pd WHERE pd.product.productID = :productID AND pd.color = :color AND pd.size = :size")
     ProductDetail findOneByColorSizeAndProductId(
             @Param("productID") int productID,

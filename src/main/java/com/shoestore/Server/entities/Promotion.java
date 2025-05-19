@@ -45,8 +45,6 @@ public class Promotion extends BaseEntity{
 
     private LocalDateTime endDate;
 
-    private BigDecimal minOrderValue;
-
     private BigDecimal maxDiscount;
 
     @Enumerated(EnumType.STRING)

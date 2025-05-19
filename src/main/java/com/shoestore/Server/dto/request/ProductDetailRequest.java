@@ -20,4 +20,5 @@ public class ProductDetailRequest {
     private ProductStatus status;
 
     private String image;
+
 }

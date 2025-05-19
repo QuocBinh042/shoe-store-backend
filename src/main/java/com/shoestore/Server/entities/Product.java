@@ -27,11 +27,6 @@ public class Product extends BaseEntity {
     @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Product name may only contain letters, numbers, and spaces")
     private String productName;
 
-    @ElementCollection
-    @CollectionTable(name = "Product_ImageURL", joinColumns = @JoinColumn(name = "productID"))
-    @Column(name = "imageURL")
-    private List<String> imageURL;
-
     @Column(name = "description", nullable = false, length = 100)
     @NotBlank(message = "Description must not be empty")
     @Size(max = 100, message = "Description must not exceed 100 characters")
@@ -69,10 +64,4 @@ public class Product extends BaseEntity {
     @JsonIgnore
     private List<Review> reviews;
 
-    public double getAverageRating() {
-        if (reviews == null || reviews.isEmpty()) {
-            return 0;
-        }
-        return reviews.stream().mapToInt(Review::getRating).average().orElse(0);
-    }
 }

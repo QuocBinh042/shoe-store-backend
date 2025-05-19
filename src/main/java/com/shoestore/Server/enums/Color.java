@@ -12,8 +12,11 @@ public enum Color {
     YELLOW("Yellow"),
     BLACK("Black"),
     WHITE("White"),
-    PINK("Pink");
-
+    PINK("Pink"),
+    GREY("Grey"),
+    ORANGE("Orange"),
+    BROWN("Brown"),
+    PURPLE("Purple");
 
     private final String colorName;
 

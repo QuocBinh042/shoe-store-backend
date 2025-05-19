@@ -14,6 +14,8 @@ public class OrderDetailDTO {
     @NotNull(message = "Product details cannot be null")
     private ProductDetailDTO productDetail;
 
+    private ProductDetailDTO giftProductDetail;
+
     @NotNull(message = "Quantity cannot be null")
     @Min(value = 1, message = "Quantity must be greater than 0")
     private Integer quantity;
@@ -21,4 +23,10 @@ public class OrderDetailDTO {
     @NotNull(message = "Price cannot be null")
     @Min(value = 0, message = "Price cannot be negative")
     private Double price;
+
+    private PromotionDTO promotion;
+
+    private Integer giftedQuantity;
+
+//    private Double promoDiscount;
 }

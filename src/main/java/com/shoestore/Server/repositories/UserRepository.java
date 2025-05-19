@@ -1,6 +1,5 @@
 package com.shoestore.Server.repositories;
 
-import com.shoestore.Server.entities.Role;
 import com.shoestore.Server.entities.User;
 import com.shoestore.Server.enums.RoleType;
 import org.springframework.data.domain.Page;
@@ -10,8 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -25,4 +23,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "AND (LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<User> searchUsersByRole(@Param("keyword") String keyword, @Param("roleType") RoleType roleType, Pageable pageable);
+
+    @Query("SELECT COUNT(u) " +
+            "FROM User u JOIN u.roles r " +
+            "WHERE r.roleType   = :role " +
+            "  AND u.createdAt >= :start " +
+            "  AND u.createdAt <= :end")
+    int countByRoleTypeAndCreatedAtBetween(
+            @Param("role") RoleType role,
+            @Param("start") LocalDateTime start,
+            @Param("end")   LocalDateTime end
+    );
 }

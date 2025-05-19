@@ -51,25 +51,25 @@ VALUES
 -- Customers
 INSERT INTO Users (email, name, password, phoneNumber, status, customerGroup, createdAt, updatedAt)
 VALUES
-('customer1@example.com', 'John Doe', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0333445566', 'Active', 'NEW', NOW(), NOW()),
-('customer2@example.com', 'Jane Smith', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0944556677', 'Active', 'EXISTING', NOW(), NOW()),
-('customer3@example.com', 'Alice Johnson', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0355667788', 'Active', 'VIP', NOW(), NOW()),
-('customer4@example.com', 'Bob Brown', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0366778899', 'Active', 'NEW', NOW(), NOW()),
-('customer5@example.com', 'Charlie Davis', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0377889900', 'Active', 'EXISTING', NOW(), NOW()),
-('customer6@example.com', 'Diana Prince', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0388990011', 'Active', 'VIP', NOW(), NOW()),
-('customer7@example.com', 'Ethan Hunt', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0399001122', 'Active', 'NEW', NOW(), NOW()),
-('customer8@example.com', 'Fiona Gallagher', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0300112233', 'Active', 'EXISTING', NOW(), NOW()),
-('customer9@example.com', 'George Clooney', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0311121314', 'Active', 'VIP', NOW(), NOW()),
-('customer10@example.com', 'Hannah Montana', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0312131415', 'Active', 'NEW', NOW(), NOW()),
-('customer11@example.com', 'Isaac Newton', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0313141516', 'Active', 'EXISTING', NOW(), NOW()),
-('customer12@example.com', 'Jack Sparrow', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0314151617', 'Active', 'VIP', NOW(), NOW()),
-('customer13@example.com', 'Kara Danvers', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0315161718', 'Active', 'NEW', NOW(), NOW()),
-('customer14@example.com', 'Liam Hemsworth', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0316171819', 'Active', 'EXISTING', NOW(), NOW()),
-('customer15@example.com', 'Mia Wallace', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0317181920', 'Active', 'VIP', NOW(), NOW()),
-('customer16@example.com', 'Nina Dobrev', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0318192021', 'Active', 'NEW', NOW(), NOW()),
-('customer17@example.com', 'Oscar Isaac', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0319202122', 'Active', 'EXISTING', NOW(), NOW()),
-('customer18@example.com', 'Peter Parker', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0320212223', 'Active', 'VIP', NOW(), NOW()),
-('customer19@example.com', 'Quinn Fabray', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0321222324', 'Active', 'NEW', NOW(), NOW());
+('customer1@example.com', 'John Doe', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0333445566', 'ACTIVE', 'NEW', NOW(), NOW()),
+('customer2@example.com', 'Jane Smith', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0944556677', 'ACTIVE', 'EXISTING', NOW(), NOW()),
+('customer3@example.com', 'Alice Johnson', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0355667788', 'ACTIVE', 'VIP', NOW(), NOW()),
+('customer4@example.com', 'Bob Brown', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0366778899', 'ACTIVE', 'NEW', NOW(), NOW()),
+('customer5@example.com', 'Charlie Davis', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0377889900', 'ACTIVE', 'EXISTING', NOW(), NOW()),
+('customer6@example.com', 'Diana Prince', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0388990011', 'ACTIVE', 'VIP', NOW(), NOW()),
+('customer7@example.com', 'Ethan Hunt', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0399001122', 'ACTIVE', 'NEW', NOW(), NOW()),
+('customer8@example.com', 'Fiona Gallagher', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0300112233', 'ACTIVE', 'EXISTING', NOW(), NOW()),
+('customer9@example.com', 'George Clooney', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0311121314', 'ACTIVE', 'VIP', NOW(), NOW()),
+('customer10@example.com', 'Hannah Montana', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0312131415', 'ACTIVE', 'NEW', NOW(), NOW()),
+('customer11@example.com', 'Isaac Newton', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0313141516', 'ACTIVE', 'EXISTING', NOW(), NOW()),
+('customer12@example.com', 'Jack Sparrow', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0314151617', 'ACTIVE', 'VIP', NOW(), NOW()),
+('customer13@example.com', 'Kara Danvers', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0315161718', 'ACTIVE', 'NEW', NOW(), NOW()),
+('customer14@example.com', 'Liam Hemsworth', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0316171819', 'ACTIVE', 'EXISTING', NOW(), NOW()),
+('customer15@example.com', 'Mia Wallace', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0317181920', 'ACTIVE', 'VIP', NOW(), NOW()),
+('customer16@example.com', 'Nina Dobrev', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0318192021', 'ACTIVE', 'NEW', NOW(), NOW()),
+('customer17@example.com', 'Oscar Isaac', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0319202122', 'ACTIVE', 'EXISTING', NOW(), NOW()),
+('customer18@example.com', 'Peter Parker', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0320212223', 'ACTIVE', 'VIP', NOW(), NOW()),
+('customer19@example.com', 'Quinn Fabray', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0321222324', 'ACTIVE', 'NEW', NOW(), NOW());
 -- Gán vai trò cho người dùng
 INSERT INTO User_Roles (userID, roleID) VALUES
 -- Admins
@@ -230,19 +230,19 @@ INSERT INTO Promotion (
     createdAt, updatedAt
 ) VALUES
     ('Summer Sale 2023', 'Percentage (10%)', 'PERCENTAGE', 10.00, NULL, NULL, NULL,
-     '2023-06-01 00:00:00', '2023-08-31 23:59:59', 'ALL', 'ACTIVE', 328,
+     '2023-06-01 00:00:00', '2026-08-31 23:59:59', 'ALL', 'ACTIVE', 328,
      NOW(), NOW()),
     ('New Customer Discount', 'Fixed Amount ($20)', 'FIXED', 20000, NULL, NULL, NULL,
-     '2023-05-15 00:00:00', '2023-12-31 23:59:59', 'ALL', 'ACTIVE', 145,
+     '2023-05-15 00:00:00', '2026-12-31 23:59:59', 'ALL', 'ACTIVE', 145,
      NOW(), NOW()),
     ('Back to School', 'Buy 2 Get 1 Free', 'BUYX', NULL, 2, 1, NULL,
-     '2023-08-01 00:00:00', '2023-09-15 23:59:59', 'CATEGORIES', 'UPCOMING', 0,
+     '2023-08-01 00:00:00', '2026-09-15 23:59:59', 'CATEGORIES', 'UPCOMING', 0,
      NOW(), NOW()),
     ('Holiday Gift', 'Free Gift', 'GIFT', NULL, NULL, NULL, 1, -- productID = 1 đã tồn tại
-     '2023-12-01 00:00:00', '2023-12-25 23:59:59', 'ALL', 'UPCOMING', 0,
+     '2023-12-01 00:00:00', '2026-12-25 23:59:59', 'ALL', 'UPCOMING', 0,
      NOW(), NOW()),
     ('Black Friday', 'Percentage (30%)', 'PERCENTAGE', 30.00, NULL, NULL, NULL,
-     '2022-11-24 00:00:00', '2022-11-28 23:59:59', 'ALL', 'EXPIRED', 512,
+     '2022-11-24 00:00:00', '2026-11-28 23:59:59', 'ALL', 'EXPIRED', 512,
      NOW(), NOW()),
     ('Sale 10%', '10% off promotion for products', 'PERCENTAGE', 10.00, NULL, NULL, NULL,
      '2025-02-01 00:00:00', '2025-07-28 23:59:59', 'ALL', 'ACTIVE', 0,
@@ -309,76 +309,533 @@ UPDATE Product SET promotionID = 2 WHERE productID = 7;
 
 INSERT INTO ProductDetail (color, size, stockQuantity, productID, status, image, createdAt, updatedAt)
 VALUES
-('RED',    'SIZE_40', 50,  1, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 1, '/product', 1, '_1'), NOW(), NOW()),
-('BLUE',   'SIZE_41', 30,  1, 'LIMITED_STOCK', CONCAT('project_ShoeStore/ImageProduct/', 1, '/product', 1, '_2'), NOW(), NOW()),
-('BLACK',  'SIZE_42', 25,  2, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 2, '/product', 2, '_1'), NOW(), NOW()),
-('WHITE',  'SIZE_43', 40,  2, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 2, '/product', 2, '_2'), NOW(), NOW()),
-('WHITE',  'SIZE_44', 20,  3, 'LIMITED_STOCK', CONCAT('project_ShoeStore/ImageProduct/', 3, '/product', 3, '_1'), NOW(), NOW()),
-('PINK',   'SIZE_40', 15,  3, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 3, '/product', 3, '_2'), NOW(), NOW()),
-('YELLOW', 'SIZE_41', 35,  4, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 4, '/product', 4, '_1'), NOW(), NOW()),
-('WHITE',  'SIZE_42', 18,  5, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 5, '/product', 5, '_1'), NOW(), NOW()),
-('GREEN',  'SIZE_43', 22,  6, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 6, '/product', 6, '_1'), NOW(), NOW()),
-('YELLOW', 'SIZE_44', 28,  7, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 7, '/product', 7, '_1'), NOW(), NOW()),
-('BLACK',  'SIZE_40', 10,  8, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 8, '/product', 8, '_1'), NOW(), NOW()),
-('WHITE',  'SIZE_41', 14,  9, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 9, '/product', 9, '_1'), NOW(), NOW()),
-('BLUE',   'SIZE_42', 33, 10, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 10, '/product', 10, '_1'), NOW(), NOW()),
-('RED',    'SIZE_43', 27, 11, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 11, '/product', 11, '_1'), NOW(), NOW()),
-('PINK',   'SIZE_44', 12, 12, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 12, '/product', 12, '_1'), NOW(), NOW()),
-('PINK',   'SIZE_40', 31, 13, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 13, '/product', 13, '_1'), NOW(), NOW()),
-('GREEN',  'SIZE_41', 19, 14, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 14, '/product', 14, '_1'), NOW(), NOW()),
-('YELLOW', 'SIZE_42', 21, 15, 'LIMITED_STOCK', CONCAT('project_ShoeStore/ImageProduct/', 15, '/product', 15, '_1'), NOW(), NOW()),
-('GREEN',  'SIZE_43', 26, 16, 'AVAILABLE',     CONCAT('project_ShoeStore/ImageProduct/', 16, '/product', 16, '_1'), NOW(), NOW()),
-('YELLOW', 'SIZE_44', 17, 17, 'UNAVAILABLE',   CONCAT('project_ShoeStore/ImageProduct/', 17, '/product', 17, '_1'), NOW(), NOW());
+-- productID 1, WHITE, random sizes: 36, 38, 40
+('WHITE', 'SIZE_36', 50, 1, 'AVAILABLE', '/1/product1_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 1, 'AVAILABLE', '/1/product1_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 1, 'AVAILABLE', '/1/product1_WHITE', NOW(), NOW()),
+-- productID 1, BLACK, random sizes: 37, 39, 41, 43
+('BLACK', 'SIZE_37', 50, 1, 'AVAILABLE', '/1/product1_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 1, 'AVAILABLE', '/1/product1_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 1, 'AVAILABLE', '/1/product1_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_43', 50, 1, 'AVAILABLE', '/1/product1_BLACK', NOW(), NOW()),
+-- productID 1, GREY, random sizes: 36, 42
+('GREY', 'SIZE_36', 50, 1, 'AVAILABLE', '/1/product1_GREY', NOW(), NOW()),
+('GREY', 'SIZE_42', 50, 1, 'AVAILABLE', '/1/product1_GREY', NOW(), NOW()),
+-- productID 1, PINK, random sizes: 38, 40, 44
+('PINK', 'SIZE_38', 50, 1, 'AVAILABLE', '/1/product1_PINK', NOW(), NOW()),
+('PINK', 'SIZE_40', 50, 1, 'AVAILABLE', '/1/product1_PINK', NOW(), NOW()),
+('PINK', 'SIZE_44', 50, 1, 'AVAILABLE', '/1/product1_PINK', NOW(), NOW()),
+-- productID 2, BLACK, random sizes: 36, 39, 41
+('BLACK', 'SIZE_36', 50, 2, 'AVAILABLE', '/2/product2_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 2, 'AVAILABLE', '/2/product2_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 2, 'AVAILABLE', '/2/product2_BLACK', NOW(), NOW()),
+-- productID 2, PINK, random sizes: 37, 40, 42, 44
+('PINK', 'SIZE_37', 50, 2, 'AVAILABLE', '/2/product2_PINK', NOW(), NOW()),
+('PINK', 'SIZE_40', 50, 2, 'AVAILABLE', '/2/product2_PINK', NOW(), NOW()),
+('PINK', 'SIZE_42', 50, 2, 'AVAILABLE', '/2/product2_PINK', NOW(), NOW()),
+('PINK', 'SIZE_44', 50, 2, 'AVAILABLE', '/2/product2_PINK', NOW(), NOW()),
+-- productID 2, RED, random sizes: 36, 38
+('RED', 'SIZE_36', 50, 2, 'AVAILABLE', '/2/product2_RED', NOW(), NOW()),
+('RED', 'SIZE_38', 50, 2, 'AVAILABLE', '/2/product2_RED', NOW(), NOW()),
+-- productID 2, WHITE, random sizes: 39, 41, 43
+('WHITE', 'SIZE_39', 50, 2, 'AVAILABLE', '/2/product2_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_41', 50, 2, 'AVAILABLE', '/2/product2_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_43', 50, 2, 'AVAILABLE', '/2/product2_WHITE', NOW(), NOW()),
+-- productID 3, BLACK, random sizes: 36, 40, 42
+('BLACK', 'SIZE_36', 50, 3, 'AVAILABLE', '/3/product3_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 3, 'AVAILABLE', '/3/product3_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_42', 50, 3, 'AVAILABLE', '/3/product3_BLACK', NOW(), NOW()),
+-- productID 3, PINK, random sizes: 37, 39, 41, 43
+('PINK', 'SIZE_37', 50, 3, 'AVAILABLE', '/3/product3_PINK', NOW(), NOW()),
+('PINK', 'SIZE_39', 50, 3, 'AVAILABLE', '/3/product3_PINK', NOW(), NOW()),
+('PINK', 'SIZE_41', 50, 3, 'AVAILABLE', '/3/product3_PINK', NOW(), NOW()),
+('PINK', 'SIZE_43', 50, 3, 'AVAILABLE', '/3/product3_PINK', NOW(), NOW()),
+-- productID 3, RED, random sizes: 36, 38, 44
+('RED', 'SIZE_36', 50, 3, 'AVAILABLE', '/3/product3_RED', NOW(), NOW()),
+('RED', 'SIZE_38', 50, 3, 'AVAILABLE', '/3/product3_RED', NOW(), NOW()),
+('RED', 'SIZE_44', 50, 3, 'AVAILABLE', '/3/product3_RED', NOW(), NOW()),
+-- productID 3, BROWN, random sizes: 39, 41
+('BROWN', 'SIZE_39', 50, 3, 'AVAILABLE', '/3/product3_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_41', 50, 3, 'AVAILABLE', '/3/product3_BROWN', NOW(), NOW()),
+-- productID 4, BLACK, random sizes: 36, 40, 42, 44
+('BLACK', 'SIZE_36', 50, 4, 'AVAILABLE', '/4/product4_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 4, 'AVAILABLE', '/4/product4_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_42', 50, 4, 'AVAILABLE', '/4/product4_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_44', 50, 4, 'AVAILABLE', '/4/product4_BLACK', NOW(), NOW()),
+-- productID 4, WHITE, random sizes: 37, 39
+('WHITE', 'SIZE_37', 50, 4, 'AVAILABLE', '/4/product4_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_39', 50, 4, 'AVAILABLE', '/4/product4_WHITE', NOW(), NOW()),
+-- productID 5, BLACK, random sizes: 36, 38, 40
+('BLACK', 'SIZE_36', 50, 5, 'AVAILABLE', '/5/product5_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_38', 50, 5, 'AVAILABLE', '/5/product5_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 5, 'AVAILABLE', '/5/product5_BLACK', NOW(), NOW()),
+-- productID 5, BROWN, random sizes: 39, 41, 43
+('BROWN', 'SIZE_39', 50, 5, 'AVAILABLE', '/5/product5_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_41', 50, 5, 'AVAILABLE', '/5/product5_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_43', 50, 5, 'AVAILABLE', '/5/product5_BROWN', NOW(), NOW()),
+-- productID 5, GREY, random sizes: 36, 42, 44
+('GREY', 'SIZE_36', 50, 5, 'AVAILABLE', '/5/product5_GREY', NOW(), NOW()),
+('GREY', 'SIZE_42', 50, 5, 'AVAILABLE', '/5/product5_GREY', NOW(), NOW()),
+('GREY', 'SIZE_44', 50, 5, 'AVAILABLE', '/5/product5_GREY', NOW(), NOW()),
+-- productID 5, RED, random sizes: 37, 40
+('RED', 'SIZE_37', 50, 5, 'AVAILABLE', '/5/product5_RED', NOW(), NOW()),
+('RED', 'SIZE_40', 50, 5, 'AVAILABLE', '/5/product5_RED', NOW(), NOW()),
+-- productID 5, YELLOW, random sizes: 38, 41, 43
+('YELLOW', 'SIZE_38', 50, 5, 'AVAILABLE', '/5/product5_YELLOW', NOW(), NOW()),
+('YELLOW', 'SIZE_41', 50, 5, 'AVAILABLE', '/5/product5_YELLOW', NOW(), NOW()),
+('YELLOW', 'SIZE_43', 50, 5, 'AVAILABLE', '/5/product5_YELLOW', NOW(), NOW()),
+-- productID 6, BLUE, random sizes: 36, 39, 42
+('BLUE', 'SIZE_36', 50, 6, 'AVAILABLE', '/6/product6_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 6, 'AVAILABLE', '/6/product6_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_42', 50, 6, 'AVAILABLE', '/6/product6_BLUE', NOW(), NOW()),
+-- productID 6, GREEN, random sizes: 37, 40, 44
+('GREEN', 'SIZE_37', 50, 6, 'AVAILABLE', '/6/product6_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_40', 50, 6, 'AVAILABLE', '/6/product6_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_44', 50, 6, 'AVAILABLE', '/6/product6_GREEN', NOW(), NOW()),
+-- productID 6, PINK, random sizes: 36, 38, 41
+('PINK', 'SIZE_36', 50, 6, 'AVAILABLE', '/6/product6_PINK', NOW(), NOW()),
+('PINK', 'SIZE_38', 50, 6, 'AVAILABLE', '/6/product6_PINK', NOW(), NOW()),
+('PINK', 'SIZE_41', 50, 6, 'AVAILABLE', '/6/product6_PINK', NOW(), NOW()),
+-- productID 6, WHITE, random sizes: 39, 42, 44
+('WHITE', 'SIZE_39', 50, 6, 'AVAILABLE', '/6/product6_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 6, 'AVAILABLE', '/6/product6_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 6, 'AVAILABLE', '/6/product6_WHITE', NOW(), NOW()),
+-- productID 7, BLACK, random sizes: 36, 40
+('BLACK', 'SIZE_36', 50, 7, 'AVAILABLE', '/7/product7_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 7, 'AVAILABLE', '/7/product7_BLACK', NOW(), NOW()),
+-- productID 7, RED, random sizes: 37, 39, 41
+('RED', 'SIZE_37', 50, 7, 'AVAILABLE', '/7/product7_RED', NOW(), NOW()),
+('RED', 'SIZE_39', 50, 7, 'AVAILABLE', '/7/product7_RED', NOW(), NOW()),
+('RED', 'SIZE_41', 50, 7, 'AVAILABLE', '/7/product7_RED', NOW(), NOW()),
+-- productID 7, WHITE, random sizes: 38, 42, 44
+('WHITE', 'SIZE_38', 50, 7, 'AVAILABLE', '/7/product7_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 7, 'AVAILABLE', '/7/product7_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 7, 'AVAILABLE', '/7/product7_WHITE', NOW(), NOW()),
+-- productID 8, BLACK, random sizes: 36, 39, 41
+('BLACK', 'SIZE_36', 50, 8, 'AVAILABLE', '/8/product8_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 8, 'AVAILABLE', '/8/product8_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 8, 'AVAILABLE', '/8/product8_BLACK', NOW(), NOW()),
+-- productID 8, GREEN, random sizes: 37, 40, 42
+('GREEN', 'SIZE_37', 50, 8, 'AVAILABLE', '/8/product8_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_40', 50, 8, 'AVAILABLE', '/8/product8_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_42', 50, 8, 'AVAILABLE', '/8/product8_GREEN', NOW(), NOW()),
+-- productID 8, PURPLE, random sizes: 36, 38, 44
+('PURPLE', 'SIZE_36', 50, 8, 'AVAILABLE', '/8/product8_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_38', 50, 8, 'AVAILABLE', '/8/product8_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_44', 50, 8, 'AVAILABLE', '/8/product8_PURPLE', NOW(), NOW()),
+-- productID 9, BLACK, random sizes: 36, 40, 42
+('BLACK', 'SIZE_36', 50, 9, 'AVAILABLE', '/9/product9_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 9, 'AVAILABLE', '/9/product9_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_42', 50, 9, 'AVAILABLE', '/9/product9_BLACK', NOW(), NOW()),
+-- productID 9, BLUE, random sizes: 37, 39
+('BLUE', 'SIZE_37', 50, 9, 'AVAILABLE', '/9/product9_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 9, 'AVAILABLE', '/9/product9_BLUE', NOW(), NOW()),
+-- productID 9, GREEN, random sizes: 38, 41, 43
+('GREEN', 'SIZE_38', 50, 9, 'AVAILABLE', '/9/product9_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_41', 50, 9, 'AVAILABLE', '/9/product9_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_43', 50, 9, 'AVAILABLE', '/9/product9_GREEN', NOW(), NOW()),
+-- productID 9, PINK, random sizes: 36, 42, 44
+('PINK', 'SIZE_36', 50, 9, 'AVAILABLE', '/9/product9_PINK', NOW(), NOW()),
+('PINK', 'SIZE_42', 50, 9, 'AVAILABLE', '/9/product9_PINK', NOW(), NOW()),
+('PINK', 'SIZE_44', 50, 9, 'AVAILABLE', '/9/product9_PINK', NOW(), NOW()),
+-- productID 10, BLACK, random sizes: 36, 39, 41
+('BLACK', 'SIZE_36', 50, 10, 'AVAILABLE', '/10/product10_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 10, 'AVAILABLE', '/10/product10_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 10, 'AVAILABLE', '/10/product10_BLACK', NOW(), NOW()),
+-- productID 10, RED, random sizes: 37, 40, 42
+('RED', 'SIZE_37', 50, 10, 'AVAILABLE', '/10/product10_RED', NOW(), NOW()),
+('RED', 'SIZE_40', 50, 10, 'AVAILABLE', '/10/product10_RED', NOW(), NOW()),
+('RED', 'SIZE_42', 50, 10, 'AVAILABLE', '/10/product10_RED', NOW(), NOW()),
+-- productID 10, WHITE, random sizes: 36, 38, 44
+('WHITE', 'SIZE_36', 50, 10, 'AVAILABLE', '/10/product10_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 10, 'AVAILABLE', '/10/product10_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 10, 'AVAILABLE', '/10/product10_WHITE', NOW(), NOW()),
+-- productID 10, PINK, random sizes: 39, 41, 43
+('PINK', 'SIZE_39', 50, 10, 'AVAILABLE', '/10/product10_PINK', NOW(), NOW()),
+('PINK', 'SIZE_41', 50, 10, 'AVAILABLE', '/10/product10_PINK', NOW(), NOW()),
+('PINK', 'SIZE_43', 50, 10, 'AVAILABLE', '/10/product10_PINK', NOW(), NOW()),
+-- productID 11, BLUE, random sizes: 36, 40
+('BLUE', 'SIZE_36', 50, 11, 'AVAILABLE', '/11/product11_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_40', 50, 11, 'AVAILABLE', '/11/product11_BLUE', NOW(), NOW()),
+-- productID 11, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 11, 'AVAILABLE', '/11/product11_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 11, 'AVAILABLE', '/11/product11_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 11, 'AVAILABLE', '/11/product11_BLACK', NOW(), NOW()),
+-- productID 11, GREEN, random sizes: 38, 42, 44
+('GREEN', 'SIZE_38', 50, 11, 'AVAILABLE', '/11/product11_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_42', 50, 11, 'AVAILABLE', '/11/product11_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_44', 50, 11, 'AVAILABLE', '/11/product11_GREEN', NOW(), NOW()),
+-- productID 11, BROWN, random sizes: 36, 39
+('BROWN', 'SIZE_36', 50, 11, 'AVAILABLE', '/11/product11_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_39', 50, 11, 'AVAILABLE', '/11/product11_BROWN', NOW(), NOW()),
+-- productID 12, WHITE, random sizes: 36, 40, 42
+('WHITE', 'SIZE_36', 50, 12, 'AVAILABLE', '/12/product12_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 12, 'AVAILABLE', '/12/product12_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 12, 'AVAILABLE', '/12/product12_WHITE', NOW(), NOW()),
+-- productID 12, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 12, 'AVAILABLE', '/12/product12_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 12, 'AVAILABLE', '/12/product12_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 12, 'AVAILABLE', '/12/product12_BLACK', NOW(), NOW()),
+-- productID 12, GREY, random sizes: 36, 38, 44
+('GREY', 'SIZE_36', 50, 12, 'AVAILABLE', '/12/product12_GREY', NOW(), NOW()),
+('GREY', 'SIZE_38', 50, 12, 'AVAILABLE', '/12/product12_GREY', NOW(), NOW()),
+('GREY', 'SIZE_44', 50, 12, 'AVAILABLE', '/12/product12_GREY', NOW(), NOW()),
+-- productID 12, BROWN, random sizes: 39, 42
+('BROWN', 'SIZE_39', 50, 12, 'AVAILABLE', '/12/product12_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_42', 50, 12, 'AVAILABLE', '/12/product12_BROWN', NOW(), NOW()),
+-- productID 13, BROWN, random sizes: 36, 40, 42
+('BROWN', 'SIZE_36', 50, 13, 'AVAILABLE', '/13/product13_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_40', 50, 13, 'AVAILABLE', '/13/product13_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_42', 50, 13, 'AVAILABLE', '/13/product13_BROWN', NOW(), NOW()),
+-- productID 13, ORANGE, random sizes: 37, 39, 41
+('ORANGE', 'SIZE_37', 50, 13, 'AVAILABLE', '/13/product13_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_39', 50, 13, 'AVAILABLE', '/13/product13_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_41', 50, 13, 'AVAILABLE', '/13/product13_ORANGE', NOW(), NOW()),
+-- productID 14, WHITE, random sizes: 36, 38, 44
+('WHITE', 'SIZE_36', 50, 14, 'AVAILABLE', '/14/product14_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 14, 'AVAILABLE', '/14/product14_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 14, 'AVAILABLE', '/14/product14_WHITE', NOW(), NOW()),
+-- productID 14, BLACK, random sizes: 39, 41, 43
+('BLACK', 'SIZE_39', 50, 14, 'AVAILABLE', '/14/product14_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 14, 'AVAILABLE', '/14/product14_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_43', 50, 14, 'AVAILABLE', '/14/product14_BLACK', NOW(), NOW()),
+-- productID 14, BROWN, random sizes: 36, 40
+('BROWN', 'SIZE_36', 50, 14, 'AVAILABLE', '/14/product14_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_40', 50, 14, 'AVAILABLE', '/14/product14_BROWN', NOW(), NOW()),
+-- productID 15, BROWN, random sizes: 36, 38, 42
+('BROWN', 'SIZE_36', 50, 15, 'AVAILABLE', '/15/product15_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_38', 50, 15, 'AVAILABLE', '/15/product15_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_42', 50, 15, 'AVAILABLE', '/15/product15_BROWN', NOW(), NOW()),
+-- productID 15, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 15, 'AVAILABLE', '/15/product15_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 15, 'AVAILABLE', '/15/product15_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 15, 'AVAILABLE', '/15/product15_BLACK', NOW(), NOW()),
+-- productID 16, WHITE, random sizes: 36, 40, 44
+('WHITE', 'SIZE_36', 50, 16, 'AVAILABLE', '/16/product16_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 16, 'AVAILABLE', '/16/product16_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 16, 'AVAILABLE', '/16/product16_WHITE', NOW(), NOW()),
+-- productID 16, BLACK, random sizes: 37, 39
+('BLACK', 'SIZE_37', 50, 16, 'AVAILABLE', '/16/product16_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 16, 'AVAILABLE', '/16/product16_BLACK', NOW(), NOW()),
+-- productID 16, RED, random sizes: 38, 41, 43
+('RED', 'SIZE_38', 50, 16, 'AVAILABLE', '/16/product16_RED', NOW(), NOW()),
+('RED', 'SIZE_41', 50, 16, 'AVAILABLE', '/16/product16_RED', NOW(), NOW()),
+('RED', 'SIZE_43', 50, 16, 'AVAILABLE', '/16/product16_RED', NOW(), NOW()),
+-- productID 16, BLUE, random sizes: 36, 42
+('BLUE', 'SIZE_36', 50, 16, 'AVAILABLE', '/16/product16_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_42', 50, 16, 'AVAILABLE', '/16/product16_BLUE', NOW(), NOW()),
+-- productID 17, WHITE, random sizes: 36, 40, 42
+('WHITE', 'SIZE_36', 50, 17, 'AVAILABLE', '/17/product17_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 17, 'AVAILABLE', '/17/product17_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 17, 'AVAILABLE', '/17/product17_WHITE', NOW(), NOW()),
+-- productID 17, PURPLE, random sizes: 37, 39, 41
+('PURPLE', 'SIZE_37', 50, 17, 'AVAILABLE', '/17/product17_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_39', 50, 17, 'AVAILABLE', '/17/product17_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_41', 50, 17, 'AVAILABLE', '/17/product17_PURPLE', NOW(), NOW()),
+-- productID 18, RED, random sizes: 36, 38, 44
+('RED', 'SIZE_36', 50, 18, 'AVAILABLE', '/18/product18_RED', NOW(), NOW()),
+('RED', 'SIZE_38', 50, 18, 'AVAILABLE', '/18/product18_RED', NOW(), NOW()),
+('RED', 'SIZE_44', 50, 18, 'AVAILABLE', '/18/product18_RED', NOW(), NOW()),
+-- productID 18, BLACK, random sizes: 39, 41, 43
+('BLACK', 'SIZE_39', 50, 18, 'AVAILABLE', '/18/product18_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 18, 'AVAILABLE', '/18/product18_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_43', 50, 18, 'AVAILABLE', '/18/product18_BLACK', NOW(), NOW()),
+-- productID 18, GREY, random sizes: 36, 40
+('GREY', 'SIZE_36', 50, 18, 'AVAILABLE', '/18/product18_GREY', NOW(), NOW()),
+('GREY', 'SIZE_40', 50, 18, 'AVAILABLE', '/18/product18_GREY', NOW(), NOW()),
+-- productID 18, BLUE, random sizes: 37, 42, 44
+('BLUE', 'SIZE_37', 50, 18, 'AVAILABLE', '/18/product18_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_42', 50, 18, 'AVAILABLE', '/18/product18_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_44', 50, 18, 'AVAILABLE', '/18/product18_BLUE', NOW(), NOW()),
+-- productID 19, BLACK, random sizes: 36, 39, 41
+('BLACK', 'SIZE_36', 50, 19, 'AVAILABLE', '/19/product19_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 19, 'AVAILABLE', '/19/product19_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 19, 'AVAILABLE', '/19/product19_BLACK', NOW(), NOW()),
+-- productID 19, BLUE, random sizes: 37, 40, 42
+('BLUE', 'SIZE_37', 50, 19, 'AVAILABLE', '/19/product19_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_40', 50, 19, 'AVAILABLE', '/19/product19_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_42', 50, 19, 'AVAILABLE', '/19/product19_BLUE', NOW(), NOW()),
+-- productID 20, WHITE, random sizes: 36, 38, 44
+('WHITE', 'SIZE_36', 50, 20, 'AVAILABLE', '/20/product20_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 20, 'AVAILABLE', '/20/product20_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 20, 'AVAILABLE', '/20/product20_WHITE', NOW(), NOW()),
+-- productID 20, BLACK, random sizes: 39, 41
+('BLACK', 'SIZE_39', 50, 20, 'AVAILABLE', '/20/product20_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 20, 'AVAILABLE', '/20/product20_BLACK', NOW(), NOW()),
+-- productID 20, PINK, random sizes: 36, 40, 42
+('PINK', 'SIZE_36', 50, 20, 'AVAILABLE', '/20/product20_PINK', NOW(), NOW()),
+('PINK', 'SIZE_40', 50, 20, 'AVAILABLE', '/20/product20_PINK', NOW(), NOW()),
+('PINK', 'SIZE_42', 50, 20, 'AVAILABLE', '/20/product20_PINK', NOW(), NOW()),
+-- productID 20, BLUE, random sizes: 37, 39, 43
+('BLUE', 'SIZE_37', 50, 20, 'AVAILABLE', '/20/product20_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 20, 'AVAILABLE', '/20/product20_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_43', 50, 20, 'AVAILABLE', '/20/product20_BLUE', NOW(), NOW()),
+-- productID 21, WHITE, random sizes: 36, 40, 44
+('WHITE', 'SIZE_36', 50, 21, 'AVAILABLE', '/21/product21_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 21, 'AVAILABLE', '/21/product21_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 21, 'AVAILABLE', '/21/product21_WHITE', NOW(), NOW()),
+-- productID 21, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 21, 'AVAILABLE', '/21/product21_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 21, 'AVAILABLE', '/21/product21_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 21, 'AVAILABLE', '/21/product21_BLACK', NOW(), NOW()),
+-- productID 21, GREY, random sizes: 36, 38
+('GREY', 'SIZE_36', 50, 21, 'AVAILABLE', '/21/product21_GREY', NOW(), NOW()),
+('GREY', 'SIZE_38', 50, 21, 'AVAILABLE', '/21/product21_GREY', NOW(), NOW()),
+-- productID 22, WHITE, random sizes: 36, 40, 42
+('WHITE', 'SIZE_36', 50, 22, 'AVAILABLE', '/22/product22_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 22, 'AVAILABLE', '/22/product22_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 22, 'AVAILABLE', '/22/product22_WHITE', NOW(), NOW()),
+-- productID 22, PURPLE, random sizes: 37, 39, 43
+('PURPLE', 'SIZE_37', 50, 22, 'AVAILABLE', '/22/product22_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_39', 50, 22, 'AVAILABLE', '/22/product22_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_43', 50, 22, 'AVAILABLE', '/22/product22_PURPLE', NOW(), NOW()),
+-- productID 22, BLUE, random sizes: 36, 38, 44
+('BLUE', 'SIZE_36', 50, 22, 'AVAILABLE', '/22/product22_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_38', 50, 22, 'AVAILABLE', '/22/product22_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_44', 50, 22, 'AVAILABLE', '/22/product22_BLUE', NOW(), NOW()),
+-- productID 23, BROWN, random sizes: 36, 40
+('BROWN', 'SIZE_36', 50, 23, 'AVAILABLE', '/23/product23_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_40', 50, 23, 'AVAILABLE', '/23/product23_BROWN', NOW(), NOW()),
+-- productID 23, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 23, 'AVAILABLE', '/23/product23_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 23, 'AVAILABLE', '/23/product23_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 23, 'AVAILABLE', '/23/product23_BLACK', NOW(), NOW()),
+-- productID 23, PINK, random sizes: 36, 38, 44
+('PINK', 'SIZE_36', 50, 23, 'AVAILABLE', '/23/product23_PINK', NOW(), NOW()),
+('PINK', 'SIZE_38', 50, 23, 'AVAILABLE', '/23/product23_PINK', NOW(), NOW()),
+('PINK', 'SIZE_44', 50, 23, 'AVAILABLE', '/23/product23_PINK', NOW(), NOW()),
+-- productID 24, WHITE, random sizes: 36, 40, 42
+('WHITE', 'SIZE_36', 50, 24, 'AVAILABLE', '/24/product24_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 24, 'AVAILABLE', '/24/product24_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 24, 'AVAILABLE', '/24/product24_WHITE', NOW(), NOW()),
+-- productID 24, BLACK, random sizes: 37, 39
+('BLACK', 'SIZE_37', 50, 24, 'AVAILABLE', '/24/product24_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 24, 'AVAILABLE', '/24/product24_BLACK', NOW(), NOW()),
+-- productID 24, BROWN, random sizes: 36, 38, 44
+('BROWN', 'SIZE_36', 50, 24, 'AVAILABLE', '/24/product24_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_38', 50, 24, 'AVAILABLE', '/24/product24_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_44', 50, 24, 'AVAILABLE', '/24/product24_BROWN', NOW(), NOW()),
+-- productID 25, BLACK, random sizes: 36, 40, 42
+('BLACK', 'SIZE_36', 50, 25, 'AVAILABLE', '/25/product25_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 25, 'AVAILABLE', '/25/product25_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_42', 50, 25, 'AVAILABLE', '/25/product25_BLACK', NOW(), NOW()),
+-- productID 26, WHITE, random sizes: 36, 38, 44
+('WHITE', 'SIZE_36', 50, 26, 'AVAILABLE', '/26/product26_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 26, 'AVAILABLE', '/26/product26_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 26, 'AVAILABLE', '/26/product26_WHITE', NOW(), NOW()),
+-- productID 26, RED, random sizes: 37, 39, 41
+('RED', 'SIZE_37', 50, 26, 'AVAILABLE', '/26/product26_RED', NOW(), NOW()),
+('RED', 'SIZE_39', 50, 26, 'AVAILABLE', '/26/product26_RED', NOW(), NOW()),
+('RED', 'SIZE_41', 50, 26, 'AVAILABLE', '/26/product26_RED', NOW(), NOW()),
+-- productID 26, YELLOW, random sizes: 36, 40
+('YELLOW', 'SIZE_36', 50, 26, 'AVAILABLE', '/26/product26_YELLOW', NOW(), NOW()),
+('YELLOW', 'SIZE_40', 50, 26, 'AVAILABLE', '/26/product26_YELLOW', NOW(), NOW()),
+-- productID 27, WHITE, random sizes: 36, 38, 44
+('WHITE', 'SIZE_36', 50, 27, 'AVAILABLE', '/27/product27_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 27, 'AVAILABLE', '/27/product27_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_44', 50, 27, 'AVAILABLE', '/27/product27_WHITE', NOW(), NOW()),
+-- productID 27, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 27, 'AVAILABLE', '/27/product27_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 27, 'AVAILABLE', '/27/product27_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 27, 'AVAILABLE', '/27/product27_BLACK', NOW(), NOW()),
+-- productID 28, GREEN, random sizes: 36, 40, 42
+('GREEN', 'SIZE_36', 50, 28, 'AVAILABLE', '/28/product28_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_40', 50, 28, 'AVAILABLE', '/28/product28_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_42', 50, 28, 'AVAILABLE', '/28/product28_GREEN', NOW(), NOW()),
+-- productID 28, BLACK, random sizes: 37, 39
+('BLACK', 'SIZE_37', 50, 28, 'AVAILABLE', '/28/product28_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 28, 'AVAILABLE', '/28/product28_BLACK', NOW(), NOW()),
+-- productID 28, GREY, random sizes: 36, 38, 44
+('GREY', 'SIZE_36', 50, 28, 'AVAILABLE', '/28/product28_GREY', NOW(), NOW()),
+('GREY', 'SIZE_38', 50, 28, 'AVAILABLE', '/28/product28_GREY', NOW(), NOW()),
+('GREY', 'SIZE_44', 50, 28, 'AVAILABLE', '/28/product28_GREY', NOW(), NOW()),
+-- productID 28, PINK, random sizes: 39, 41, 43
+('PINK', 'SIZE_39', 50, 28, 'AVAILABLE', '/28/product28_PINK', NOW(), NOW()),
+('PINK', 'SIZE_41', 50, 28, 'AVAILABLE', '/28/product28_PINK', NOW(), NOW()),
+('PINK', 'SIZE_43', 50, 28, 'AVAILABLE', '/28/product28_PINK', NOW(), NOW()),
+-- productID 29, GREEN, random sizes: 36, 40
+('GREEN', 'SIZE_36', 50, 29, 'AVAILABLE', '/29/product29_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_40', 50, 29, 'AVAILABLE', '/29/product29_GREEN', NOW(), NOW()),
+-- productID 29, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 29, 'AVAILABLE', '/29/product29_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 29, 'AVAILABLE', '/29/product29_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 29, 'AVAILABLE', '/29/product29_BLACK', NOW(), NOW()),
+-- productID 29, GREY, random sizes: 36, 38, 44
+('GREY', 'SIZE_36', 50, 29, 'AVAILABLE', '/29/product29_GREY', NOW(), NOW()),
+('GREY', 'SIZE_38', 50, 29, 'AVAILABLE', '/29/product29_GREY', NOW(), NOW()),
+('GREY', 'SIZE_44', 50, 29, 'AVAILABLE', '/29/product29_GREY', NOW(), NOW()),
+-- productID 30, BROWN, random sizes: 36, 40, 42
+('BROWN', 'SIZE_36', 50, 30, 'AVAILABLE', '/30/product30_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_40', 50, 30, 'AVAILABLE', '/30/product30_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_42', 50, 30, 'AVAILABLE', '/30/product30_BROWN', NOW(), NOW()),
+-- productID 30, BLACK, random sizes: 37, 39
+('BLACK', 'SIZE_37', 50, 30, 'AVAILABLE', '/30/product30_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 30, 'AVAILABLE', '/30/product30_BLACK', NOW(), NOW()),
+-- productID 30, GREY, random sizes: 36, 38, 44
+('GREY', 'SIZE_36', 50, 30, 'AVAILABLE', '/30/product30_GREY', NOW(), NOW()),
+('GREY', 'SIZE_38', 50, 30, 'AVAILABLE', '/30/product30_GREY', NOW(), NOW()),
+('GREY', 'SIZE_44', 50, 30, 'AVAILABLE', '/30/product30_GREY', NOW(), NOW()),
+-- productID 30, ORANGE, random sizes: 39, 41, 43
+('ORANGE', 'SIZE_39', 50, 30, 'AVAILABLE', '/30/product30_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_41', 50, 30, 'AVAILABLE', '/30/product30_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_43', 50, 30, 'AVAILABLE', '/30/product30_ORANGE', NOW(), NOW()),
+-- productID 31, WHITE, random sizes: 36, 40
+('WHITE', 'SIZE_36', 50, 31, 'AVAILABLE', '/31/product31_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 31, 'AVAILABLE', '/31/product31_WHITE', NOW(), NOW()),
+-- productID 31, BROWN, random sizes: 37, 39, 41
+('BROWN', 'SIZE_37', 50, 31, 'AVAILABLE', '/31/product31_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_39', 50, 31, 'AVAILABLE', '/31/product31_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_41', 50, 31, 'AVAILABLE', '/31/product31_BROWN', NOW(), NOW()),
+-- productID 31, GREY, random sizes: 36, 38, 44
+('BLUE', 'SIZE_36', 50, 31, 'AVAILABLE', '/31/product31_GREY', NOW(), NOW()),
+('BLUE', 'SIZE_38', 50, 31, 'AVAILABLE', '/31/product31_GREY', NOW(), NOW()),
+('BLUE', 'SIZE_44', 50, 31, 'AVAILABLE', '/31/product31_GREY', NOW(), NOW()),
+-- productID 31, PURPLE, random sizes: 39, 41
+('PURPLE', 'SIZE_39', 50, 31, 'AVAILABLE', '/31/product31_PURPLE', NOW(), NOW()),
+('PURPLE', 'SIZE_41', 50, 31, 'AVAILABLE', '/31/product31_PURPLE', NOW(), NOW()),
+-- productID 32, WHITE, random sizes: 36, 40, 42
+('WHITE', 'SIZE_36', 50, 32, 'AVAILABLE', '/32/product32_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_40', 50, 32, 'AVAILABLE', '/32/product32_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_42', 50, 32, 'AVAILABLE', '/32/product32_WHITE', NOW(), NOW()),
+-- productID 32, RED, random sizes: 37, 39
+('RED', 'SIZE_37', 50, 32, 'AVAILABLE', '/32/product32_RED', NOW(), NOW()),
+('RED', 'SIZE_39', 50, 32, 'AVAILABLE', '/32/product32_RED', NOW(), NOW()),
+-- productID 32, GREEN, random sizes: 36, 38, 44
+('GREEN', 'SIZE_36', 50, 32, 'AVAILABLE', '/32/product32_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_38', 50, 32, 'AVAILABLE', '/32/product32_GREEN', NOW(), NOW()),
+('GREEN', 'SIZE_44', 50, 32, 'AVAILABLE', '/32/product32_GREEN', NOW(), NOW()),
+-- productID 32, BLUE, random sizes: 39, 41, 43
+('BLUE', 'SIZE_39', 50, 32, 'AVAILABLE', '/32/product32_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_41', 50, 32, 'AVAILABLE', '/32/product32_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_43', 50, 32, 'AVAILABLE', '/32/product32_BLUE', NOW(), NOW()),
+-- productID 33, BLACK, random sizes: 36, 40
+('BLACK', 'SIZE_36', 50, 33, 'AVAILABLE', '/33/product33_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 33, 'AVAILABLE', '/33/product33_BLACK', NOW(), NOW()),
+-- productID 33, BLUE, random sizes: 37, 39, 41
+('BLUE', 'SIZE_37', 50, 33, 'AVAILABLE', '/33/product33_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 33, 'AVAILABLE', '/33/product33_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_41', 50, 33, 'AVAILABLE', '/33/product33_BLUE', NOW(), NOW()),
+-- productID 34, BROWN, random sizes: 36, 38, 44
+('BROWN', 'SIZE_36', 50, 34, 'AVAILABLE', '/34/product34_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_38', 50, 34, 'AVAILABLE', '/34/product34_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_44', 50, 34, 'AVAILABLE', '/34/product34_BROWN', NOW(), NOW()),
+-- productID 34, BLACK, random sizes: 39, 41
+('BLACK', 'SIZE_39', 50, 34, 'AVAILABLE', '/34/product34_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 34, 'AVAILABLE', '/34/product34_BLACK', NOW(), NOW()),
+-- productID 34, BLUE, random sizes: 36, 40, 42
+('BLUE', 'SIZE_36', 50, 34, 'AVAILABLE', '/34/product34_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_40', 50, 34, 'AVAILABLE', '/34/product34_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_42', 50, 34, 'AVAILABLE', '/34/product34_BLUE', NOW(), NOW()),
+-- productID 35, WHITE, random sizes: 36, 38
+('WHITE', 'SIZE_36', 50, 35, 'AVAILABLE', '/35/product35_WHITE', NOW(), NOW()),
+('WHITE', 'SIZE_38', 50, 35, 'AVAILABLE', '/35/product35_WHITE', NOW(), NOW()),
+-- productID 35, BLUE, random sizes: 37, 39, 41
+('BLUE', 'SIZE_37', 50, 35, 'AVAILABLE', '/35/product35_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 35, 'AVAILABLE', '/35/product35_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_41', 50, 35, 'AVAILABLE', '/35/product35_BLUE', NOW(), NOW()),
+-- productID 36, BLACK, random sizes: 36, 40, 42
+('BLACK', 'SIZE_36', 50, 36, 'AVAILABLE', '/36/product36_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 36, 'AVAILABLE', '/36/product36_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_42', 50, 36, 'AVAILABLE', '/36/product36_BLACK', NOW(), NOW()),
+-- productID 36, BLUE, random sizes: 37, 39
+('BLUE', 'SIZE_37', 50, 36, 'AVAILABLE', '/36/product36_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 36, 'AVAILABLE', '/36/product36_BLUE', NOW(), NOW()),
+-- productID 37, BROWN, random sizes: 36, 38, 44
+('BROWN', 'SIZE_36', 50, 37, 'AVAILABLE', '/37/product37_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_38', 50, 37, 'AVAILABLE', '/37/product37_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_44', 50, 37, 'AVAILABLE', '/37/product37_BROWN', NOW(), NOW()),
+-- productID 37, BLACK, random sizes: 39, 41, 43
+('BLACK', 'SIZE_39', 50, 37, 'AVAILABLE', '/37/product37_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 37, 'AVAILABLE', '/37/product37_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_43', 50, 37, 'AVAILABLE', '/37/product37_BLACK', NOW(), NOW()),
+-- productID 38, BLACK, random sizes: 36, 40
+('BLACK', 'SIZE_36', 50, 38, 'AVAILABLE', '/38/product38_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_40', 50, 38, 'AVAILABLE', '/38/product38_BLACK', NOW(), NOW()),
+-- productID 38, BLUE, random sizes: 37, 39, 41
+('BLUE', 'SIZE_37', 50, 38, 'AVAILABLE', '/38/product38_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 38, 'AVAILABLE', '/38/product38_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_41', 50, 38, 'AVAILABLE', '/38/product38_BLUE', NOW(), NOW()),
+-- productID 39, BLACK, random sizes: 36, 38, 44
+('BLACK', 'SIZE_36', 50, 39, 'AVAILABLE', '/39/product39_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_38', 50, 39, 'AVAILABLE', '/39/product39_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_44', 50, 39, 'AVAILABLE', '/39/product39_BLACK', NOW(), NOW()),
+-- productID 39, BLUE, random sizes: 39, 41
+('BLUE', 'SIZE_39', 50, 39, 'AVAILABLE', '/39/product39_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_41', 50, 39, 'AVAILABLE', '/39/product39_BLUE', NOW(), NOW()),
+-- productID 40, ORANGE, random sizes: 36, 40, 42
+('ORANGE', 'SIZE_36', 50, 40, 'AVAILABLE', '/40/product40_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_40', 50, 40, 'AVAILABLE', '/40/product40_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_42', 50, 40, 'AVAILABLE', '/40/product40_ORANGE', NOW(), NOW()),
+-- productID 40, BLUE, random sizes: 37, 39
+('BLUE', 'SIZE_37', 50, 40, 'AVAILABLE', '/40/product40_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 40, 'AVAILABLE', '/40/product40_BLUE', NOW(), NOW()),
+-- productID 41, BROWN, random sizes: 36, 38, 44
+('BROWN', 'SIZE_36', 50, 41, 'AVAILABLE', '/41/product41_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_38', 50, 41, 'AVAILABLE', '/41/product41_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_44', 50, 41, 'AVAILABLE', '/41/product41_BROWN', NOW(), NOW()),
+-- productID 41, BLACK, random sizes: 39, 41, 43
+('BLACK', 'SIZE_39', 50, 41, 'AVAILABLE', '/41/product41_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 41, 'AVAILABLE', '/41/product41_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_43', 50, 41, 'AVAILABLE', '/41/product41_BLACK', NOW(), NOW()),
+-- productID 41, GREY, random sizes: 36, 40
+('GREY', 'SIZE_36', 50, 41, 'AVAILABLE', '/41/product41_GREY', NOW(), NOW()),
+('GREY', 'SIZE_40', 50, 41, 'AVAILABLE', '/41/product41_GREY', NOW(), NOW()),
+-- productID 41, BLUE, random sizes: 37, 39, 41
+('BLUE', 'SIZE_37', 50, 41, 'AVAILABLE', '/41/product41_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_39', 50, 41, 'AVAILABLE', '/41/product41_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_41', 50, 41, 'AVAILABLE', '/41/product41_BLUE', NOW(), NOW()),
+-- productID 42, YELLOW, random sizes: 36, 38, 44
+('YELLOW', 'SIZE_36', 50, 42, 'AVAILABLE', '/42/product42_YELLOW', NOW(), NOW()),
+('YELLOW', 'SIZE_38', 50, 42, 'AVAILABLE', '/42/product42_YELLOW', NOW(), NOW()),
+('YELLOW', 'SIZE_44', 50, 42, 'AVAILABLE', '/42/product42_YELLOW', NOW(), NOW()),
+-- productID 42, BLACK, random sizes: 39, 41
+('BLACK', 'SIZE_39', 50, 42, 'AVAILABLE', '/42/product42_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 42, 'AVAILABLE', '/42/product42_BLACK', NOW(), NOW()),
+-- productID 42, BLUE, random sizes: 36, 40, 42
+('BLUE', 'SIZE_36', 50, 42, 'AVAILABLE', '/42/product42_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_40', 50, 42, 'AVAILABLE', '/42/product42_BLUE', NOW(), NOW()),
+('BLUE', 'SIZE_42', 50, 42, 'AVAILABLE', '/42/product42_BLUE', NOW(), NOW()),
+-- productID 43, GREY, random sizes: 36, 38
+('GREY', 'SIZE_36', 50, 43, 'AVAILABLE', '/43/product43_GREY', NOW(), NOW()),
+('GREY', 'SIZE_38', 50, 43, 'AVAILABLE', '/43/product43_GREY', NOW(), NOW()),
+-- productID 44, RED, random sizes: 36, 40, 42
+('RED', 'SIZE_36', 50, 44, 'AVAILABLE', '/44/product44_RED', NOW(), NOW()),
+('RED', 'SIZE_40', 50, 44, 'AVAILABLE', '/44/product44_RED', NOW(), NOW()),
+('RED', 'SIZE_42', 50, 44, 'AVAILABLE', '/44/product44_RED', NOW(), NOW()),
+-- productID 44, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 44, 'AVAILABLE', '/44/product44_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 44, 'AVAILABLE', '/44/product44_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 44, 'AVAILABLE', '/44/product44_BLACK', NOW(), NOW()),
+-- productID 44, ORANGE, random sizes: 36, 38, 44
+('ORANGE', 'SIZE_36', 50, 44, 'AVAILABLE', '/44/product44_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_38', 50, 44, 'AVAILABLE', '/44/product44_ORANGE', NOW(), NOW()),
+('ORANGE', 'SIZE_44', 50, 44, 'AVAILABLE', '/44/product44_ORANGE', NOW(), NOW()),
+-- productID 45, BROWN, random sizes: 36, 40
+('BROWN', 'SIZE_36', 50, 45, 'AVAILABLE', '/45/product45_BROWN', NOW(), NOW()),
+('BROWN', 'SIZE_40', 50, 45, 'AVAILABLE', '/45/product45_BROWN', NOW(), NOW()),
+-- productID 45, BLACK, random sizes: 37, 39, 41
+('BLACK', 'SIZE_37', 50, 45, 'AVAILABLE', '/45/product45_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_39', 50, 45, 'AVAILABLE', '/45/product45_BLACK', NOW(), NOW()),
+('BLACK', 'SIZE_41', 50, 45, 'AVAILABLE', '/45/product45_BLACK', NOW(), NOW());
+-- productID 46, RED, random sizes: 36, 38, 44
+-- ('RED', 'SIZE_36', 50, 46, 'AVAILABLE', '/46/product46_RED', NOW(), NOW()),
+-- ('RED', 'SIZE_38', 50, 46, 'AVAILABLE', '/46/product46_RED', NOW(), NOW()),
+-- ('RED', 'SIZE_44', 50, 46, 'AVAILABLE', '/46/product46_RED', NOW(), NOW()),
+-- productID 46, BLACK, random sizes: 39, 41
+-- ('BLACK', 'SIZE_39', 50, 46, 'AVAILABLE', '/46/product46_BLACK', NOW(), NOW()),
+-- ('BLACK', 'SIZE_41', 50, 46, 'AVAILABLE', '/46/product46_BLACK', NOW(), NOW()),
+-- productID 46, GREY, random sizes: 36, 40, 42
+-- ('GREY', 'SIZE_36', 50, 46, 'AVAILABLE', '/46/product46_GREY', NOW(), NOW()),
+-- ('GREY', 'SIZE_40', 50, 46, 'AVAILABLE', '/46/product46_GREY', NOW(), NOW()),
+-- ('GREY', 'SIZE_42', 50, 46, 'AVAILABLE', '/46/product46_GREY', NOW(), NOW()),
+-- productID 47, BLACK, random sizes: 36, 38
+-- ('BLACK', 'SIZE_36', 50, 47, 'AVAILABLE', '/47/product47_BLACK', NOW(), NOW()),
+-- ('BLACK', 'SIZE_38', 50, 47, 'AVAILABLE', '/47/product47_BLACK', NOW(), NOW()),
+-- productID 47, GREY, random sizes: 37, 39, 41
+-- ('GREY', 'SIZE_37', 50, 47, 'AVAILABLE', '/47/product47_GREY', NOW(), NOW()),
+-- ('GREY', 'SIZE_39', 50, 47, 'AVAILABLE', '/47/product47_GREY', NOW(), NOW()),
+-- ('GREY', 'SIZE_41', 50, 47, 'AVAILABLE', '/47/product47_GREY', NOW(), NOW());
 
-
--- Thêm dữ liệu cho bảng Product_ImageURL
-INSERT INTO Product_ImageURL (productID, imageURL)
-VALUES
-(1, 'product1_1.png'), (1, 'product1_2.png'), (1, 'product1_3.png'), (1, 'product1_4.png'), (1, 'product1_5.png'),
-(2, 'product2_1.png'), (2, 'product2_2.png'), (2, 'product2_3.png'), (2, 'product2_4.png'), (2, 'product2_5.png'),
-(3, 'product3_1.png'), (3, 'product3_2.png'), (3, 'product3_3.png'), (3, 'product3_4.png'), (3, 'product3_5.png'),
-(4, 'product4_1.png'), (4, 'product4_2.png'), (4, 'product4_3.png'), (4, 'product4_4.png'), (4, 'product4_5.png'),
-(5, 'product5_1.png'), (5, 'product5_2.png'), (5, 'product5_3.png'), (5, 'product5_4.png'), (5, 'product5_5.png'),
-(6, 'product6_1.png'), (6, 'product6_2.png'), (6, 'product6_3.png'), (6, 'product6_4.png'), (6, 'product6_5.png'),
-(7, 'product7_1.png'), (7, 'product7_2.png'), (7, 'product7_3.png'), (7, 'product7_4.png'), (7, 'product7_5.png'),
-(8, 'product8_1.png'), (8, 'product8_2.png'), (8, 'product8_3.png'), (8, 'product8_4.png'), (8, 'product8_5.png'),
-(9, 'product9_1.png'), (9, 'product9_2.png'), (9, 'product9_3.png'), (9, 'product9_4.png'), (9, 'product9_5.png'),
-(10, 'product10_1.png'), (10, 'product10_2.png'), (10, 'product10_3.png'), (10, 'product10_4.png'), (10, 'product10_5.png'),
-(11, 'product11_1.png'), (11, 'product11_2.png'), (11, 'product11_3.png'), (11, 'product11_4.png'), (11, 'product11_5.png'),
-(12, 'product12_1.png'), (12, 'product12_2.png'), (12, 'product12_3.png'), (12, 'product12_4.png'), (12, 'product12_5.png'),
-(13, 'product13_1.png'), (13, 'product13_2.png'), (13, 'product13_3.png'), (13, 'product13_4.png'), (13, 'product13_5.png'),
-(14, 'product14_1.png'), (14, 'product14_2.png'), (14, 'product14_3.png'), (14, 'product14_4.png'), (14, 'product14_5.png'),
-(15, 'product15_1.png'), (15, 'product15_2.png'), (15, 'product15_3.png'), (15, 'product15_4.png'), (15, 'product15_5.png'),
-(16, 'product16_1.png'), (16, 'product16_2.png'), (16, 'product16_3.png'), (16, 'product16_4.png'), (16, 'product16_5.png'),
-(17, 'product17_1.png'), (17, 'product17_2.png'), (17, 'product17_3.png'), (17, 'product17_4.png'), (17, 'product17_5.png'),
-(18, 'product18_1.png'), (18, 'product18_2.png'), (18, 'product18_3.png'), (18, 'product18_4.png'), (18, 'product18_5.png'),
-(19, 'product19_1.png'), (19, 'product19_2.png'), (19, 'product19_3.png'), (19, 'product19_4.png'), (19, 'product19_5.png'),
-(20, 'product20_1.png'), (20, 'product20_2.png'), (20, 'product20_3.png'), (20, 'product20_4.png'), (20, 'product20_5.png'),
-(21, 'product21_1.png'), (21, 'product21_2.png'), (21, 'product21_3.png'), (21, 'product21_4.png'), (21, 'product21_5.png'),
-(22, 'product22_1.png'), (22, 'product22_2.png'), (22, 'product22_3.png'), (22, 'product22_4.png'), (22, 'product22_5.png'),
-(23, 'product23_1.png'), (23, 'product23_2.png'), (23, 'product23_3.png'), (23, 'product23_4.png'), (23, 'product23_5.png'),
-(24, 'product24_1.png'), (24, 'product24_2.png'), (24, 'product24_3.png'), (24, 'product24_4.png'), (24, 'product24_5.png'),
-(25, 'product25_1.png'), (25, 'product25_2.png'), (25, 'product25_3.png'), (25, 'product25_4.png'), (25, 'product25_5.png'),
-(26, 'product26_1.png'), (26, 'product26_2.png'), (26, 'product26_3.png'), (26, 'product26_4.png'), (26, 'product26_5.png'),
-(27, 'product27_1.png'), (27, 'product27_2.png'), (27, 'product27_3.png'), (27, 'product27_4.png'), (27, 'product27_5.png'),
-(28, 'product28_1.png'), (28, 'product28_2.png'), (28, 'product28_3.png'), (28, 'product28_4.png'), (28, 'product28_5.png'),
-(29, 'product29_1.png'), (29, 'product29_2.png'), (29, 'product29_3.png'), (29, 'product29_4.png'), (29, 'product29_5.png'),
-(30, 'product30_1.png'), (30, 'product30_2.png'), (30, 'product30_3.png'), (30, 'product30_4.png'), (30, 'product30_5.png'),
-(31, 'product31_1.png'), (31, 'product31_2.png'), (31, 'product31_3.png'), (31, 'product31_4.png'), (31, 'product31_5.png'),
-(32, 'product32_1.png'), (32, 'product32_2.png'), (32, 'product32_3.png'), (32, 'product32_4.png'), (32, 'product32_5.png'),
-(33, 'product33_1.png'), (33, 'product33_2.png'), (33, 'product33_3.png'), (33, 'product33_4.png'), (33, 'product33_5.png'),
-(34, 'product34_1.png'), (34, 'product34_2.png'), (34, 'product34_3.png'), (34, 'product34_4.png'), (34, 'product34_5.png'),
-(35, 'product35_1.png'), (35, 'product35_2.png'), (35, 'product35_3.png'), (35, 'product35_4.png'), (35, 'product35_5.png'),
-(36, 'product36_1.png'), (36, 'product36_2.png'), (36, 'product36_3.png'), (36, 'product36_4.png'), (36, 'product36_5.png'),
-(37, 'product37_1.png'), (37, 'product37_2.png'), (37, 'product37_3.png'), (37, 'product37_4.png'), (37, 'product37_5.png'),
-(38, 'product38_1.png'), (38, 'product38_2.png'), (38, 'product38_3.png'), (38, 'product38_4.png'), (38, 'product38_5.png'),
-(39, 'product39_1.png'), (39, 'product39_2.png'), (39, 'product39_3.png'), (39, 'product39_4.png'), (39, 'product39_5.png'),
-(40, 'product40_1.png'), (40, 'product40_2.png'), (40, 'product40_3.png'), (40, 'product40_4.png'), (40, 'product40_5.png'),
-(41, 'product41_1.png'), (41, 'product41_2.png'), (41, 'product41_3.png'), (41, 'product41_4.png'), (41, 'product41_5.png'),
-(42, 'product42_1.png'), (42, 'product42_2.png'), (42, 'product42_3.png'), (42, 'product42_4.png'), (42, 'product42_5.png'),
-(43, 'product43_1.png'), (43, 'product43_2.png'), (43, 'product43_3.png'), (43, 'product43_4.png'), (43, 'product43_5.png'),
-(44, 'product44_1.png'), (44, 'product44_2.png'), (44, 'product44_3.png'), (44, 'product44_4.png'), (44, 'product44_5.png'),
-(45, 'product45_1.png'), (45, 'product45_2.png'), (45, 'product45_3.png'), (45, 'product45_4.png'), (45, 'product45_5.png');
 
 -- Thêm dữ liệu cho bảng Voucher
 INSERT INTO Voucher (code, description, discountValue, discountType, minOrderValue, freeShipping, startDate, endDate, status, createdAt, updatedAt)
@@ -438,44 +895,51 @@ VALUES
 (3, 10, 19, NOW(), NOW()),
 (1, 10, 20, NOW(), NOW());
 
--- Thêm dữ liệu cho bảng Orders
-INSERT INTO Orders (orderDate, status, total, feeShip, code, voucherID, shippingAddress, paymentMethod,voucherDiscount, userID, createdAt, updatedAt)
-VALUES
-(NOW(), 'PENDING', 4400000, 30000, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '123 Maple St, City, Country', 'CASH', 0, 4, NOW(), NOW()),
-(NOW(), 'SHIPPED', 3200000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '456 Pine Rd, City, Country', 'CASH', 0, 5, NOW(), NOW()),
-(NOW(), 'DELIVERED', 4050000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '789 Oak Ave, City, Country', 'CASH', 0, 6, NOW(), NOW()),
-(NOW(), 'PENDING', 3500000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '654 Cedar Ln, City, Country', 'VNPAY', 0, 7, NOW(), NOW()),
-(NOW(), 'DELIVERED', 2150000, 0, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, '987 Pine St, City, Country', 'VNPAY', 0, 8, NOW(), NOW());
-
+-- INSERT INTO Orders (
+--     createdAt,
+--     updatedAt,
+--     code,
+--     feeShip,
+--     orderDate,
+--     paymentMethod,
+--     shippingAddress,
+--     status,
+--     total,
+--     voucherDiscount,
+--     userID,
+--     voucherID
+-- ) VALUES
+--     ('2023-10-01 10:00:00', '2023-10-03 15:00:00', 'ORD015', 30000.0, '2023-10-01', 'CASH',  '123 Đường Láng, Hà Nội', 'DELIVERED', 500000.0,    0.0, 1, NULL),
+--     ('2023-10-05 08:00:00', '2023-10-06 14:00:00', 'ORD016', 40000.0, '2023-10-05', 'VNPAY', '456 Nguyễn Huệ, TP.HCM', 'CANCELED',  750000.0, 50000.0, 2, NULL);
 -- Thêm dữ liệu cho bảng Receipt
-INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt)
-VALUES
-(4050000, NOW(), 3, NOW(), NOW()),
-(2150000, NOW(), 5, NOW(), NOW());
+-- INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt)
+-- VALUES
+-- (4050000, NOW(), 3, NOW(), NOW()),
+-- (2150000, NOW(), 5, NOW(), NOW());
 
 -- Thêm dữ liệu cho bảng OrderDetail
-INSERT INTO OrderDetail (
-    orderID, 
-    productDetailID, 
-    quantity, 
-    price, 
-    createdAt, 
-    updatedAt, 
-    promotionID, 
-    giftProductDetailID, 
-    giftedQuantity, 
-    promoDiscount
-) VALUES
-(1, 3, 2, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(1, 5, 1, 1400000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(2, 2, 2, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(2, 4, 1, 800000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(3, 6, 1, 1800000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(3, 7, 3, 750000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(4, 1, 2, 1000000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(4, 3, 1, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(5, 2, 1, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
-(5, 6, 1, 950000, NOW(), NOW(), NULL, NULL, 0, NULL);
+-- INSERT INTO OrderDetail (
+--     orderID, 
+--     productDetailID, 
+--     quantity, 
+--     price, 
+--     createdAt, 
+--     updatedAt, 
+--     promotionID, 
+--     giftProductDetailID, 
+--     giftedQuantity, 
+--     promoDiscount
+-- ) VALUES
+-- (1, 3, 2, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (1, 5, 1, 1400000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (2, 2, 2, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (2, 4, 1, 800000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (3, 6, 1, 1800000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (3, 7, 3, 750000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (4, 1, 2, 1000000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (4, 3, 1, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (5, 2, 1, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
+-- (5, 6, 1, 950000, NOW(), NOW(), NULL, NULL, 0, NULL);
 
 
 -- Thêm dữ liệu cho bảng Payment
@@ -494,3 +958,25 @@ VALUES
 (3, 3, 6, 3, 'Rất tiếc, sản phẩm không như mong đợi.', NOW(), NOW()),
 (4, 1, 8, 5, 'Rất hài lòng với sản phẩm!', NOW(), NOW()),
 (5, 1, 10, 2, 'Màu sắc không giống như hình.', NOW(), NOW());
+
+
+-- ==============================
+-- Chèn dữ liệu OrderStatusHistory
+-- ==============================
+-- INSERT INTO OrderStatusHistory (
+--     orderID,
+--     status,
+--     cancelReason,
+--     trackingNumber,
+--     deliveredAt,
+--     createdAt,
+--     updatedAt
+-- ) VALUES
+--     (15, 'PENDING',   NULL,            NULL,                NULL,                '2023-10-01 10:00:00', '2023-10-01 10:00:00'),
+--     (15, 'CONFIRMED', NULL,            NULL,                NULL,                '2023-10-01 12:00:00', '2023-10-01 12:00:00'),
+--     (15, 'SHIPPED',   NULL,            'VN123456789',       NULL,                '2023-10-02 09:00:00', '2023-10-02 09:00:00'),
+--     (15, 'DELIVERED', NULL,            NULL,                '2023-10-03 15:00:00','2023-10-03 15:00:00','2023-10-03 15:00:00'),
+--     (16, 'PENDING',   NULL,            NULL,                NULL,                '2023-10-05 08:00:00', '2023-10-05 08:00:00'),
+--     (16, 'CONFIRMED', NULL,            NULL,                NULL,                '2023-10-05 10:00:00', '2023-10-05 10:00:00'),
+--     (16, 'CANCELED',  'Khách hàng đổi ý', NULL,             NULL,                '2023-10-06 14:00:00', '2023-10-06 14:00:00');
+
