@@ -1,20 +1,19 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.ProductDTO;
+import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.dto.response.ApiStatusResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.ProductSearchResponse;
+import com.shoestore.Server.dto.response.SearchProductResponse;
 import com.shoestore.Server.dto.response.RestResponse;
-import com.shoestore.Server.entities.Product;
-import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.service.ProductService;
+import com.shoestore.Server.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -25,8 +24,6 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-
-
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable int id) {
         ProductDTO productDTO = productService.getProductById(id);
@@ -51,7 +48,7 @@ public class ProductController {
                     .body(new RestResponse<>(HttpStatus.NOT_FOUND.value(), "Product not found", null, null));
         }
 
-        List<ProductSearchResponse> relatedProducts = productService.getRelatedProducts(id, product.getCategoryID(), product.getBrandID());
+        List<SearchProductResponse> relatedProducts = productService.getRelatedProducts(id, product.getCategoryID(), product.getBrandID());
         return ResponseEntity.ok(relatedProducts);
     }
 
@@ -133,10 +130,18 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<PaginationResponse<ProductSearchResponse>> getAllProducts(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "12") int size) {
-        PaginationResponse<ProductSearchResponse> productPage = productService.getAllProduct(page, size);
+    public ResponseEntity<PaginationResponse<SearchProductResponse>> getAllProducts(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int size) {
+        PaginationResponse<SearchProductResponse> productPage = productService.getAllProducts(page, size);
         return ResponseEntity.ok(productPage);
+    }
+    @GetMapping("/get-best-seller")
+    public ResponseEntity<List<FeaturedProductResponse>> getTopBestSeller() {
+        return ResponseEntity.ok(productService.getBestSellingProduct());
+    }
+    @GetMapping("/get-new-arrivals")
+    public ResponseEntity<List<FeaturedProductResponse>> getNewArrivals() {
+        return ResponseEntity.ok(productService.getNewArrivals());
     }
 }

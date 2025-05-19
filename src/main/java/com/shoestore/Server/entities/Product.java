@@ -1,48 +1,43 @@
 package com.shoestore.Server.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.shoestore.Server.enums.ProductStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Table
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productID")
     private int productID;
+
     @Column(name = "productName", nullable = false)
-    @NotBlank(message = "Tên sản phẩm không được để trống")
-    @Size(max = 50, message = "Tên sản phẩm không được vượt quá 50 ký tự")
-    @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Tên sản phẩm chỉ được chứa chữ, số và khoảng trắng")
+    @NotBlank(message = "Product name must not be empty")
+    @Size(max = 50, message = "Product name must not exceed 50 characters")
+    @Pattern(regexp = "^[a-zA-Z0-9 ]*$", message = "Product name may only contain letters, numbers, and spaces")
     private String productName;
-    @ElementCollection
-    @CollectionTable(name = "Product_ImageURL", joinColumns = @JoinColumn(name = "productID"))
-    @Column(name = "imageURL")
-    private List<String> imageURL;
+
     @Column(name = "description", nullable = false, length = 100)
-    @NotBlank(message = "Mô tả không được để trống")
-    @Size(max = 100, message = "Mô tả không được vượt quá 100 ký tự")
+    @NotBlank(message = "Description must not be empty")
+    @Size(max = 100, message = "Description must not exceed 100 characters")
     private String description;
 
     @Column(name = "price", nullable = false)
-    @DecimalMin(value = "0", inclusive = false, message = "Giá phải lớn hơn 0")
+    @DecimalMin(value = "0", inclusive = false, message = "Price must be greater than 0")
     private double price;
-    private String status;
+
+    @Enumerated (EnumType.STRING)
+    private ProductStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brandID")
@@ -64,14 +59,9 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "promotionID", nullable = true)
     @JsonIgnore
     private Promotion promotion;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Review> reviews;
-    public double getAverageRating() {
-        if (reviews == null || reviews.isEmpty()) {
-            return 0;
-        }
-        return reviews.stream().mapToInt(Review::getRating).average().orElse(0);
-    }
 
 }

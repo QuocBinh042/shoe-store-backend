@@ -1,5 +1,6 @@
 package com.shoestore.Server.dto.request;
 
+import com.shoestore.Server.enums.ProductStatus;
 import lombok.Data;
 
 import java.util.List;
@@ -10,11 +11,11 @@ public class ProductDTO {
     private List<String> imageURL;
     private String description;
     private double price;
-    private String status;
+    private ProductStatus status;
     private int brandID;
     private int categoryID;
     private int supplierID;
-    private List<ProductDetailDTO> productDetails;
+    private List<ProductDetailRequest> productDetails;
 
 }
 

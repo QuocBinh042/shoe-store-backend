@@ -2,12 +2,14 @@ package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.ProductDTO;
 
+import com.shoestore.Server.dto.response.FeaturedProductResponse;
 import com.shoestore.Server.dto.response.PaginationResponse;
-import com.shoestore.Server.dto.response.ProductSearchResponse;
+import com.shoestore.Server.dto.response.SearchProductResponse;
 
 import com.shoestore.Server.entities.Product;
 
 import com.shoestore.Server.mapper.ProductMapper;
+import com.shoestore.Server.repositories.ProductDetailRepository;
 import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.ReviewRepository;
 import com.shoestore.Server.service.PaginationService;
@@ -24,6 +26,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,20 +41,22 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewRepository reviewRepository;
     private final PromotionService promotionService;
 
-    private List<ProductSearchResponse> enhanceProductSearchResponses(List<ProductSearchResponse> products) {
-        for (ProductSearchResponse p : products) {
+    public List<SearchProductResponse> enhanceProductSearchResponses(List<SearchProductResponse> products) {
+        for (SearchProductResponse p : products) {
             p.setRating(getAverageRating(p.getProductID()));
             p.setDiscountPrice(promotionService.getDiscountedPrice(p.getProductID()));
+            p.setPromotion(promotionService.getPromotionTypeByProductId(p.getProductID()));
+            p.setImage(p.getProductDetails().get(0).getImage());
         }
         return products;
     }
 
     @Override
-    public PaginationResponse<ProductSearchResponse> getAllProduct(int page, int pageSize) {
+    public PaginationResponse<SearchProductResponse> getAllProducts(int page, int pageSize) {
         List<Product> products = productRepository.findAll();
 
         PaginationResponse<Product> paginatedProducts = paginationService.paginate(products, page, pageSize);
-        List<ProductSearchResponse> productDTOs = productMapper.toProductSearchResponse(paginatedProducts.getItems());
+        List<SearchProductResponse> productDTOs = productMapper.toListProductSearchResponse(paginatedProducts.getItems());
 
         return new PaginationResponse<>(
                 enhanceProductSearchResponses(productDTOs),
@@ -62,13 +68,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PaginationResponse<ProductSearchResponse> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
+    public PaginationResponse<SearchProductResponse> getFilteredProducts(List<Integer> categoryIds, List<Integer> brandIds, List<String> colors, List<String> sizes,
                                                                          String keyword, Double minPrice, Double maxPrice, String sortBy, int page, int pageSize) {
         Specification<Product> spec = buildProductSpecification(categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice);
         Pageable pageable = PageRequest.of(page - 1, pageSize, getSortOrder(sortBy));
         Page<Product> pagedProducts = productRepository.findAll(spec, pageable);
 
-        List<ProductSearchResponse> productDTOs = productMapper.toProductSearchResponse(pagedProducts.getContent());
+        List<SearchProductResponse> productDTOs = productMapper.toListProductSearchResponse(pagedProducts.getContent());
         return new PaginationResponse<>(
                 enhanceProductSearchResponses(productDTOs),
                 pagedProducts.getTotalElements(),
@@ -132,7 +138,8 @@ public class ProductServiceImpl implements ProductService {
                                                              String keyword, Double minPrice, Double maxPrice) {
         Specification<Product> spec = Specification.where(null);
 
-        if (categoryIds != null && !categoryIds.isEmpty()) spec = spec.and(ProductSpecification.hasCategories(categoryIds));
+        if (categoryIds != null && !categoryIds.isEmpty())
+            spec = spec.and(ProductSpecification.hasCategories(categoryIds));
         if (brandIds != null && !brandIds.isEmpty()) spec = spec.and(ProductSpecification.hasBrands(brandIds));
         if (colors != null && !colors.isEmpty()) spec = spec.and(ProductSpecification.hasColors(colors));
         if (sizes != null && !sizes.isEmpty()) spec = spec.and(ProductSpecification.hasSizes(sizes));
@@ -173,22 +180,33 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDTO createProduct(ProductDTO productDTO) {
-        return productMapper.toDto(productRepository.save(productMapper.toEntity(productDTO)));
+        Product product = productMapper.toEntity(productDTO);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDto(savedProduct);
     }
 
     @Override
     @Transactional
     public ProductDTO updateProduct(int id, ProductDTO productDTO) {
-        return productRepository.findById(id).map(product -> {
+        Optional<Product> existingProduct = productRepository.findById(id);
+
+        if (existingProduct.isPresent()) {
+            Product product = existingProduct.get();
+
             product.setProductName(productDTO.getProductName());
             product.setDescription(productDTO.getDescription());
             product.setPrice(productDTO.getPrice());
             product.setStatus(productDTO.getStatus());
-            return productMapper.toDto(productRepository.save(product));
-        }).orElse(null);
+//            product.getImageURL().clear();
+//            product.getImageURL().addAll(productDTO.getImageURL());
+            Product updatedProduct = productRepository.save(product);
+            return productMapper.toDto(updatedProduct);
+        }
+
+        return null;
     }
 
-    
+
     @Override
     @Transactional
     public boolean deleteProduct(int id) {
@@ -200,7 +218,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductSearchResponse> getRelatedProducts(int productId, int categoryId, int brandId) {
+    public List<SearchProductResponse> getRelatedProducts(int productId, int categoryId, int brandId) {
         List<Product> relatedProducts = productRepository.findTop10ByCategory_CategoryIDAndProductIDNot(categoryId, productId);
 
         if (relatedProducts.size() < 10) {
@@ -210,7 +228,42 @@ public class ProductServiceImpl implements ProductService {
                     .toList();
             relatedProducts.addAll(brandProducts);
         }
-        List<ProductSearchResponse> productSearchResponse=productMapper.toProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
+        List<SearchProductResponse> productSearchResponse = productMapper.toListProductSearchResponse(relatedProducts.stream().limit(10).collect(Collectors.toList()));
         return enhanceProductSearchResponses(productSearchResponse);
     }
+
+    @Override
+    public List<FeaturedProductResponse> getBestSellingProduct() {
+        List<Object[]> rawResults = productRepository.findTopSellingProducts();
+        return rawResults.stream()
+                .map(row -> new FeaturedProductResponse(
+                        (int) row[0],
+                        (String) row[1],
+                        (String) row[2],
+                        (double) row[3],
+                        (long) row[4],
+                        (long) row[5],
+                        row[6] != null ? ((Timestamp) row[6]).toLocalDateTime() : null,
+                        (String) row[7]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeaturedProductResponse> getNewArrivals() {
+        List<Object[]> rawResults = productRepository.findNewArrivals();
+        return rawResults.stream()
+                .map(row -> new FeaturedProductResponse(
+                        (int) row[0],
+                        (String) row[1],
+                        (String) row[2],
+                        (double) row[3],
+                        (long) row[4],
+                        (long) row[5],
+                        row[6] != null ? ((Timestamp) row[6]).toLocalDateTime() : null,
+                        (String) row[7]
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

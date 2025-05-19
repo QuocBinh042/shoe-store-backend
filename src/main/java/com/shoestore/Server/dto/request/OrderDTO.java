@@ -1,5 +1,6 @@
 package com.shoestore.Server.dto.request;
 
+import com.shoestore.Server.enums.PaymentMethod;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -26,18 +27,16 @@ public class OrderDTO {
     @NotBlank(message = "Order code cannot be blank")
     private String code;
 
-    private VoucherDTO voucher;
-
     @NotBlank(message = "Shipping address cannot be blank")
     private String shippingAddress;
 
-    @NotBlank(message = "Payment method cannot be blank")
-    private String typePayment;
+    @NotNull(message = "Payment method cannot be null")
+    private PaymentMethod paymentMethod;
 
     @NotNull(message = "Discount cannot be null")
     @PositiveOrZero(message = "Discount cannot be negative")
-    private double discount;
+    private double voucherDiscount;
 
-    @NotNull(message = "User cannot be null")
+    private VoucherDTO voucher;
     private UserDTO user;
 }

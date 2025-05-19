@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shoestore.Server.enums.OrderStatus;
 import com.shoestore.Server.enums.PaymentMethod;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,8 +14,9 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name ="Orders")
-public class Order extends BaseEntity{
+@Table(name = "Orders")
+@ToString
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
@@ -30,7 +28,7 @@ public class Order extends BaseEntity{
     private double feeShip;
     private String code;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "voucherID",nullable = true)
+    @JoinColumn(name = "voucherID", nullable = true)
     private Voucher voucher;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Column(nullable = true)
@@ -43,12 +41,13 @@ public class Order extends BaseEntity{
     private String shippingAddress;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-    private double discount;
+    private double voucherDiscount;
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
-    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonIgnore
     private Receipt receipt;
-
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderStatusHistory> statusHistory;
 }

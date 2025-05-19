@@ -2,6 +2,7 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.request.PaymentDTO;
+import com.shoestore.Server.dto.response.PaymentResponse;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,9 +35,8 @@ public class PaymentController {
     }
 
     @GetMapping("/by-order-id/{order-id}")
-    public ResponseEntity<PaymentDTO> getPaymentByOrderId(@PathVariable("order-id") int id) {
-        PaymentDTO paymentDTO = paymentService.getPaymentByOrderId(id);
-        return paymentDTO != null ? ResponseEntity.ok(paymentDTO) : ResponseEntity.notFound().build();
+    public ResponseEntity<PaymentResponse> getPaymentByOrderId(@PathVariable("order-id") int id) {
+        return ResponseEntity.ok(paymentService.getPaymentByOrderId(id));
     }
 
     @GetMapping("/get-all")
