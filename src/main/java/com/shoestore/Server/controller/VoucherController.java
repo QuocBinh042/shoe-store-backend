@@ -34,6 +34,18 @@ public class VoucherController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteVoucher(@PathVariable int id) {
         voucherService.deleteVoucher(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build(); 
+    }
+
+    @PostMapping("/create-batch")
+    public ResponseEntity<List<VoucherDTO>> createVouchers(@RequestBody List<VoucherDTO> voucherList) {
+        List<VoucherDTO> created = voucherService.createVouchers(voucherList);
+        return ResponseEntity.ok(created);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<VoucherDTO>> getAllVouchers() {
+        List<VoucherDTO> vouchers = voucherService.getAllVouchers();
+        return ResponseEntity.ok(vouchers);
     }
 }

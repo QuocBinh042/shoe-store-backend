@@ -12,4 +12,6 @@ public interface VoucherService{
     void deleteVoucher(int voucherID);
     List<VoucherDTO> getAllVouchers();
     List<VoucherDTO> getEligibleVouchers(BigDecimal orderValue);
+    List<VoucherDTO> createVouchers(List<VoucherDTO> voucherDTOList);
+
 }

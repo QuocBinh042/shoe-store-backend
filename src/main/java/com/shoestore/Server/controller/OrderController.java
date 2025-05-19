@@ -2,9 +2,12 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
+import com.shoestore.Server.dto.request.UpdateOrderDetailRequest;
 import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
 import com.shoestore.Server.dto.response.*;
+import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.service.EmailService;
+import com.shoestore.Server.service.OrderDetailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.utils.AppConstants;
 import jakarta.validation.Valid;
@@ -26,6 +29,8 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final EmailService emailService;
+    private final OrderDetailService orderDetailService;
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('CREATE_ORDER')")
     public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO){
@@ -156,6 +161,14 @@ public class OrderController {
         return ResponseEntity.ok(count);
     }
 
+    @GetMapping("/day")
+    public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByDay(
+            @RequestParam(value = "page", defaultValue = AppConstants.PAGE_NUMBER) int page,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        PaginationResponse<OrderDTO> response = orderService.getOrdersByDay(page, pageSize);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/month")
     public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByMonth(
             @RequestParam(value = "page", defaultValue = AppConstants.PAGE_NUMBER) int page,
@@ -228,4 +241,6 @@ public class OrderController {
     public ResponseEntity<OrderStatusHistoryResponse> addOrderStatusHistory(@RequestBody OrderHistoryStatusDTO request) {
         return ResponseEntity.ok(orderService.create(request));
     }
+
+
 }

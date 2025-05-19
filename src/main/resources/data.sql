@@ -44,9 +44,9 @@ AND p.name IN ('CREATE_ORDER', 'VIEW_ORDER', 'WRITE_REVIEW', 'VIEW_PRODUCTS', 'V
 -- Admins
 INSERT INTO Users (email, name, password, phoneNumber, status, createdAt, updatedAt)
 VALUES
-('admin1@example.com', 'Admin User 1', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0334567890', 'Active', NOW(), NOW()),
-('admin2@example.com', 'Admin User 2', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0987654321', 'Active', NOW(), NOW()),
-('admin3@example.com', 'Admin User 3', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0322334455', 'Active', NOW(), NOW());
+('admin1@example.com', 'Admin User 1', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0334567890', 'ACTIVE', NOW(), NOW()),
+('admin2@example.com', 'Admin User 2', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0987654321', 'ACTIVE', NOW(), NOW()),
+('admin3@example.com', 'Admin User 3', '$2a$10$piYOHuFhF7WWTyziAev08.RtlRcnZuruhfrTrgYWO6phJ4l1XvSBm', '0322334455', 'ACTIVE', NOW(), NOW());
 
 -- Customers
 INSERT INTO Users (email, name, password, phoneNumber, status, customerGroup, createdAt, updatedAt)
@@ -895,53 +895,6 @@ VALUES
 (3, 10, 19, NOW(), NOW()),
 (1, 10, 20, NOW(), NOW());
 
--- INSERT INTO Orders (
---     createdAt,
---     updatedAt,
---     code,
---     feeShip,
---     orderDate,
---     paymentMethod,
---     shippingAddress,
---     status,
---     total,
---     voucherDiscount,
---     userID,
---     voucherID
--- ) VALUES
---     ('2023-10-01 10:00:00', '2023-10-03 15:00:00', 'ORD015', 30000.0, '2023-10-01', 'CASH',  '123 Đường Láng, Hà Nội', 'DELIVERED', 500000.0,    0.0, 1, NULL),
---     ('2023-10-05 08:00:00', '2023-10-06 14:00:00', 'ORD016', 40000.0, '2023-10-05', 'VNPAY', '456 Nguyễn Huệ, TP.HCM', 'CANCELED',  750000.0, 50000.0, 2, NULL);
--- Thêm dữ liệu cho bảng Receipt
--- INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt)
--- VALUES
--- (4050000, NOW(), 3, NOW(), NOW()),
--- (2150000, NOW(), 5, NOW(), NOW());
-
--- Thêm dữ liệu cho bảng OrderDetail
--- INSERT INTO OrderDetail (
---     orderID, 
---     productDetailID, 
---     quantity, 
---     price, 
---     createdAt, 
---     updatedAt, 
---     promotionID, 
---     giftProductDetailID, 
---     giftedQuantity, 
---     promoDiscount
--- ) VALUES
--- (1, 3, 2, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (1, 5, 1, 1400000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (2, 2, 2, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (2, 4, 1, 800000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (3, 6, 1, 1800000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (3, 7, 3, 750000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (4, 1, 2, 1000000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (4, 3, 1, 1500000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (5, 2, 1, 1200000, NOW(), NOW(), NULL, NULL, 0, NULL),
--- (5, 6, 1, 950000, NOW(), NOW(), NULL, NULL, 0, NULL);
-
-
 -- Thêm dữ liệu cho bảng Payment
 INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES
 (1, NOW(), 'PENDING', NOW(), NOW()),
@@ -959,24 +912,148 @@ VALUES
 (4, 1, 8, 5, 'Rất hài lòng với sản phẩm!', NOW(), NOW()),
 (5, 1, 10, 2, 'Màu sắc không giống như hình.', NOW(), NOW());
 
-
--- ==============================
--- Chèn dữ liệu OrderStatusHistory
--- ==============================
--- INSERT INTO OrderStatusHistory (
---     orderID,
---     status,
---     cancelReason,
---     trackingNumber,
---     deliveredAt,
---     createdAt,
---     updatedAt
--- ) VALUES
---     (15, 'PENDING',   NULL,            NULL,                NULL,                '2023-10-01 10:00:00', '2023-10-01 10:00:00'),
---     (15, 'CONFIRMED', NULL,            NULL,                NULL,                '2023-10-01 12:00:00', '2023-10-01 12:00:00'),
---     (15, 'SHIPPED',   NULL,            'VN123456789',       NULL,                '2023-10-02 09:00:00', '2023-10-02 09:00:00'),
---     (15, 'DELIVERED', NULL,            NULL,                '2023-10-03 15:00:00','2023-10-03 15:00:00','2023-10-03 15:00:00'),
---     (16, 'PENDING',   NULL,            NULL,                NULL,                '2023-10-05 08:00:00', '2023-10-05 08:00:00'),
---     (16, 'CONFIRMED', NULL,            NULL,                NULL,                '2023-10-05 10:00:00', '2023-10-05 10:00:00'),
---     (16, 'CANCELED',  'Khách hàng đổi ý', NULL,             NULL,                '2023-10-06 14:00:00', '2023-10-06 14:00:00');
-
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-11 11:39:22', '2025-03-13 11:39:22', 'ORD001', 50000, '2025-03-11', 'VNPAY', 'Số 101, Đường A1, Quận B, TP.HCM', 'DELIVERED', 3600000, 50000, 10, 2);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-02-20 11:39:22', '2025-02-22 11:39:22', 'ORD002', 40000, '2025-02-20', 'CASH', 'Số 102, Đường A2, Quận B, TP.HCM', 'PENDING', 4990000, 50000, 3, 3);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-24 11:39:22', '2025-03-26 11:39:22', 'ORD003', 30000, '2025-03-24', 'CASH', 'Số 103, Đường A3, Quận B, TP.HCM', 'CONFIRMED', 4030000, 0, 9, 3);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-10 11:39:22', '2025-03-12 11:39:22', 'ORD004', 50000, '2025-03-10', 'CASH', 'Số 104, Đường A4, Quận B, TP.HCM', 'CANCELED', 7030000, 20000, 8, 3);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-02-19 11:39:22', '2025-02-21 11:39:22', 'ORD005', 50000, '2025-02-19', 'VNPAY', 'Số 105, Đường A5, Quận B, TP.HCM', 'CANCELED', 1550000, 0, 1, 5);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-02-13 11:39:22', '2025-02-15 11:39:22', 'ORD006', 40000, '2025-02-13', 'CASH', 'Số 106, Đường A6, Quận B, TP.HCM', 'CONFIRMED', 790000, 50000, 7, 5);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-02-18 11:39:22', '2025-02-20 11:39:22', 'ORD007', 30000, '2025-02-18', 'VNPAY', 'Số 107, Đường A7, Quận B, TP.HCM', 'CONFIRMED', 4480000, 50000, 8, 2);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-14 11:39:22', '2025-03-16 11:39:22', 'ORD008', 50000, '2025-03-14', 'VNPAY', 'Số 108, Đường A8, Quận B, TP.HCM', 'CANCELED', 4600000, 50000, 9, NULL);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-02-15 11:39:22', '2025-02-17 11:39:22', 'ORD009', 50000, '2025-02-15', 'CASH', 'Số 109, Đường A9, Quận B, TP.HCM', 'DELIVERED', 1650000, 0, 4, 5);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-04-21 11:39:22', '2025-04-23 11:39:22', 'ORD010', 40000, '2025-04-21', 'VNPAY', 'Số 110, Đường A10, Quận B, TP.HCM', 'DELIVERED', 5320000, 20000, 7, 3);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-04-21 11:39:22', '2025-04-23 11:39:22', 'ORD011', 50000, '2025-04-21', 'VNPAY', 'Số 111, Đường A11, Quận B, TP.HCM', 'CONFIRMED', 5800000, 50000, 3, 5);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-20 11:39:22', '2025-03-22 11:39:22', 'ORD012', 30000, '2025-03-20', 'VNPAY', 'Số 112, Đường A12, Quận B, TP.HCM', 'CONFIRMED', 7430000, 0, 2, 2);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-04-21 11:39:22', '2025-04-23 11:39:22', 'ORD013', 30000, '2025-04-21', 'CASH', 'Số 113, Đường A13, Quận B, TP.HCM', 'PENDING', 5480000, 50000, 6, 2);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-05-03 11:39:22', '2025-05-05 11:39:22', 'ORD014', 50000, '2025-05-03', 'VNPAY', 'Số 114, Đường A14, Quận B, TP.HCM', 'CANCELED', 1030000, 20000, 2, 4);
+INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-08 11:39:22', '2025-03-10 11:39:22', 'ORD015', 30000, '2025-03-08', 'CASH', 'Số 115, Đường A15, Quận B, TP.HCM', 'DELIVERED', 4510000, 20000, 7, 1);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (1, 22, 2, 1000000, '2025-03-11 11:39:22', '2025-03-13 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (1, 12, 2, 800000, '2025-03-11 11:39:22', '2025-03-13 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (2, 5, 2, 1000000, '2025-02-20 11:39:22', '2025-02-22 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (2, 43, 2, 1500000, '2025-02-20 11:39:22', '2025-02-22 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (3, 18, 3, 1000000, '2025-03-24 11:39:22', '2025-03-26 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (3, 16, 1, 1000000, '2025-03-24 11:39:22', '2025-03-26 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (4, 14, 2, 1500000, '2025-03-10 11:39:22', '2025-03-12 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (4, 48, 1, 1000000, '2025-03-10 11:39:22', '2025-03-12 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (4, 9, 2, 1500000, '2025-03-10 11:39:22', '2025-03-12 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (5, 9, 1, 1500000, '2025-02-19 11:39:22', '2025-02-21 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (6, 14, 1, 800000, '2025-02-13 11:39:22', '2025-02-15 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (7, 23, 3, 1500000, '2025-02-18 11:39:22', '2025-02-20 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (8, 50, 2, 800000, '2025-03-14 11:39:22', '2025-03-16 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (8, 21, 2, 1500000, '2025-03-14 11:39:22', '2025-03-16 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (9, 18, 2, 800000, '2025-02-15 11:39:22', '2025-02-17 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (10, 34, 1, 1500000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (10, 9, 2, 1500000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (10, 16, 1, 800000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (11, 11, 3, 800000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (11, 9, 1, 1000000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (11, 48, 3, 800000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (12, 30, 3, 1000000, '2025-03-20 11:39:22', '2025-03-22 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (12, 29, 2, 1000000, '2025-03-20 11:39:22', '2025-03-22 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (12, 21, 3, 800000, '2025-03-20 11:39:22', '2025-03-22 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (13, 22, 1, 1500000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (13, 16, 2, 800000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (13, 34, 3, 800000, '2025-04-21 11:39:22', '2025-04-23 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (14, 49, 1, 1000000, '2025-05-03 11:39:22', '2025-05-05 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderDetail (orderID, productDetailID, quantity, price, createdAt, updatedAt, promotionID, giftProductDetailID, giftedQuantity, promoDiscount) VALUES (15, 39, 3, 1500000, '2025-03-08 11:39:22', '2025-03-10 11:39:22', NULL, NULL, 0, NULL);
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (1, 'PENDING', NULL, NULL, NULL, '2025-03-11 11:39:22', '2025-03-11 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (1, 'CONFIRMED', NULL, NULL, NULL, '2025-03-11 13:39:22', '2025-03-11 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (1, 'SHIPPED', NULL, 'VN000000001', NULL, '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (1, 'DELIVERED', NULL, NULL, '2025-03-13 11:39:22', '2025-03-13 11:39:22', '2025-03-13 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (2, 'PENDING', NULL, NULL, NULL, '2025-02-20 11:39:22', '2025-02-20 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (2, 'CONFIRMED', NULL, NULL, NULL, '2025-02-20 13:39:22', '2025-02-20 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (3, 'PENDING', NULL, NULL, NULL, '2025-03-24 11:39:22', '2025-03-24 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (3, 'CONFIRMED', NULL, NULL, NULL, '2025-03-24 13:39:22', '2025-03-24 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (4, 'PENDING', NULL, NULL, NULL, '2025-03-10 11:39:22', '2025-03-10 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (4, 'CONFIRMED', NULL, NULL, NULL, '2025-03-10 13:39:22', '2025-03-10 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (4, 'CANCELED', 'Khách hàng hủy đơn', NULL, NULL, '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (5, 'PENDING', NULL, NULL, NULL, '2025-02-19 11:39:22', '2025-02-19 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (5, 'CONFIRMED', NULL, NULL, NULL, '2025-02-19 13:39:22', '2025-02-19 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (5, 'CANCELED', 'Khách hàng hủy đơn', NULL, NULL, '2025-02-21 11:39:22', '2025-02-21 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (6, 'PENDING', NULL, NULL, NULL, '2025-02-13 11:39:22', '2025-02-13 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (6, 'CONFIRMED', NULL, NULL, NULL, '2025-02-13 13:39:22', '2025-02-13 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (7, 'PENDING', NULL, NULL, NULL, '2025-02-18 11:39:22', '2025-02-18 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (7, 'CONFIRMED', NULL, NULL, NULL, '2025-02-18 13:39:22', '2025-02-18 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (8, 'PENDING', NULL, NULL, NULL, '2025-03-14 11:39:22', '2025-03-14 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (8, 'CONFIRMED', NULL, NULL, NULL, '2025-03-14 13:39:22', '2025-03-14 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (8, 'CANCELED', 'Khách hàng hủy đơn', NULL, NULL, '2025-03-16 11:39:22', '2025-03-16 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (9, 'PENDING', NULL, NULL, NULL, '2025-02-15 11:39:22', '2025-02-15 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (9, 'CONFIRMED', NULL, NULL, NULL, '2025-02-15 13:39:22', '2025-02-15 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (9, 'SHIPPED', NULL, 'VN000000009', NULL, '2025-02-16 11:39:22', '2025-02-16 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (9, 'DELIVERED', NULL, NULL, '2025-02-17 11:39:22', '2025-02-17 11:39:22', '2025-02-17 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (10, 'PENDING', NULL, NULL, NULL, '2025-04-21 11:39:22', '2025-04-21 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (10, 'CONFIRMED', NULL, NULL, NULL, '2025-04-21 13:39:22', '2025-04-21 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (10, 'SHIPPED', NULL, 'VN000000010', NULL, '2025-04-22 11:39:22', '2025-04-22 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (10, 'DELIVERED', NULL, NULL, '2025-04-23 11:39:22', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (11, 'PENDING', NULL, NULL, NULL, '2025-04-21 11:39:22', '2025-04-21 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (11, 'CONFIRMED', NULL, NULL, NULL, '2025-04-21 13:39:22', '2025-04-21 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (12, 'PENDING', NULL, NULL, NULL, '2025-03-20 11:39:22', '2025-03-20 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (12, 'CONFIRMED', NULL, NULL, NULL, '2025-03-20 13:39:22', '2025-03-20 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (13, 'PENDING', NULL, NULL, NULL, '2025-04-21 11:39:22', '2025-04-21 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (13, 'CONFIRMED', NULL, NULL, NULL, '2025-04-21 13:39:22', '2025-04-21 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (14, 'PENDING', NULL, NULL, NULL, '2025-05-03 11:39:22', '2025-05-03 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (14, 'CONFIRMED', NULL, NULL, NULL, '2025-05-03 13:39:22', '2025-05-03 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (14, 'CANCELED', 'Khách hàng hủy đơn', NULL, NULL, '2025-05-05 11:39:22', '2025-05-05 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (15, 'PENDING', NULL, NULL, NULL, '2025-03-08 11:39:22', '2025-03-08 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (15, 'CONFIRMED', NULL, NULL, NULL, '2025-03-08 13:39:22', '2025-03-08 13:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (15, 'SHIPPED', NULL, 'VN000000015', NULL, '2025-03-09 11:39:22', '2025-03-09 11:39:22');
+INSERT INTO OrderStatusHistory (orderID, status, cancelReason, trackingNumber, deliveredAt, createdAt, updatedAt) VALUES (15, 'DELIVERED', NULL, NULL, '2025-03-10 11:39:22', '2025-03-10 11:39:22', '2025-03-10 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4161167, '2025-03-13 11:39:22', 1, '2025-03-13 11:39:22', '2025-03-13 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (2962703, '2025-02-22 11:39:22', 2, '2025-02-22 11:39:22', '2025-02-22 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (1507769, '2025-03-26 11:39:22', 3, '2025-03-26 11:39:22', '2025-03-26 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4677491, '2025-03-12 11:39:22', 4, '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4356633, '2025-02-21 11:39:22', 5, '2025-02-21 11:39:22', '2025-02-21 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4401225, '2025-02-15 11:39:22', 6, '2025-02-15 11:39:22', '2025-02-15 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4862165, '2025-02-20 11:39:22', 7, '2025-02-20 11:39:22', '2025-02-20 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (946101, '2025-03-16 11:39:22', 8, '2025-03-16 11:39:22', '2025-03-16 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (2495762, '2025-02-17 11:39:22', 9, '2025-02-17 11:39:22', '2025-02-17 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (3886634, '2025-04-23 11:39:22', 10, '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4152595, '2025-04-23 11:39:22', 11, '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (4796952, '2025-03-22 11:39:22', 12, '2025-03-22 11:39:22', '2025-03-22 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (2485782, '2025-04-23 11:39:22', 13, '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (2133019, '2025-05-05 11:39:22', 14, '2025-05-05 11:39:22', '2025-05-05 11:39:22');
+INSERT INTO Receipt (total, receiptDate, orderID, createdAt, updatedAt) VALUES (3458544, '2025-03-10 11:39:22', 15, '2025-03-10 11:39:22', '2025-03-10 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (1, '2025-03-13 11:39:22', 'SUCCESS', '2025-03-13 11:39:22', '2025-03-13 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (2, '2025-02-22 11:39:22', 'PENDING', '2025-02-22 11:39:22', '2025-02-22 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (3, '2025-03-26 11:39:22', 'PENDING', '2025-03-26 11:39:22', '2025-03-26 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (4, '2025-03-12 11:39:22', 'PENDING', '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (5, '2025-02-21 11:39:22', 'PENDING', '2025-02-21 11:39:22', '2025-02-21 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (6, '2025-02-15 11:39:22', 'PENDING', '2025-02-15 11:39:22', '2025-02-15 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (7, '2025-02-20 11:39:22', 'PENDING', '2025-02-20 11:39:22', '2025-02-20 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (8, '2025-03-16 11:39:22', 'PENDING', '2025-03-16 11:39:22', '2025-03-16 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (9, '2025-02-17 11:39:22', 'SUCCESS', '2025-02-17 11:39:22', '2025-02-17 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (10, '2025-04-23 11:39:22', 'SUCCESS', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (11, '2025-04-23 11:39:22', 'PENDING', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (12, '2025-03-22 11:39:22', 'PENDING', '2025-03-22 11:39:22', '2025-03-22 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (13, '2025-04-23 11:39:22', 'PENDING', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (14, '2025-05-05 11:39:22', 'PENDING', '2025-05-05 11:39:22', '2025-05-05 11:39:22');
+INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES (15, '2025-03-10 11:39:22', 'SUCCESS', '2025-03-10 11:39:22', '2025-03-10 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (10, 8, 1, 4, 'Sản phẩm tốt.', '2025-03-13 11:39:22', '2025-03-13 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (10, 18, 2, 4, 'Sản phẩm tốt.', '2025-03-13 11:39:22', '2025-03-13 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (3, 16, 3, 3, 'Sản phẩm tốt.', '2025-02-22 11:39:22', '2025-02-22 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (3, 16, 4, 3, 'Đúng mô tả.', '2025-02-22 11:39:22', '2025-02-22 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (9, 16, 5, 4, 'Đóng gói đẹp.', '2025-03-26 11:39:22', '2025-03-26 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (9, 16, 6, 4, 'Giao hàng nhanh.', '2025-03-26 11:39:22', '2025-03-26 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (8, 12, 7, 4, 'Hài lòng.', '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (8, 15, 8, 4, 'Đúng mô tả.', '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (8, 12, 9, 5, 'Hài lòng.', '2025-03-12 11:39:22', '2025-03-12 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (1, 6, 10, 5, 'Giao hàng nhanh.', '2025-02-21 11:39:22', '2025-02-21 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (7, 2, 11, 4, 'Sản phẩm tốt.', '2025-02-15 11:39:22', '2025-02-15 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (8, 7, 12, 5, 'Đúng mô tả.', '2025-02-20 11:39:22', '2025-02-20 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (9, 4, 13, 5, 'Giao hàng nhanh.', '2025-03-16 11:39:22', '2025-03-16 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (9, 18, 14, 4, 'Sản phẩm tốt.', '2025-03-16 11:39:22', '2025-03-16 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (4, 15, 15, 4, 'Đóng gói đẹp.', '2025-02-17 11:39:22', '2025-02-17 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (7, 16, 16, 4, 'Đóng gói đẹp.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (7, 11, 17, 5, 'Hài lòng.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (7, 10, 18, 5, 'Hài lòng.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (3, 14, 19, 4, 'Đóng gói đẹp.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (3, 2, 20, 3, 'Đóng gói đẹp.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (3, 9, 21, 4, 'Sản phẩm tốt.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (2, 10, 22, 3, 'Giao hàng nhanh.', '2025-03-22 11:39:22', '2025-03-22 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (2, 14, 23, 3, 'Sản phẩm tốt.', '2025-03-22 11:39:22', '2025-03-22 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (2, 16, 24, 3, 'Giao hàng nhanh.', '2025-03-22 11:39:22', '2025-03-22 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (6, 16, 25, 3, 'Sản phẩm tốt.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (6, 11, 26, 3, 'Đóng gói đẹp.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (6, 18, 27, 4, 'Hài lòng.', '2025-04-23 11:39:22', '2025-04-23 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (2, 20, 28, 4, 'Giao hàng nhanh.', '2025-05-05 11:39:22', '2025-05-05 11:39:22');
+INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt) VALUES (7, 12, 29, 3, 'Giao hàng nhanh.', '2025-03-10 11:39:22', '2025-03-10 11:39:22');

@@ -1,8 +1,10 @@
 package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.response.PaginationResponse;
+import com.shoestore.Server.dto.response.SearchProductResponse;
 import com.shoestore.Server.service.CloudinaryService;
 import com.shoestore.Server.service.PaginationService;
+import com.shoestore.Server.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ public class CloudinaryController {
 
     private final CloudinaryService cloudinaryService;
     private final PaginationService paginationService;
-
+    private final ProductService productService;
     @GetMapping
     public ResponseEntity<PaginationResponse<Map<String, Object>>> listImages(
             @RequestParam(defaultValue = "1") int page,
@@ -43,8 +45,10 @@ public class CloudinaryController {
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "productId", required = false) String productId) {
         try {
+            PaginationResponse<SearchProductResponse> tmp = productService.getAllProducts(1, 12);
+
             String folder = "project_ShoeStore/ImageProduct/"
-                    + (productId != null && !productId.isEmpty() ? productId : "default");
+                    + (productId != null && !productId.isEmpty() ? productId : tmp.getTotalElements() + 1);
             Map uploadResult = cloudinaryService.upload(file, folder);
             return ResponseEntity.ok(uploadResult);
         } catch (IOException e) {
