@@ -96,7 +96,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    @RateLimiter(name = "mailSendRateLimiter") // <--- THÊM ANNOTATION NÀY
+    @RateLimiter(name = "mailSendRateLimiter")
     @Retry(name = "mailSendRetry", fallbackMethod = "fallbackSendOrderStatusEmail")
     public void sendOrderStatusEmail(int orderId, OrderStatus status) {
         try {

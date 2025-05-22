@@ -6,6 +6,7 @@ import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.dto.response.UserResponse;
 import com.shoestore.Server.entities.Role;
 import com.shoestore.Server.entities.User;
+import com.shoestore.Server.enums.CustomerGroup;
 import com.shoestore.Server.enums.RoleType;
 import com.shoestore.Server.enums.UserStatus;
 import com.shoestore.Server.exception.UserAlreadyExistsException;
@@ -173,6 +174,26 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Invalid status value: " + status);
         }
         userRepository.save(user);
+        return userMapper.toResponse(user);
+    }
+
+    @Override
+    public UserResponse updateCustomerGroupByTotalAmount(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        Double totalAmount = calculateTotalAmountByUserId(userId);
+
+        if (totalAmount >= 5_000_000) {
+            user.setCustomerGroup(CustomerGroup.VIP);
+        } else if (totalAmount >= 2_000_000) {
+            user.setCustomerGroup(CustomerGroup.EXISTING);
+        } else {
+            user.setCustomerGroup(CustomerGroup.NEW);
+        }
+
+        userRepository.save(user);
+
         return userMapper.toResponse(user);
     }
 

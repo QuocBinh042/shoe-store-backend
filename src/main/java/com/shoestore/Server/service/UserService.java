@@ -36,4 +36,5 @@ public interface UserService {
     boolean isEmailExists(String email);
     void changePassword(int userId, String currentPassword, String newPassword);
 
+    UserResponse updateCustomerGroupByTotalAmount(int userId);
 }
