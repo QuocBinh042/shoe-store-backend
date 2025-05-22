@@ -9,4 +9,5 @@ public interface EmailService {
     void sendOrderSuccessEmail(String to, String customerName, String orderCode);
     void sendVerificationCodeEmail(String to, String customerName);
     String generateVerificationCode();
+    void sendVerificationForgotPassword(String to, String customerName);
 }

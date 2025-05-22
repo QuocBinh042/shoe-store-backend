@@ -71,6 +71,34 @@ public class EmailServiceImpl implements EmailService {
         int code = 100000 + random.nextInt(900000);
         return String.valueOf(code);
     }
+
+    @Override
+    public void sendVerificationForgotPassword(String to, String customerName) {
+        try {
+            String verificationCode = generateVerificationCode();
+            redisTemplate.opsForValue().set("OTP:" + to, verificationCode, 5, TimeUnit.MINUTES);
+            logger.info("Stored OTP: {} for email: {} in Redis", verificationCode, to);
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject("Xác thực quên mật khẩu");
+
+            Context context = new Context();
+            context.setVariable("customerName", customerName);
+            context.setVariable("verificationCode", verificationCode);
+            String htmlContent = templateEngine.process("verify-email-forgot-password", context);
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+            logger.info("Verification email sent to {}", to);
+        } catch (Exception e) {
+            logger.error("Error sending email to {}: {}", to, e.getMessage());
+        }
+    }
+
+
     @Async
     @Override
     public void sendOrderSuccessEmail(String to, String customerName, String orderCode) {

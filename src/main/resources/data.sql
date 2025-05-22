@@ -838,13 +838,13 @@ VALUES
 
 
 -- Thêm dữ liệu cho bảng Voucher
-INSERT INTO Voucher (code, description, discountValue, discountType, minOrderValue, freeShipping, startDate, endDate, status, createdAt, updatedAt)
+INSERT INTO Voucher (code, description, discountValue, discountType, minOrderValue, freeShipping, startDate, endDate,customerGroup, status, createdAt, updatedAt)
 VALUES
-('SPRINGSALE20', 'Get 20% off on your next order.', 20, 'PERCENT', 100000, 0, '2025-02-01T00:00:00', '2025-03-15T23:59:59', 1, NOW(), NOW()),
-('FREESHIP100K', 'Free shipping for orders above 100,000 VND.', 0, 'FIXED', 100000, 1, '2025-02-01T00:00:00', '2025-03-10T23:59:59', 1, NOW(), NOW()),
-('SUMMERSALE15', 'Save 15% on summer collection.', 15, 'PERCENT', 50000, 0, '2025-01-01T00:00:00', '2025-06-30T23:59:59', 1, NOW(), NOW()),
-('NEWUSER50K', 'Get 50,000 VND off your first order.', 50000, 'FIXED', 50000, 0, '2025-01-01T00:00:00', '2025-01-31T23:59:59', 1, NOW(), NOW()),
-('WINTERDISCOUNT25', 'Get 25% off on all winter wear.', 25, 'PERCENT', 200000, 0, '2024-12-01T00:00:00', '2025-12-31T23:59:59', 1, NOW(), NOW());
+('SPRINGSALE20', 'Get 20% off on your next order.', 20, 'PERCENT', 100000, 0, '2025-02-01T00:00:00', '2025-03-15T23:59:59', 'NEW',1, NOW(), NOW()),
+('FREESHIP100K', 'Free shipping for orders above 100,000 VND.', 0, 'FIXED', 100000, 1, '2025-02-01T00:00:00', '2025-03-10T23:59:59','EXISTING', 1, NOW(), NOW()),
+('SUMMERSALE15', 'Save 15% on summer collection.', 15, 'PERCENT', 50000, 0, '2025-01-01T00:00:00', '2025-06-30T23:59:59','NEW',1, NOW(), NOW()),
+('NEWUSER50K', 'Get 50,000 VND off your first order.', 50000, 'FIXED', 50000, 0, '2025-01-01T00:00:00', '2025-01-31T23:59:59','VIP', 1, NOW(), NOW()),
+('WINTERDISCOUNT25', 'Get 25% off on all winter wear.', 25, 'PERCENT', 200000, 0, '2024-12-01T00:00:00', '2025-12-31T23:59:59','VIP', 1, NOW(), NOW());
 
 -- Thêm dữ liệu cho bảng Cart
 INSERT INTO Cart (createdAt, updatedAt, userID)
@@ -895,22 +895,6 @@ VALUES
 (3, 10, 19, NOW(), NOW()),
 (1, 10, 20, NOW(), NOW());
 
--- Thêm dữ liệu cho bảng Payment
-INSERT INTO Payment (orderID, paymentDate, status, createdAt, updatedAt) VALUES
-(1, NOW(), 'PENDING', NOW(), NOW()),
-(2, NOW(), 'PENDING', NOW(), NOW()),
-(3, NOW(), 'SUCCESS', NOW(), NOW()),
-(4, NOW(), 'PENDING', NOW(), NOW()),
-(5, NOW(), 'SUCCESS', NOW(), NOW());
-
--- Thêm dữ liệu cho bảng Review
-INSERT INTO Review (userID, productID, orderDetailID, rating, comment, createdAt, updatedAt)
-VALUES
-(1, 3, 1, 5, 'Sản phẩm tuyệt vời, chất lượng tốt!', NOW(), NOW()),
-(2, 1, 4, 4, 'Giày rất đẹp nhưng hơi chật.', NOW(), NOW()),
-(3, 3, 6, 3, 'Rất tiếc, sản phẩm không như mong đợi.', NOW(), NOW()),
-(4, 1, 8, 5, 'Rất hài lòng với sản phẩm!', NOW(), NOW()),
-(5, 1, 10, 2, 'Màu sắc không giống như hình.', NOW(), NOW());
 
 INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-03-11 11:39:22', '2025-03-13 11:39:22', 'ORD001', 50000, '2025-03-11', 'VNPAY', 'Số 101, Đường A1, Quận B, TP.HCM', 'DELIVERED', 3600000, 50000, 10, 2);
 INSERT INTO Orders (createdAt, updatedAt, code, feeShip, orderDate, paymentMethod, shippingAddress, status, total, voucherDiscount, userID, voucherID) VALUES ('2025-02-20 11:39:22', '2025-02-22 11:39:22', 'ORD002', 40000, '2025-02-20', 'CASH', 'Số 102, Đường A2, Quận B, TP.HCM', 'PENDING', 4990000, 50000, 3, 3);

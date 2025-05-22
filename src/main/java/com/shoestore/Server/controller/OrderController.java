@@ -1,9 +1,6 @@
 package com.shoestore.Server.controller;
 
-import com.shoestore.Server.dto.request.OrderDTO;
-import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
-import com.shoestore.Server.dto.request.UpdateOrderDetailRequest;
-import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
+import com.shoestore.Server.dto.request.*;
 import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.service.EmailService;
@@ -241,6 +238,11 @@ public class OrderController {
     public ResponseEntity<OrderStatusHistoryResponse> addOrderStatusHistory(@RequestBody OrderHistoryStatusDTO request) {
         return ResponseEntity.ok(orderService.create(request));
     }
-
+    @PostMapping("/cancel-order")
+    public ResponseEntity<?> cancelOrder(@RequestBody OrderCancelRequest request) {
+        System.out.println(request);
+        orderService.cancelOrders(request);
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Order canceled successfully.", null, null));
+    }
 
 }

@@ -1,9 +1,6 @@
 package com.shoestore.Server.controller;
 
-import com.shoestore.Server.dto.request.ChangePasswordRequest;
-import com.shoestore.Server.dto.request.LoginRequest;
-import com.shoestore.Server.dto.request.SignUpRequest;
-import com.shoestore.Server.dto.request.UserDTO;
+import com.shoestore.Server.dto.request.*;
 import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.entities.User;
 import com.shoestore.Server.enums.UserStatus;
@@ -61,7 +58,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        System.out.println("Nhân"+loginRequest);
         try {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getEmail());
             if (!passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
@@ -117,10 +113,18 @@ public class AuthController {
     public ResponseEntity<?> resendOTP(@RequestParam String email) {
         UserResponse user =userService.findByEmail(email);
         if (UserStatus.ACTIVE.equals(user.getStatus())) {
-            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.BAD_REQUEST.getCode(), "Verification code resent.", null,null));
+            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.BAD_REQUEST.getCode(), "User has been activated.", null,null));
         }
-
         emailService.sendVerificationCodeEmail(email, user.getName());
+        return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Verification code resent.", null,null));
+    }
+    @PostMapping("/sendOTP-forgot-password")
+    public ResponseEntity<?> sendOTPForgotPassword(@RequestParam String email) {
+        UserResponse user =userService.findByEmail(email);
+        if (!UserStatus.ACTIVE.equals(user.getStatus())) {
+            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.BAD_REQUEST.getCode(), "user not activated.", null,null));
+        }
+        emailService.sendVerificationForgotPassword(email, user.getName());
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Verification code resent.", null,null));
     }
     @PostMapping("/verify-otp")
@@ -271,6 +275,26 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new RestResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An error occurred", e.getMessage(), null));
+        }
+    }
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        String storedOtp = redisTemplate.opsForValue().get("OTP:" + request.getEmail());
+        System.out.println("Nhận"+storedOtp);
+        System.out.println("Nhận"+request);
+        if (storedOtp == null) {
+            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.BAD_REQUEST.getCode(), "OTP has expired or does not exist.", null,null));
+        } else if (!storedOtp.equals(request.getOtp())) {
+            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.BAD_REQUEST.getCode(), "Invalid OTP.", null,null));
+        }
+        redisTemplate.delete("OTP:" + request.getEmail());
+
+        try {
+            userService.forgotPassword(request.getEmail(), request.getNewPassword());
+            return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Password reset successfully.", null,null));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RestResponse<>(HttpStatus.NOT_FOUND.value(), "User not found.", null, null));
         }
     }
 

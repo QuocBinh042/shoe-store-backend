@@ -6,6 +6,7 @@ import com.shoestore.Server.dto.response.PaginationResponse;
 import com.shoestore.Server.dto.response.UserResponse;
 import com.shoestore.Server.entities.Role;
 import com.shoestore.Server.entities.User;
+import com.shoestore.Server.enums.CustomerGroup;
 import com.shoestore.Server.enums.RoleType;
 import com.shoestore.Server.enums.UserStatus;
 import com.shoestore.Server.exception.UserAlreadyExistsException;
@@ -161,6 +162,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void forgotPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 
     @Override
     public UserResponse updateUserStatus(int id, String status) {

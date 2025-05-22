@@ -20,10 +20,13 @@ public class VoucherController {
     }
 
     @GetMapping("/eligible")
-    public ResponseEntity<List<VoucherDTO>> getEligibleVouchers(@RequestParam BigDecimal orderValue) {
-        List<VoucherDTO> vouchers = voucherService.getEligibleVouchers(orderValue);
+    public ResponseEntity<List<VoucherDTO>> getEligibleVouchers(
+            @RequestParam int userId,
+            @RequestParam BigDecimal orderValue) {
+        List<VoucherDTO> vouchers = voucherService.getEligibleVouchers(userId, orderValue);
         return ResponseEntity.ok(vouchers);
     }
+
 
     @GetMapping("/by-voucher-id/{id}")
     public ResponseEntity<VoucherDTO> getVoucherById(@PathVariable int id) {

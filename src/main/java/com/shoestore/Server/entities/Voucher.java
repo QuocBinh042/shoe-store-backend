@@ -1,5 +1,6 @@
 package com.shoestore.Server.entities;
 
+import com.shoestore.Server.enums.CustomerGroup;
 import com.shoestore.Server.enums.VoucherType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -42,4 +43,6 @@ public class Voucher extends BaseEntity{
     private Integer usedCount;
 
     private String productRestriction;
+    @Enumerated(EnumType.STRING)
+    private CustomerGroup customerGroup;
 }

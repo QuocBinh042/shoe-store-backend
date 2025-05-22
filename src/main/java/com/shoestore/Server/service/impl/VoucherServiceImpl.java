@@ -1,10 +1,14 @@
 package com.shoestore.Server.service.impl;
 
 import com.shoestore.Server.dto.request.VoucherDTO;
+import com.shoestore.Server.entities.User;
 import com.shoestore.Server.entities.Voucher;
 import com.shoestore.Server.mapper.VoucherMapper;
+import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.repositories.VoucherRepository;
 import com.shoestore.Server.service.VoucherService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +19,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class VoucherServiceImpl implements VoucherService {
 
     private final VoucherRepository voucherRepository;
     private final VoucherMapper voucherMapper;
-
-    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherMapper voucherMapper) {
-        this.voucherRepository = voucherRepository;
-        this.voucherMapper = voucherMapper;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public List<VoucherDTO> getAllVouchers() {
@@ -58,10 +59,12 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public List<VoucherDTO> getEligibleVouchers(BigDecimal orderValue) {
+    public List<VoucherDTO> getEligibleVouchers(int userId, BigDecimal orderValue) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
         log.info("Fetching eligible vouchers for order value: {}", orderValue);
-        List<VoucherDTO> eligibleVouchers = voucherRepository.findByMinOrderValueLessThanEqualAndStatusTrueAndStartDateBeforeAndEndDateAfter(
-                        orderValue, LocalDateTime.now(), LocalDateTime.now())
+        List<VoucherDTO> eligibleVouchers = voucherRepository.findByMinOrderValueLessThanEqualAndStatusTrueAndStartDateBeforeAndEndDateAfterAndCustomerGroup(
+                        orderValue, LocalDateTime.now(), LocalDateTime.now(),user.getCustomerGroup())
                 .stream()
                 .map(voucherMapper::toDto)
                 .collect(Collectors.toList());

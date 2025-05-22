@@ -4,6 +4,7 @@ import com.shoestore.Server.dto.response.RestResponse;
 import com.shoestore.Server.utils.annotation.ApiMessage;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -31,8 +32,12 @@ public class GlobalResponseHandler implements ResponseBodyAdvice {
         if (body instanceof String) {
             return body;
         }
+
         String path = request.getURI().getPath();
         if (path.contains("/swagger-ui") || path.contains("/v3/api-docs") || path.contains("/api-docs")) {
+            return body;
+        }
+        if (status == HttpStatus.UNAUTHORIZED.value()) {
             return body;
         }
 
@@ -43,8 +48,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice {
             restResponse.setError(body.toString());
             restResponse.setData(null);
             return restResponse;
-        }
-        else {
+        } else {
             RestResponse<Object> restResponse = new RestResponse<>();
             restResponse.setStatusCode(status);
             restResponse.setData(body);

@@ -1,5 +1,6 @@
 package com.shoestore.Server.service;
 
+import com.shoestore.Server.dto.request.OrderCancelRequest;
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
 import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
@@ -90,5 +91,5 @@ public interface OrderService {
     List<OrderStatusHistoryResponse> getOrderHistory(int orderID);
     OrderStatusHistoryResponse create(OrderHistoryStatusDTO orderHistoryStatusDTO);
     void cancelUnpaidVNPayOrders();
-
+    void cancelOrders(OrderCancelRequest orderCancelRequest);
 }

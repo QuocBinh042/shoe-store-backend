@@ -4,6 +4,8 @@ import com.shoestore.Server.dto.request.VoucherDTO;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class OrderResponse  {
@@ -27,4 +29,6 @@ public class OrderResponse  {
     private VoucherDTO voucher;
 
     private UserResponse user;
+    private LocalDateTime createdAt;
+    private List<OrderStatusHistoryResponse> statusHistory;
 }

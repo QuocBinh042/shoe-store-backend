@@ -1,13 +1,11 @@
 package com.shoestore.Server.service.impl;
 
+import com.shoestore.Server.dto.request.OrderCancelRequest;
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
 import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
 import com.shoestore.Server.dto.response.*;
-import com.shoestore.Server.entities.Order;
-import com.shoestore.Server.entities.OrderStatusHistory;
-import com.shoestore.Server.entities.User;
-import com.shoestore.Server.entities.Voucher;
+import com.shoestore.Server.entities.*;
 import com.shoestore.Server.enums.OrderStatus;
 import com.shoestore.Server.enums.PaymentMethod;
 import com.shoestore.Server.exception.BadRequestException;
@@ -15,10 +13,7 @@ import com.shoestore.Server.exception.NotFoundException;
 import com.shoestore.Server.mapper.OrderDetailMapper;
 import com.shoestore.Server.mapper.OrderMapper;
 import com.shoestore.Server.mapper.OrderStatusHistoryMapper;
-import com.shoestore.Server.repositories.OrderRepository;
-import com.shoestore.Server.repositories.OrderStatusHistoryRepository;
-import com.shoestore.Server.repositories.UserRepository;
-import com.shoestore.Server.repositories.VoucherRepository;
+import com.shoestore.Server.repositories.*;
 import com.shoestore.Server.service.OrderDetailService;
 import com.shoestore.Server.service.OrderService;
 import com.shoestore.Server.service.PaginationService;
@@ -55,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
     private final PaymentService paymentService;
     private final OrderStatusHistoryRepository orderStatusHistoryRepository;
     private final OrderStatusHistoryMapper orderStatusHistoryMapper;
+    private final ProductDetailRepository productDetailRepository;
     @Override
     public List<OrderDTO> getAllOrders() {
         log.info("Fetching all orders...");
@@ -136,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
     public List<PlacedOrderResponse> getOrderByByUser(int userId) {
         log.info("Fetching orders for User ID: {}", userId);
 
-        List<PlacedOrderResponse> orders = orderRepository.findByUser_UserID(userId)
+        return orderRepository.findByUser_UserID(userId)
                 .stream()
                 .map(order -> {
                     int orderId = order.getOrderID();
@@ -144,17 +140,22 @@ public class OrderServiceImpl implements OrderService {
                             .stream()
                             .map(orderDetailService::mapToPlacedOrderDetailsResponse)
                             .collect(Collectors.toList());
+                    OrderResponse orderResponse = orderMapper.toResponse(order);
+
+                    List<OrderStatusHistoryResponse> canceledHistory = orderStatusHistoryMapper.toListResponse(
+                            orderStatusHistoryRepository.findByOrder_OrderIDAndStatus(orderId, OrderStatus.CANCELED)
+                    );
+                    orderResponse.setStatusHistory(canceledHistory.isEmpty() ? null : canceledHistory);
 
                     return new PlacedOrderResponse(
-                            orderMapper.toResponse(order),
+                            orderResponse,
                             orderDetails,
                             paymentService.getPaymentByOrderId(orderId)
                     );
                 })
                 .collect(Collectors.toList());
-        log.info("Found {} orders for User ID: {}", orders.size(), userId);
-        return orders;
     }
+
 
     @Override
     public OrderDTO getOrderByCode(String code) {
@@ -552,6 +553,72 @@ public class OrderServiceImpl implements OrderService {
                 orderRepository.save(order);
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrders(OrderCancelRequest orderCancelRequest) {
+        Order order = orderRepository.findById(orderCancelRequest.getOrderId())
+                .orElseThrow(() -> new NotFoundException("Order not found with id: " + orderCancelRequest.getOrderId()));
+
+        if (!order.getStatus().equals(OrderStatus.PENDING)) {
+            log.error("Cannot cancel order ID {} with current status: {}", orderCancelRequest.getOrderId(), order.getStatus());
+            throw new BadRequestException("Cannot cancel order with status: " + order.getStatus());
+        }
+
+        List<OrderDetail> orderDetails = order.getOrderDetails();
+        if (orderDetails == null || orderDetails.isEmpty()) {
+            log.warn("No order details found for order ID: {}", orderCancelRequest.getOrderId());
+            throw new BadRequestException("No order details found for order ID: " + orderCancelRequest.getOrderId());
+        }
+
+        for (OrderDetail detail : orderDetails) {
+            ProductDetail productDetail = detail.getProductDetail();
+            if (productDetail == null) {
+                log.error("ProductDetail is null for OrderDetail ID: {}", detail.getOrderDetailID());
+                throw new BadRequestException("ProductDetail not found for OrderDetail ID: " + detail.getOrderDetailID());
+            }
+            int newStockQuantity = productDetail.getStockQuantity() + detail.getQuantity();
+            if (newStockQuantity < 0) {
+                log.error("Invalid stock quantity for productDetail ID: {}", productDetail.getProductDetailID());
+                throw new BadRequestException("Invalid stock quantity for productDetail ID: " + productDetail.getProductDetailID());
+            }
+            productDetail.setStockQuantity(newStockQuantity);
+            productDetailRepository.save(productDetail);
+            log.info("Updated stock quantity for productDetail ID: {} to {}", productDetail.getProductDetailID(), newStockQuantity);
+
+            ProductDetail giftProductDetail = detail.getGiftProductDetail();
+            if (giftProductDetail != null && detail.getGiftedQuantity() > 0) {
+                int newGiftStockQuantity = giftProductDetail.getStockQuantity() + detail.getGiftedQuantity();
+                if (newGiftStockQuantity < 0) {
+                    log.error("Invalid stock quantity for giftProductDetail ID: {}", giftProductDetail.getProductDetailID());
+                    throw new BadRequestException("Invalid stock quantity for giftProductDetail ID: " + giftProductDetail.getProductDetailID());
+                }
+                giftProductDetail.setStockQuantity(newGiftStockQuantity);
+                productDetailRepository.save(giftProductDetail);
+                log.info("Updated stock quantity for giftProductDetail ID: {} to {}", giftProductDetail.getProductDetailID(), newGiftStockQuantity);
+            }
+        }
+
+        User user = userRepository.findById(orderCancelRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + orderCancelRequest.getUserId()));
+
+        order.setStatus(OrderStatus.CANCELED);
+
+        OrderStatusHistory history = new OrderStatusHistory();
+        history.setOrder(order);
+        history.setStatus(OrderStatus.CANCELED);
+        history.setCancelReason(orderCancelRequest.getReason());
+        history.setCreatedAt(LocalDateTime.now());
+        history.setChangedBy(user);
+
+        if (order.getStatusHistory() == null) {
+            order.setStatusHistory(new ArrayList<>());
+        }
+        order.getStatusHistory().add(history);
+
+        orderRepository.save(order);
+        log.info("Order ID {} canceled successfully by user ID: {}", orderCancelRequest.getOrderId(), orderCancelRequest.getUserId());
     }
 
 }
