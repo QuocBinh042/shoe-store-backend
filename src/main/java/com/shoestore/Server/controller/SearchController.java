@@ -54,7 +54,6 @@ public class SearchController {
             @RequestParam(required = false) String sortBy,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") int pageSize) {
-
         PaginationResponse<SearchProductResponse> paginatedProducts = productService.getFilteredProducts(
                 categoryIds, brandIds, colors, sizes, keyword, minPrice, maxPrice, sortBy, page, pageSize);
         return ResponseEntity.ok(paginatedProducts);
