@@ -39,6 +39,11 @@ public class Order extends BaseEntity {
     private Payment payment;
     @Column(name = "shippingAddress", nullable = false)
     private String shippingAddress;
+
+    private String shippingMethod;
+
+    private String trackingNumber;
+
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     private double voucherDiscount;
@@ -50,4 +55,5 @@ public class Order extends BaseEntity {
     private Receipt receipt;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderStatusHistory> statusHistory;
+
 }

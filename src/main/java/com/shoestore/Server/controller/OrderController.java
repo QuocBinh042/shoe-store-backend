@@ -1,10 +1,8 @@
 package com.shoestore.Server.controller;
 
-import com.shoestore.Server.dto.request.OrderDTO;
-import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
-import com.shoestore.Server.dto.request.UpdateOrderDetailRequest;
-import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
+import com.shoestore.Server.dto.request.*;
 import com.shoestore.Server.dto.response.*;
+import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.OrderDetailService;
@@ -242,5 +240,15 @@ public class OrderController {
         return ResponseEntity.ok(orderService.create(request));
     }
 
+    @PutMapping("/{id}/user")
+    public ResponseEntity<?> updateOrderUser(@PathVariable int id, @Valid @RequestBody UserDTO userDTO) {
+        Order updated = orderService.updateOrderUser(id, userDTO);
+        return ResponseEntity.ok(updated);
+    }
 
+    @PutMapping("/{id}/shipping")
+    public ResponseEntity<?> updateOrderShipping(@PathVariable int id, @Valid @RequestBody ShippingDTO shippingDTO) {
+        Order updated = orderService.updateOrderShipping(id, shippingDTO);
+        return ResponseEntity.ok(updated);
+    }
 }

@@ -9,7 +9,9 @@ import com.shoestore.Server.repositories.ProductRepository;
 import com.shoestore.Server.repositories.UserRepository;
 import com.shoestore.Server.service.DashboardService;
 import com.shoestore.Server.service.PaginationService;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DashboardServiceImpl implements DashboardService {
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
@@ -214,10 +217,17 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    @Retry(name = "adminCustomerMetricsRetry", fallbackMethod = "fallbackCustomerMetrics")
     public CustomerMetricsResponse getCustomerMetrics(int year) {
+        // GIẢ LẬP LỖI ĐỂ TEST RETRY (bạn có thể bỏ sau khi demo xong)
+        if (Math.random() < 0.7) {
+            log.warn("Simulated failure in getCustomerMetrics (year = {})", year);
+            throw new RuntimeException("Simulated failure");
+        }
+
+        // Logic gốc:
         List<CustomerRetentionResponse> retList = getCustomerRetention(year);
         double retentionRate = retList.isEmpty() ? 0.0 : retList.get(retList.size() - 1).retentionRate();
-
         double avgLifetime = Optional.ofNullable(orderRepository.findAvgCustomerLifetimeValue(year)).orElse(0.0);
         double repeatRate = Optional.ofNullable(orderRepository.findRepeatPurchaseRate(year)).orElse(0.0);
 
@@ -226,6 +236,13 @@ public class DashboardServiceImpl implements DashboardService {
                 Math.round(avgLifetime * 100) / 100.0,
                 Math.round(repeatRate * 10) / 10.0
         );
+    }
+
+    // Hàm fallback bắt buộc có đúng tham số (int year, Throwable t)
+    public CustomerMetricsResponse fallbackCustomerMetrics(int year, Throwable t) {
+        log.error("Fallback for getCustomerMetrics (year = {}), reason: {}", year, t.getMessage());
+        // Có thể trả về giá trị mặc định hoặc dữ liệu dummy cho fallback
+        return new CustomerMetricsResponse(0.0, 0.0, 0.0);
     }
     @Override
     public PaginationResponse<InventoryForecastResponse> getInventoryForecast(int page, int pageSize) {

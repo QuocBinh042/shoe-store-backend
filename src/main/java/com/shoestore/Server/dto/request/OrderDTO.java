@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class OrderDTO {
     private int orderID;
 
-    @PastOrPresent(message = "Order date cannot be in the future")
+//    @PastOrPresent(message = "Order date cannot be in the future")
     private LocalDate orderDate;
 
     @NotBlank(message = "Status cannot be blank")
@@ -30,6 +30,10 @@ public class OrderDTO {
     @NotBlank(message = "Shipping address cannot be blank")
     private String shippingAddress;
 
+    private String shippingMethod;
+
+    private String trackingNumber;
+
     @NotNull(message = "Payment method cannot be null")
     private PaymentMethod paymentMethod;
 
@@ -38,5 +42,6 @@ public class OrderDTO {
     private double voucherDiscount;
 
     private VoucherDTO voucher;
+
     private UserDTO user;
 }

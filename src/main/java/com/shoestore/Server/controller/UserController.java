@@ -97,4 +97,11 @@ public class UserController {
         Double totalAmount = userService.calculateTotalAmountByUserId(id);
         return ResponseEntity.ok(totalAmount);
     }
+
+    @PatchMapping("/{id}/update-customer-group")
+    public ResponseEntity<UserResponse> updateCustomerGroup(@PathVariable int id) {
+        UserResponse updatedUser = userService.updateCustomerGroupByTotalAmount(id);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }
