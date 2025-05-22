@@ -869,7 +869,8 @@ VALUES
 (NOW(), NOW(), 18),
 (NOW(), NOW(), 19),
 (NOW(), NOW(), 20),
-(NOW(), NOW(), 21);
+(NOW(), NOW(), 21),
+(NOW(), NOW(), 22);
 
 -- Thêm dữ liệu cho bảng CartItem
 INSERT INTO CartItem (quantity, cartID, productDetailID, createdAt, updatedAt)

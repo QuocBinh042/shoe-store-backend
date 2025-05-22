@@ -28,7 +28,6 @@ public interface UserService {
 
     UserResponse createCustomer(UserDTO userDTO);
 
-
     UserResponse updateUserStatus(int id, String status);
 
     int countDeliveredOrdersByUserId(int userId);
@@ -37,4 +36,6 @@ public interface UserService {
     boolean isEmailExists(String email);
     void changePassword(int userId, String currentPassword, String newPassword);
     void forgotPassword(String email,String newPassword);
+
+    UserResponse updateCustomerGroupByTotalAmount(int userId);
 }

@@ -323,58 +323,93 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public BigDecimal calculateFinalPriceWithPromotions(int productId) {
         log.info("Calculating final price with promotions for Product ID: {}", productId);
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product not found with ID: " + productId));
 
         List<Promotion> appliedPromotions = fetchAppliedPromotions(productId);
+
+        BigDecimal originalPrice = BigDecimal.valueOf(product.getPrice());
+        BigDecimal finalPrice = originalPrice;
+
         if (appliedPromotions.isEmpty()) {
             log.info("No active promotions found for Product ID: {}", productId);
-            return BigDecimal.valueOf(product.getPrice()).setScale(2, RoundingMode.HALF_UP);
+            return finalPrice.setScale(2, RoundingMode.HALF_UP);
         }
 
-        BigDecimal finalPrice = BigDecimal.valueOf(product.getPrice());
-
+        // Kiểm tra có promotion không cộng dồn không
         boolean hasNonStackable = appliedPromotions.stream()
                 .anyMatch(promo -> promo.getStackable() == null || !promo.getStackable());
 
         if (hasNonStackable) {
-            // Nếu có ít nhất một promotion không cho phép cộng dồn, chọn promotion có giá trị giảm lớn nhất
+            // Chỉ áp dụng promotion có số tiền giảm lớn nhất (tính trên originalPrice)
+            final BigDecimal basePrice = originalPrice;
             Promotion bestPromotion = appliedPromotions.stream()
-                    .filter(promo -> promo.getDiscountValue() != null) // Lọc bỏ các promotion có discountValue null
-                    .max(Comparator.comparing(Promotion::getDiscountValue, Comparator.nullsLast(Comparator.naturalOrder())))
+                    .filter(promo -> promo.getDiscountValue() != null)
+                    .max(Comparator.comparing(promo -> calculateDiscountAmount(promo, basePrice)))
                     .orElse(null);
 
             if (bestPromotion != null) {
-                BigDecimal discountValue = bestPromotion.getDiscountValue();
-                BigDecimal discountRate = discountValue.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
-                BigDecimal discountAmount = finalPrice.multiply(discountRate);
+                BigDecimal discountAmount = calculateDiscountAmount(bestPromotion, basePrice);
                 finalPrice = finalPrice.subtract(discountAmount);
-                log.info("Applied best promotion (non-stackable): {} with discount: {}%, New price: {}",
-                        bestPromotion.getName(), discountValue, finalPrice);
+                log.info("Applied best promotion (non-stackable): {} - Discount amount: {}, New price: {}",
+                        bestPromotion.getName(), discountAmount, finalPrice);
             }
         } else {
-            // Nếu tất cả promotion đều cho phép cộng dồn, áp dụng lần lượt
-            // Sắp xếp theo discountValue giảm dần để áp dụng các promotion lớn trước
-            List<Promotion> sortedPromotions = appliedPromotions.stream()
-                    .filter(promo -> promo.getDiscountValue() != null) // Lọc bỏ các promotion có discountValue null
-                    .sorted(Comparator.comparing(Promotion::getDiscountValue, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
-                    .collect(Collectors.toList());
+            // Cộng dồn promotions, mỗi promotion áp dụng trên finalPrice hiện tại
+            List<Promotion> sortedPromotions;
+            {
+                // Để dùng được biến trong lambda, cần final/effectively final biến này
+                final BigDecimal priceForSort = finalPrice;
+                sortedPromotions = appliedPromotions.stream()
+                        .filter(promo -> promo.getDiscountValue() != null)
+                        .sorted((p1, p2) -> calculateDiscountAmount(p2, priceForSort)
+                                .compareTo(calculateDiscountAmount(p1, priceForSort)))
+                        .collect(Collectors.toList());
+            }
 
-            for (Promotion promotion : sortedPromotions) {
-                BigDecimal discountValue = promotion.getDiscountValue();
-                BigDecimal discountRate = discountValue.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
-                BigDecimal discountAmount = finalPrice.multiply(discountRate);
+            for (Promotion promo : sortedPromotions) {
+                BigDecimal discountAmount = calculateDiscountAmount(promo, finalPrice);
                 finalPrice = finalPrice.subtract(discountAmount);
-                log.info("Applied stackable promotion: {} with discount: {}%, New price: {}",
-                        promotion.getName(), discountValue, finalPrice);
+                log.info("Applied stackable promotion: {} - Discount amount: {}, New price: {}",
+                        promo.getName(), discountAmount, finalPrice);
+
+                // Nếu đã về 0 thì dừng luôn, không âm giá
+                if (finalPrice.compareTo(BigDecimal.ZERO) <= 0) {
+                    finalPrice = BigDecimal.ZERO;
+                    break;
+                }
             }
         }
 
-        finalPrice = finalPrice.max(BigDecimal.ZERO);
-        finalPrice = finalPrice.setScale(2, RoundingMode.HALF_UP);
-        log.info("Final price after promotions for Product ID {}: {}", productId, finalPrice);
+        finalPrice = finalPrice.max(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
+        log.info("Final price after all promotions for Product ID {}: {}", productId, finalPrice);
         return finalPrice;
     }
+
+    /**
+     * Tính số tiền giảm thực tế cho từng promotion dựa vào loại (PERCENTAGE hoặc FIXED)
+     */
+    private BigDecimal calculateDiscountAmount(Promotion promo, BigDecimal currentPrice) {
+        if (promo == null || promo.getDiscountValue() == null || currentPrice == null) {
+            return BigDecimal.ZERO;
+        }
+        String type = promo.getType().name();
+        BigDecimal discountValue = promo.getDiscountValue();
+
+        if ("PERCENTAGE".equalsIgnoreCase(type)) {
+            // Giới hạn tối đa 100%
+            BigDecimal cappedPercent = discountValue.min(BigDecimal.valueOf(100));
+            BigDecimal discountRate = cappedPercent.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+            return currentPrice.multiply(discountRate).setScale(2, RoundingMode.HALF_UP);
+        } else if ("FIXED".equalsIgnoreCase(type)) {
+            // Không giảm quá giá hiện tại
+            return discountValue.min(currentPrice).setScale(2, RoundingMode.HALF_UP);
+        } else {
+            return BigDecimal.ZERO;
+        }
+    }
+
 
     @Override
     public PromotionResponse getPromotionTypeByProductId(int productID) {

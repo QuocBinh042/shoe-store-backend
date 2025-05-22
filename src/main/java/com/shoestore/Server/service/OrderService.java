@@ -1,11 +1,12 @@
 package com.shoestore.Server.service;
 
+import com.shoestore.Server.dto.request.*;
 import com.shoestore.Server.dto.request.OrderCancelRequest;
 import com.shoestore.Server.dto.request.OrderDTO;
 import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
 import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
 import com.shoestore.Server.dto.response.*;
-import org.apache.coyote.BadRequestException;
+import com.shoestore.Server.entities.Order;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -92,4 +93,8 @@ public interface OrderService {
     OrderStatusHistoryResponse create(OrderHistoryStatusDTO orderHistoryStatusDTO);
     void cancelUnpaidVNPayOrders();
     void cancelOrders(OrderCancelRequest orderCancelRequest);
+    Order updateOrderUser(int id, UserDTO userDTO);
+
+    Order updateOrderShipping(int id, ShippingDTO shippingDTO);
+
 }

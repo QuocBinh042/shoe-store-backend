@@ -5,6 +5,8 @@ import com.shoestore.Server.enums.OrderStatus;
 import com.shoestore.Server.repositories.OrderRepository;
 import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.ProductService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -122,9 +124,12 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
+    @RateLimiter(name = "mailSendRateLimiter")
+    @Retry(name = "mailSendRetry", fallbackMethod = "fallbackSendOrderStatusEmail")
     public void sendOrderStatusEmail(int orderId, OrderStatus status) {
         try {
-            Order order = orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+            Order order = orderRepository.findById(orderId)
+                    .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
 
             MimeMessage msg = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
@@ -135,11 +140,10 @@ public class EmailServiceImpl implements EmailService {
 
             // Set To & Subject
             helper.setTo(order.getUser().getEmail());
-            System.out.println(status);
             String subject = switch (status) {
                 case CONFIRMED -> "Order Confirmed – Code: " + order.getCode();
-                case CANCELED -> "Order Canceled  – Code: " + order.getCode();
-                default -> "Order Update    – Code: " + order.getCode();
+                case CANCELED -> "Order Canceled – Code: " + order.getCode();
+                default -> "Order Update – Code: " + order.getCode();
             };
             helper.setSubject(subject);
 
@@ -167,15 +171,31 @@ public class EmailServiceImpl implements EmailService {
 
             // Render HTML & text
             String html = templateEngine.process("email/order-status", ctx);
-            String text = new StringBuilder().append("Hello ").append(order.getUser().getName()).append("\n").append("Order Code: ").append(order.getCode()).append("\n").append("Order Date: ").append(order.getOrderDate()).append("\n\n").append("Thank you for shopping with us!").toString();
+            String text = "Hello " + order.getUser().getName() + "\n"
+                    + "Order Code: " + order.getCode() + "\n"
+                    + "Order Date: " + order.getOrderDate() + "\n\n"
+                    + "Thank you for shopping with us!";
             helper.setText(text, html);
 
+            // --- TEST: Giả lập lỗi để demo retry ---
+            if (Math.random() < 0.7) {
+                logger.warn("[TEST RETRY] Lỗi giả lập gửi mail, sẽ thử lại...");
+                throw new RuntimeException("Simulated mail send failure for retry demo");
+            }
+
+            // --- Gửi mail thực tế ---
             mailSender.send(msg);
             logger.info("Sent order status email to {}", order.getUser().getEmail());
 
         } catch (Exception ex) {
-            logger.error("Failed to send order status email for order {}", orderId, ex);
+            logger.error("Failed to send order status email for order {}: {}", orderId, ex.getMessage());
+            throw new RuntimeException("Failed to send mail", ex);
         }
+    }
+
+    // Fallback method không cần đổi gì
+    public void fallbackSendOrderStatusEmail(int orderId, OrderStatus status, Throwable t) {
+        logger.error("Fallback: Gửi mail đơn hàng {} (status {}) thất bại sau khi retry. Lý do: {}", orderId, status, t.getMessage());
     }
 
 }

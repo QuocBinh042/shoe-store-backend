@@ -2,6 +2,7 @@ package com.shoestore.Server.controller;
 
 import com.shoestore.Server.dto.request.*;
 import com.shoestore.Server.dto.response.*;
+import com.shoestore.Server.entities.Order;
 import com.shoestore.Server.entities.OrderDetail;
 import com.shoestore.Server.service.EmailService;
 import com.shoestore.Server.service.OrderDetailService;
@@ -245,4 +246,15 @@ public class OrderController {
         return ResponseEntity.ok(new RestResponse<>(ApiStatusResponse.SUCCESS.getCode(), "Order canceled successfully.", null, null));
     }
 
+    @PutMapping("/{id}/user")
+    public ResponseEntity<?> updateOrderUser(@PathVariable int id, @Valid @RequestBody UserDTO userDTO) {
+        Order updated = orderService.updateOrderUser(id, userDTO);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping("/{id}/shipping")
+    public ResponseEntity<?> updateOrderShipping(@PathVariable int id, @Valid @RequestBody ShippingDTO shippingDTO) {
+        Order updated = orderService.updateOrderShipping(id, shippingDTO);
+        return ResponseEntity.ok(updated);
+    }
 }

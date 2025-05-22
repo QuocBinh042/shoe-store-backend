@@ -1,9 +1,6 @@
 package com.shoestore.Server.service.impl;
 
-import com.shoestore.Server.dto.request.OrderCancelRequest;
-import com.shoestore.Server.dto.request.OrderDTO;
-import com.shoestore.Server.dto.request.OrderHistoryStatusDTO;
-import com.shoestore.Server.dto.request.UpdateOrderStatusRequest;
+import com.shoestore.Server.dto.request.*;
 import com.shoestore.Server.dto.response.*;
 import com.shoestore.Server.entities.*;
 import com.shoestore.Server.enums.OrderStatus;
@@ -553,6 +550,41 @@ public class OrderServiceImpl implements OrderService {
                 orderRepository.save(order);
             }
         }
+    }
+    @Override
+    public Order updateOrderUser(int id, UserDTO userDTO) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (userDTO != null && userDTO.getUserID() != 0) {
+            User user = userRepository.findById(userDTO.getUserID())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (userDTO.getName() != null) user.setName(userDTO.getName());
+            if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
+            if (userDTO.getPhoneNumber() != null) user.setPhoneNumber(userDTO.getPhoneNumber());
+
+            userRepository.save(user);
+            order.setUser(user);
+        } else {
+            order.setUser(null);
+        }
+
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order updateOrderShipping(int id, ShippingDTO shippingDTO) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (shippingDTO != null) {
+            order.setShippingAddress(shippingDTO.getShippingAddress());
+            order.setShippingMethod(shippingDTO.getShippingMethod());
+            order.setTrackingNumber(shippingDTO.getTrackingNumber());
+        }
+
+        return orderRepository.save(order);
     }
 
     @Override
