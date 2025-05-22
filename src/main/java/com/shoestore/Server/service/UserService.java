@@ -28,7 +28,6 @@ public interface UserService {
 
     UserResponse createCustomer(UserDTO userDTO);
 
-
     UserResponse updateUserStatus(int id, String status);
 
     int countDeliveredOrdersByUserId(int userId);
