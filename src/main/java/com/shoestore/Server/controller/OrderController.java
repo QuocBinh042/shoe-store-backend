@@ -33,7 +33,7 @@ public class OrderController {
     @PreAuthorize("hasAnyAuthority('CREATE_ORDER')")
     public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO){
         OrderDTO saveOrder=orderService.addOrder(orderDTO);
-//        emailService.sendOrderSuccessEmail(saveOrder.getUser().getEmail(), saveOrder.getUser().getName(), saveOrder.getCode());
+        emailService.sendOrderSuccessEmail(saveOrder.getUser().getEmail(), saveOrder.getUser().getName(), saveOrder.getCode());
         return ResponseEntity.ok(saveOrder);
     }
 

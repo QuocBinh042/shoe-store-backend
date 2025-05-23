@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  shoe-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: group04:latest
+    environment:
+      - PORT=8080
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
