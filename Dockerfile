@@ -9,4 +9,5 @@ WORKDIR /app
 COPY --from=build /app/target/Server-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
-CMD ["sh", "-c", "java -Dserver.port=$PORT -jar app.jar"]
+CMD ["sh", "-c", "java -Xmx256m -Dserver.port=$PORT -jar app.jar"]
+

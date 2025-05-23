@@ -1,5 +1,7 @@
 {
   "build": {
-    "env": "JAVA_TOOL_OPTIONS=-Xmx300m"
+    "env": {
+      "JAVA_TOOL_OPTIONS": "-Xmx256m"
+    }
   }
 }
