@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/admin/email")
+@RequestMapping("api/admin/email")
 @RequiredArgsConstructor
 @Slf4j
 public class EmailController {
