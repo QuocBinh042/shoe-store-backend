@@ -2,9 +2,7 @@ services:
   - type: web
     name: springboot-api
     plan: free
-    buildCommand: "./mvnw clean package"
-    startCommand: "java -jar target/demo-0.0.1-SNAPSHOT.jar"
     runtime: docker
     envVars:
       - key: PORT
-        value: 10000
+        value: "10000"
